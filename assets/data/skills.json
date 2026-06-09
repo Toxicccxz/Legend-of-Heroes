@@ -1,0 +1,14 @@
+[
+  {
+    "id": "basic_sword",
+    "name": "基础剑诀",
+    "description": "青云门入门剑法，重在稳准。",
+    "category": "剑法"
+  },
+  {
+    "id": "wind_step",
+    "name": "清风步",
+    "description": "轻盈灵动的基础身法。",
+    "category": "身法"
+  }
+]

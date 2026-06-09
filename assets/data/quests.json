@@ -1,0 +1,35 @@
+[
+  {
+    "id": "main_investigate_village",
+    "title": "调查废弃村口",
+    "category": "主线",
+    "description": "查明废弃村口发生了什么。",
+    "objectives": ["调查废弃村口"],
+    "initialProgress": {
+      "investigated": 0,
+      "required": 1
+    }
+  },
+  {
+    "id": "side_guard_herb",
+    "title": "给守卫送止血草",
+    "category": "支线",
+    "description": "收集 3 株止血草并交给守卫。",
+    "objectives": ["收集止血草", "交给守卫"],
+    "initialProgress": {
+      "collected": 1,
+      "required": 3
+    }
+  },
+  {
+    "id": "sect_intro_qingyun",
+    "title": "前往青云门接引点",
+    "category": "门派引导",
+    "description": "找到青云门接引人，了解入门试炼。",
+    "objectives": ["前往青云门接引点"],
+    "initialProgress": {
+      "arrived": 0,
+      "required": 1
+    }
+  }
+]

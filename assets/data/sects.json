@@ -1,0 +1,9 @@
+[
+  {
+    "id": "qingyun_sect",
+    "name": "青云门",
+    "description": "以剑法和身法闻名的门派。",
+    "ranks": ["外门弟子", "内门弟子"],
+    "skills": ["basic_sword", "wind_step"]
+  }
+]

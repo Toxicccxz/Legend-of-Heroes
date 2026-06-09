@@ -1,0 +1,22 @@
+[
+  {
+    "id": "dialogue_wandering_merchant",
+    "lines": ["最近村里不太平……"],
+    "events": []
+  },
+  {
+    "id": "dialogue_guard",
+    "lines": ["如果你能找到 3 株止血草，我会感谢你的。"],
+    "events": ["event_talk_guard_herb"]
+  },
+  {
+    "id": "dialogue_little_girl",
+    "lines": ["我看到有人往老井方向去了。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_qingyun_guide",
+    "lines": ["若想入门，先证明你的心性。"],
+    "events": []
+  }
+]

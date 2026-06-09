@@ -1,0 +1,26 @@
+[
+  {
+    "id": "wandering_merchant",
+    "name": "流浪商人",
+    "description": "背着旧货箱的商人，眼神谨慎。",
+    "dialogueId": "dialogue_wandering_merchant"
+  },
+  {
+    "id": "guard",
+    "name": "守卫",
+    "description": "疲惫但仍尽责的村口守卫。",
+    "dialogueId": "dialogue_guard"
+  },
+  {
+    "id": "little_girl",
+    "name": "小女孩",
+    "description": "躲在屋檐下的小女孩，像是知道一些线索。",
+    "dialogueId": "dialogue_little_girl"
+  },
+  {
+    "id": "qingyun_guide",
+    "name": "青云门接引人",
+    "description": "衣袍整洁的年轻修士。",
+    "dialogueId": "dialogue_qingyun_guide"
+  }
+]

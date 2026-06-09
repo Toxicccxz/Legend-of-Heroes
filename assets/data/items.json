@@ -1,0 +1,44 @@
+[
+  {
+    "id": "small_potion",
+    "name": "小红药水",
+    "description": "恢复 20 HP。",
+    "type": "consumable",
+    "effects": {
+      "restoreHp": 20
+    }
+  },
+  {
+    "id": "healing_herb",
+    "name": "止血草",
+    "description": "守卫需要的任务物品。",
+    "type": "quest",
+    "effects": {}
+  },
+  {
+    "id": "bread",
+    "name": "面包",
+    "description": "恢复少量体力。",
+    "type": "consumable",
+    "effects": {
+      "restoreStamina": 15
+    }
+  },
+  {
+    "id": "novice_cloth",
+    "name": "新手布衣",
+    "description": "粗布缝成的基础防具。",
+    "type": "equipment",
+    "slot": "body",
+    "effects": {
+      "defense": 1
+    }
+  },
+  {
+    "id": "wooden_token",
+    "name": "木制令牌",
+    "description": "青云门接引点用来识别新人的令牌。",
+    "type": "quest",
+    "effects": {}
+  }
+]

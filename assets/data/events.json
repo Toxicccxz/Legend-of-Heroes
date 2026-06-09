@@ -1,0 +1,47 @@
+[
+  {
+    "id": "event_first_enter_village",
+    "type": "enterRoom",
+    "message": "你第一次来到废弃村口。",
+    "logType": "system",
+    "onceFlag": "entered_village_entrance",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_village_entrance",
+    "type": "investigate",
+    "message": "你在路边发现了一些凌乱的脚印。",
+    "logType": "system",
+    "onceFlag": "investigated_village_entrance",
+    "effects": {
+      "questId": "main_investigate_village",
+      "progressKey": "investigated",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_talk_guard_herb",
+    "type": "dialogue",
+    "message": "守卫看了看你的药草，提醒你还需要再找一些。",
+    "logType": "quest",
+    "effects": {
+      "questId": "side_guard_herb",
+      "progressKey": "collected",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_use_small_potion",
+    "type": "useItem",
+    "message": "你使用了小红药水，恢复 20 HP。",
+    "logType": "system",
+    "effects": {}
+  },
+  {
+    "id": "event_rest",
+    "type": "rest",
+    "message": "你短暂休息，恢复了体力。",
+    "logType": "system",
+    "effects": {}
+  }
+]
