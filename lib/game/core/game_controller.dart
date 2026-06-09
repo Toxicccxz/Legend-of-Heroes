@@ -14,8 +14,8 @@ import 'game_action.dart';
 import 'game_state.dart';
 
 final gameDefinitionsProvider = FutureProvider<GameDefinitions>((ref) {
-  const repository = AssetGameDefinitionRepository();
-  return const SampleGameDataLoader(repository).load();
+  final repository = AssetGameDefinitionRepository();
+  return SampleGameDataLoader(repository).load();
 });
 
 final saveRepositoryProvider = Provider<SaveRepository>((ref) {
@@ -150,10 +150,10 @@ class GameController extends StateNotifier<GameState> {
 
   void _rest() {
     final player = state.player.copyWith(
-      hp: (state.player.hp + 10).clamp(0, state.player.maxHp) as int,
-      mp: (state.player.mp + 8).clamp(0, state.player.maxMp) as int,
+      hp: (state.player.hp + 10).clamp(0, state.player.maxHp),
+      mp: (state.player.mp + 8).clamp(0, state.player.maxMp),
       stamina:
-          (state.player.stamina + 20).clamp(0, state.player.maxStamina) as int,
+          (state.player.stamina + 20).clamp(0, state.player.maxStamina),
     );
     state = state.copyWith(player: player);
     _addLog(GameLogType.system, '你短暂休息，恢复了一些 HP、MP 和体力。');

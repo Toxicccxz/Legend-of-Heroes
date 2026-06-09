@@ -40,11 +40,11 @@ class InventorySystem {
     final hpRestore = item.effects['restoreHp'] ?? 0;
     final staminaRestore = item.effects['restoreStamina'] ?? 0;
     final player = state.player.copyWith(
-      hp: (state.player.hp + hpRestore).clamp(0, state.player.maxHp) as int,
+      hp: (state.player.hp + hpRestore).clamp(0, state.player.maxHp),
       stamina: (state.player.stamina + staminaRestore).clamp(
         0,
         state.player.maxStamina,
-      ) as int,
+      ),
     );
     return removeItem(state.copyWith(player: player), itemId, 1);
   }
