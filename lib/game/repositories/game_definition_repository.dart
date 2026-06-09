@@ -38,7 +38,7 @@ abstract class GameDefinitionRepository {
 }
 
 class AssetGameDefinitionRepository implements GameDefinitionRepository {
-  const AssetGameDefinitionRepository({AssetBundle? bundle})
+  AssetGameDefinitionRepository({AssetBundle? bundle})
     : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
