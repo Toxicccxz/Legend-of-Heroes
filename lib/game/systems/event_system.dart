@@ -18,6 +18,19 @@ class EventSystem {
     return _activeEvents(state, ids);
   }
 
+  List<EventDefinition> processEventsByType(GameState state, String type) {
+    final definitions = state.definitions;
+    if (definitions == null) {
+      return const [];
+    }
+    final ids =
+        definitions.events.values
+            .where((event) => event.type == type)
+            .map((event) => event.id)
+            .toList();
+    return _activeEvents(state, ids);
+  }
+
   GameState setFlag(GameState state, String key, dynamic value) {
     final nextFlags = Map<String, dynamic>.from(state.flags);
     nextFlags[key] = value;
