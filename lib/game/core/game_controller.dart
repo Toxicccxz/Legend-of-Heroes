@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/sample_game_data_loader.dart';
 import '../models/event_definition.dart';
+import '../models/item_definition.dart';
 import '../repositories/game_definition_repository.dart';
 import '../repositories/save_repository.dart';
 import '../systems/dialogue_system.dart';
@@ -14,8 +15,8 @@ import 'game_action.dart';
 import 'game_state.dart';
 
 final gameDefinitionsProvider = FutureProvider<GameDefinitions>((ref) {
-  const repository = AssetGameDefinitionRepository();
-  return const SampleGameDataLoader(repository).load();
+  final repository = AssetGameDefinitionRepository();
+  return SampleGameDataLoader(repository).load();
 });
 
 final saveRepositoryProvider = Provider<SaveRepository>((ref) {
@@ -125,10 +126,23 @@ class GameController extends StateNotifier<GameState> {
 
   void _useItem(String itemId) {
     final item = state.definitions?.items[itemId];
-    state = _inventorySystem.useItem(state, itemId);
-    if (item != null) {
-      _addLog(GameLogType.system, '你使用了${item.name}。');
+    if (item == null) {
+      return;
     }
+    if (item.type != ItemType.consumable) {
+      _addLog(GameLogType.system, '${item.name}无法直接使用。');
+      return;
+    }
+    if (_inventorySystem.getItemCount(state, itemId) <= 0) {
+      _addLog(GameLogType.system, '背包中没有${item.name}。');
+      return;
+    }
+    state = _inventorySystem.useItem(state, itemId);
+    if (item.useEvents.isEmpty) {
+      _addLog(GameLogType.system, '你使用了${item.name}。');
+      return;
+    }
+    _applyEvents(_eventSystem.processActionEvents(state, item.useEvents));
   }
 
   void _equipItem(String itemId) {
@@ -149,14 +163,12 @@ class GameController extends StateNotifier<GameState> {
   }
 
   void _rest() {
-    final player = state.player.copyWith(
-      hp: (state.player.hp + 10).clamp(0, state.player.maxHp) as int,
-      mp: (state.player.mp + 8).clamp(0, state.player.maxMp) as int,
-      stamina:
-          (state.player.stamina + 20).clamp(0, state.player.maxStamina) as int,
-    );
-    state = state.copyWith(player: player);
-    _addLog(GameLogType.system, '你短暂休息，恢复了一些 HP、MP 和体力。');
+    final events = _eventSystem.processRestEvents(state);
+    if (events.isEmpty) {
+      _addLog(GameLogType.system, '你短暂休息，但没有恢复效果。');
+      return;
+    }
+    _applyEvents(events);
   }
 
   void _applyEnterRoomEvents() {
@@ -187,7 +199,28 @@ class GameController extends StateNotifier<GameState> {
       if (completeQuestId != null) {
         state = _questSystem.completeQuest(state, completeQuestId);
       }
+      _applyPlayerRestoreEffects(event.effects);
     }
+  }
+
+  void _applyPlayerRestoreEffects(Map<String, dynamic> effects) {
+    final restoreHp = effects['restoreHp'] as int? ?? 0;
+    final restoreMp = effects['restoreMp'] as int? ?? 0;
+    final restoreStamina = effects['restoreStamina'] as int? ?? 0;
+    if (restoreHp == 0 && restoreMp == 0 && restoreStamina == 0) {
+      return;
+    }
+
+    state = state.copyWith(
+      player: state.player.copyWith(
+        hp: (state.player.hp + restoreHp).clamp(0, state.player.maxHp),
+        mp: (state.player.mp + restoreMp).clamp(0, state.player.maxMp),
+        stamina: (state.player.stamina + restoreStamina).clamp(
+          0,
+          state.player.maxStamina,
+        ),
+      ),
+    );
   }
 
   void _addLog(GameLogType type, String message) {

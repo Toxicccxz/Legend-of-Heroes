@@ -18,6 +18,11 @@ class EventSystem {
     return _activeEvents(state, ids);
   }
 
+  List<EventDefinition> processRestEvents(GameState state) {
+    final room = state.definitions?.rooms[state.currentRoomId];
+    return _activeEvents(state, room?.restEvents ?? const []);
+  }
+
   GameState setFlag(GameState state, String key, dynamic value) {
     final nextFlags = Map<String, dynamic>.from(state.flags);
     nextFlags[key] = value;

@@ -6,7 +6,10 @@
     "type": "consumable",
     "effects": {
       "restoreHp": 20
-    }
+    },
+    "useEvents": [
+      "event_use_small_potion"
+    ]
   },
   {
     "id": "healing_herb",
