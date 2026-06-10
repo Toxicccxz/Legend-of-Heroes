@@ -118,10 +118,6 @@ class GameController extends StateNotifier<GameState> {
         _eventSystem.processActionEvents(state, dialogue.events),
       );
     }
-    state = _questSystem.checkProgressAfterAction(
-      state,
-      TalkToNpcAction(npcId),
-    );
   }
 
   void _useItem(String itemId) {
@@ -194,6 +190,7 @@ class GameController extends StateNotifier<GameState> {
           progressKey,
           progressValue,
         );
+        state = _questSystem.completeQuestIfProgressMet(state, questId);
       }
       final completeQuestId = event.effects['completeQuestId'] as String?;
       if (completeQuestId != null) {
