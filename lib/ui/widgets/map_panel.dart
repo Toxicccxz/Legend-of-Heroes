@@ -283,7 +283,7 @@ class _RoomMapPainter extends CustomPainter {
         continue;
       }
       final current = room.id == state.currentRoomId;
-      final rect = Rect.fromCenter(center: center, width: 16, height: 16);
+      final rect = Rect.fromCenter(center: center, width: 14, height: 14);
       final paint =
           Paint()
             ..color = current ? Colors.black : Colors.white
@@ -299,8 +299,12 @@ class _RoomMapPainter extends CustomPainter {
   }
 
   Offset _positionFor(RoomDefinition room, Size size) {
-    final left = 46 + room.mapX * ((size.width - 160) / 4);
-    final top = 22 + room.mapY * ((size.height - 44) / 3);
+    const gridStep = 24.0;
+    final mapWidth = size.width - 112;
+    final left =
+        ((mapWidth - gridStep * 4) / 2).clamp(16.0, 48.0) +
+        room.mapX * gridStep;
+    final top = 18 + room.mapY * gridStep;
     return Offset(left, top);
   }
 
