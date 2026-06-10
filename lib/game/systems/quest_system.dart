@@ -1,4 +1,3 @@
-import '../core/game_action.dart';
 import '../core/game_state.dart';
 import '../models/quest_progress.dart';
 
@@ -55,17 +54,27 @@ class QuestSystem {
     return state.questProgress[questId];
   }
 
-  GameState checkProgressAfterAction(GameState state, GameAction action) {
-    if (action is TalkToNpcAction && action.npcId == 'guard') {
-      final current = state.questProgress['side_guard_herb'];
-      if (current == null || current.status == QuestStatus.completed) {
-        return state;
-      }
-      final collected = current.progress['collected'] ?? 0;
-      if (collected >= 3) {
-        return completeQuest(state, 'side_guard_herb');
-      }
+  GameState completeQuestIfProgressMet(GameState state, String questId) {
+    final current = state.questProgress[questId];
+    if (current == null || current.status == QuestStatus.completed) {
+      return state;
     }
-    return state;
+
+    final required = current.progress['required'];
+    if (required == null) {
+      return state;
+    }
+
+    final progressValues =
+        current.progress.entries
+            .where((entry) => entry.key != 'required')
+            .map((entry) => entry.value)
+            .toList();
+    if (progressValues.isEmpty) {
+      return state;
+    }
+
+    final requirementsMet = progressValues.every((value) => value >= required);
+    return requirementsMet ? completeQuest(state, questId) : state;
   }
 }
