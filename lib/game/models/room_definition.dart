@@ -8,6 +8,7 @@ class RoomDefinition {
     required this.npcs,
     required this.onEnterEvents,
     required this.investigateEvents,
+    required this.restEvents,
     required this.mapX,
     required this.mapY,
   });
@@ -20,6 +21,7 @@ class RoomDefinition {
   final List<String> npcs;
   final List<String> onEnterEvents;
   final List<String> investigateEvents;
+  final List<String> restEvents;
   final int mapX;
   final int mapY;
 
@@ -36,6 +38,9 @@ class RoomDefinition {
       ),
       investigateEvents: List<String>.from(
         json['investigateEvents'] as List<dynamic>? ?? const [],
+      ),
+      restEvents: List<String>.from(
+        json['restEvents'] as List<dynamic>? ?? const [],
       ),
       mapX: json['mapX'] as int? ?? 0,
       mapY: json['mapY'] as int? ?? 0,

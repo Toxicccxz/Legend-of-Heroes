@@ -21,11 +21,15 @@ class CharacterStatusPanel extends ConsumerWidget {
     return SizedBox(
       height: 245,
       child: PanelFrame(
-        title: '人物状态',
+        title: '',
         child: Row(
           children: [
             SizedBox(width: 122, child: _PlayerStats(state: state)),
-            const VerticalDivider(width: 20, thickness: 1.4, color: Colors.black),
+            const VerticalDivider(
+              width: 20,
+              thickness: 1.4,
+              color: Colors.black,
+            ),
             Expanded(child: _StatusTabArea(state: state, ref: ref)),
           ],
         ),
@@ -42,16 +46,28 @@ class _PlayerStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = state.player;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _StatText(label: '姓名', value: player.name),
-        _StatText(label: '等级', value: '${player.level}'),
-        _BarStat(label: 'HP', value: player.hp, max: player.maxHp),
-        _BarStat(label: 'MP', value: player.mp, max: player.maxMp),
-        _BarStat(label: '体力', value: player.stamina, max: player.maxStamina),
-        _StatText(label: '金币', value: '${player.gold} ○'),
-      ],
+    return FittedBox(
+      alignment: Alignment.topLeft,
+      fit: BoxFit.scaleDown,
+      child: SizedBox(
+        width: 122,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _StatText(label: '姓名', value: player.name),
+            _StatText(label: '等级', value: '${player.level}'),
+            _BarStat(label: 'HP', value: player.hp, max: player.maxHp),
+            _BarStat(label: 'MP', value: player.mp, max: player.maxMp),
+            _BarStat(
+              label: '体力',
+              value: player.stamina,
+              max: player.maxStamina,
+            ),
+            _StatText(label: '金币', value: '${player.gold} ○'),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -67,32 +83,35 @@ class _StatusTabArea extends StatelessWidget {
     return Column(
       children: [
         Row(
-          children: StatusTab.values.map((tab) {
-            final selected = state.selectedStatusTab == tab;
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    foregroundColor: Colors.black,
-                    backgroundColor: selected ? Colors.grey.shade200 : Colors.white,
-                    side: BorderSide(
-                      color: Colors.black,
-                      width: selected ? 2 : 1,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+          children:
+              StatusTab.values.map((tab) {
+                final selected = state.selectedStatusTab == tab;
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        foregroundColor: Colors.black,
+                        backgroundColor:
+                            selected ? Colors.grey.shade200 : Colors.white,
+                        side: BorderSide(
+                          color: Colors.black,
+                          width: selected ? 2 : 1,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      onPressed:
+                          () => ref
+                              .read(gameControllerProvider.notifier)
+                              .dispatch(SelectStatusTabAction(tab)),
+                      child: Text(tab.label),
                     ),
                   ),
-                  onPressed: () => ref
-                      .read(gameControllerProvider.notifier)
-                      .dispatch(SelectStatusTabAction(tab)),
-                  child: Text(tab.label),
-                ),
-              ),
-            );
-          }).toList(),
+                );
+              }).toList(),
         ),
         const SizedBox(height: 6),
         Expanded(
@@ -131,21 +150,19 @@ class _StatText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Text(
         '$label： $value',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
   }
 }
 
 class _BarStat extends StatelessWidget {
-  const _BarStat({
-    required this.label,
-    required this.value,
-    required this.max,
-  });
+  const _BarStat({required this.label, required this.value, required this.max});
 
   final String label;
   final int value;
@@ -155,18 +172,18 @@ class _BarStat extends StatelessWidget {
   Widget build(BuildContext context) {
     final ratio = max == 0 ? 0.0 : value / max;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             '$label    $value / $max',
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 3),
+          const SizedBox(height: 2),
           LinearProgressIndicator(
             value: ratio,
-            minHeight: 8,
+            minHeight: 6,
             color: Colors.grey.shade700,
             backgroundColor: Colors.white,
           ),

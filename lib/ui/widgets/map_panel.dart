@@ -15,7 +15,7 @@ class MapPanel extends ConsumerWidget {
     final room = state.definitions?.rooms[state.currentRoomId];
 
     return PanelFrame(
-      title: '地图',
+      title: '',
       child: Column(
         children: [
           Expanded(
@@ -28,16 +28,16 @@ class MapPanel extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      _LegendItem(label: '其他房间', thick: false),
+                      _LegendItem(label: '其他房间', current: false),
                       SizedBox(height: 8),
-                      _LegendItem(label: '当前位置', thick: true),
+                      _LegendItem(label: '当前位置', current: true),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           _RoomInfo(room: room),
         ],
       ),
@@ -62,12 +62,12 @@ class _RoomInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('区域： ${room?.name ?? '未知区域'}',
-              style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(
+            '区域： ${room?.name ?? '未知区域'}',
+            style: const TextStyle(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 4),
           Text('描述： ${room?.description ?? ''}'),
-          const Divider(thickness: 1),
-          Text('环境标签： ${(room?.tags ?? const []).join(' / ')}'),
         ],
       ),
     );
@@ -75,10 +75,10 @@ class _RoomInfo extends StatelessWidget {
 }
 
 class _LegendItem extends StatelessWidget {
-  const _LegendItem({required this.label, required this.thick});
+  const _LegendItem({required this.label, required this.current});
 
   final String label;
-  final bool thick;
+  final bool current;
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +88,8 @@ class _LegendItem extends StatelessWidget {
           width: 18,
           height: 18,
           decoration: BoxDecoration(
-            border: Border.all(width: thick ? 3 : 1.4),
-            color: Colors.white,
+            border: Border.all(width: 1.4),
+            color: current ? Colors.black : Colors.white,
           ),
         ),
         const SizedBox(width: 8),
@@ -111,10 +111,11 @@ class _RoomMapPainter extends CustomPainter {
       return;
     }
 
-    final gridPaint = Paint()
-      ..color = Colors.grey.shade300
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+    final gridPaint =
+        Paint()
+          ..color = Colors.grey.shade300
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1;
     for (var x = 0.0; x < size.width; x += size.width / 6) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
     }
@@ -125,9 +126,10 @@ class _RoomMapPainter extends CustomPainter {
     final positions = <String, Offset>{
       for (final room in rooms) room.id: _positionFor(room, size),
     };
-    final linePaint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 2;
+    final linePaint =
+        Paint()
+          ..color = Colors.black
+          ..strokeWidth = 2;
     for (final room in rooms) {
       final from = positions[room.id];
       if (from == null) {
@@ -147,14 +149,16 @@ class _RoomMapPainter extends CustomPainter {
         continue;
       }
       final current = room.id == state.currentRoomId;
-      final rect = Rect.fromCenter(center: center, width: 30, height: 30);
-      final paint = Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.fill;
-      final border = Paint()
-        ..color = Colors.black
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = current ? 4 : 1.5;
+      final rect = Rect.fromCenter(center: center, width: 22, height: 22);
+      final paint =
+          Paint()
+            ..color = current ? Colors.black : Colors.white
+            ..style = PaintingStyle.fill;
+      final border =
+          Paint()
+            ..color = Colors.black
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1.5;
       canvas.drawRect(rect, paint);
       canvas.drawRect(rect, border);
     }
