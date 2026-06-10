@@ -219,8 +219,8 @@ class _LegendItem extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 18,
-          height: 18,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
             border: Border.all(width: 1.4),
             color: current ? Colors.black : Colors.white,
@@ -283,7 +283,7 @@ class _RoomMapPainter extends CustomPainter {
         continue;
       }
       final current = room.id == state.currentRoomId;
-      final rect = Rect.fromCenter(center: center, width: 22, height: 22);
+      final rect = Rect.fromCenter(center: center, width: 16, height: 16);
       final paint =
           Paint()
             ..color = current ? Colors.black : Colors.white

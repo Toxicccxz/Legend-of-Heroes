@@ -26,14 +26,41 @@ class ActionMessagePanel extends ConsumerWidget {
   }
 }
 
-class _MessageLog extends StatelessWidget {
+class _MessageLog extends StatefulWidget {
   const _MessageLog({required this.state});
 
   final GameState state;
 
   @override
+  State<_MessageLog> createState() => _MessageLogState();
+}
+
+class _MessageLogState extends State<_MessageLog> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollToBottomAfterLayout();
+  }
+
+  @override
+  void didUpdateWidget(covariant _MessageLog oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.state.logs.length != widget.state.logs.length) {
+      _scrollToBottomAfterLayout();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final logs = state.logs;
+    final logs = widget.state.logs;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -42,12 +69,22 @@ class _MessageLog extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: ListView(
+        controller: _scrollController,
         children:
             logs.map((log) {
               return Text('[${_formatTime(log.timestamp)}] ${log.message}');
             }).toList(),
       ),
     );
+  }
+
+  void _scrollToBottomAfterLayout() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) {
+        return;
+      }
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   String _formatTime(DateTime time) {
