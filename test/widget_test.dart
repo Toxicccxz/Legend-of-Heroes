@@ -16,7 +16,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('姓名： 冒险者'), findsOneWidget);
-    expect(find.textContaining('当前目标'), findsOneWidget);
+    expect(find.text('可互动'), findsOneWidget);
+    expect(find.text('出口'), findsOneWidget);
     expect(find.textContaining('废弃村口'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
