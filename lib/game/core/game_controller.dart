@@ -163,7 +163,7 @@ class GameController extends StateNotifier<GameState> {
   }
 
   void _rest() {
-    final events = _eventSystem.processEventsByType(state, 'rest');
+    final events = _eventSystem.processRestEvents(state);
     if (events.isEmpty) {
       _addLog(GameLogType.system, '你短暂休息，但没有恢复效果。');
       return;

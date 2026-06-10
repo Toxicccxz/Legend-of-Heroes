@@ -18,17 +18,9 @@ class EventSystem {
     return _activeEvents(state, ids);
   }
 
-  List<EventDefinition> processEventsByType(GameState state, String type) {
-    final definitions = state.definitions;
-    if (definitions == null) {
-      return const [];
-    }
-    final ids =
-        definitions.events.values
-            .where((event) => event.type == type)
-            .map((event) => event.id)
-            .toList();
-    return _activeEvents(state, ids);
+  List<EventDefinition> processRestEvents(GameState state) {
+    final room = state.definitions?.rooms[state.currentRoomId];
+    return _activeEvents(state, room?.restEvents ?? const []);
   }
 
   GameState setFlag(GameState state, String key, dynamic value) {
