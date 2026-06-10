@@ -15,12 +15,11 @@ class ActionMessagePanel extends ConsumerWidget {
     final state = ref.watch(gameControllerProvider);
 
     return PanelFrame(
-      title: '行动与消息',
+      title: '',
       child: Column(
         children: [
           _TrackedQuestBar(state: state),
           const SizedBox(height: 6),
-          _MessageTabs(state: state, ref: ref),
           Expanded(child: _MessageLog(state: state)),
           const SizedBox(height: 6),
           SizedBox(
@@ -105,48 +104,6 @@ class _TrackedQuestBar extends StatelessWidget {
   }
 }
 
-class _MessageTabs extends StatelessWidget {
-  const _MessageTabs({required this.state, required this.ref});
-
-  final GameState state;
-  final WidgetRef ref;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children:
-          MessageFilter.values.map((filter) {
-            final selected = state.selectedMessageFilter == filter;
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: SizedBox(
-                  height: 38,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor:
-                          selected ? Colors.grey.shade200 : Colors.white,
-                      padding: EdgeInsets.zero,
-                      side: BorderSide(width: selected ? 2 : 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    onPressed:
-                        () => ref
-                            .read(gameControllerProvider.notifier)
-                            .dispatch(SelectMessageFilterAction(filter)),
-                    child: Text(filter.label),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-    );
-  }
-}
-
 class _MessageLog extends StatelessWidget {
   const _MessageLog({required this.state});
 
@@ -154,7 +111,7 @@ class _MessageLog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logs = state.logs.where((log) => _matchesFilter(log)).toList();
+    final logs = state.logs;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -169,16 +126,6 @@ class _MessageLog extends StatelessWidget {
             }).toList(),
       ),
     );
-  }
-
-  bool _matchesFilter(GameLogEntry log) {
-    return switch (state.selectedMessageFilter) {
-      MessageFilter.all => true,
-      MessageFilter.dialogue => log.type == GameLogType.dialogue,
-      MessageFilter.combat => log.type == GameLogType.combat,
-      MessageFilter.system =>
-        log.type == GameLogType.system || log.type == GameLogType.quest,
-    };
   }
 
   String _formatTime(DateTime time) {
@@ -379,16 +326,5 @@ class _ActionButton extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-extension MessageFilterLabel on MessageFilter {
-  String get label {
-    return switch (this) {
-      MessageFilter.all => '全部',
-      MessageFilter.dialogue => '对话',
-      MessageFilter.combat => '战斗',
-      MessageFilter.system => '系统',
-    };
   }
 }

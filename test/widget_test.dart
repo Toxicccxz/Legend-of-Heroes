@@ -15,9 +15,9 @@ void main() {
     await tester.pumpWidget(const ProviderScope(child: LegendOfHeroesApp()));
     await tester.pumpAndSettle();
 
-    expect(find.text('人物状态'), findsOneWidget);
-    expect(find.text('地图'), findsOneWidget);
-    expect(find.text('行动与消息'), findsOneWidget);
+    expect(find.text('姓名： 冒险者'), findsOneWidget);
+    expect(find.textContaining('当前目标'), findsOneWidget);
+    expect(find.textContaining('废弃村口'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 }

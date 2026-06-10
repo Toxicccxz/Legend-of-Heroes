@@ -21,7 +21,7 @@ class CharacterStatusPanel extends ConsumerWidget {
     return SizedBox(
       height: 245,
       child: PanelFrame(
-        title: '人物状态',
+        title: '',
         child: Row(
           children: [
             SizedBox(width: 122, child: _PlayerStats(state: state)),
