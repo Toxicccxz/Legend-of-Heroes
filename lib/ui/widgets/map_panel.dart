@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,15 +8,19 @@ import '../../game/core/game_controller.dart';
 import '../../game/core/game_state.dart';
 import '../../game/models/npc_definition.dart';
 import '../../game/models/room_definition.dart';
+import '../../game/systems/map_system.dart';
 import 'panel_frame.dart';
 
 class MapPanel extends ConsumerWidget {
   const MapPanel({super.key});
 
+  static const _mapSystem = MapSystem();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameControllerProvider);
     final room = state.definitions?.rooms[state.currentRoomId];
+    final visibleRooms = _mapSystem.getVisibleRooms(state);
 
     return PanelFrame(
       title: '',
@@ -25,7 +31,11 @@ class MapPanel extends ConsumerWidget {
               children: [
                 Expanded(
                   child: CustomPaint(
-                    painter: _RoomMapPainter(state),
+                    painter: _RoomMapPainter(
+                      rooms: visibleRooms,
+                      currentRoom: room,
+                      currentRoomId: state.currentRoomId,
+                    ),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
@@ -234,31 +244,51 @@ class _LegendItem extends StatelessWidget {
 }
 
 class _RoomMapPainter extends CustomPainter {
-  const _RoomMapPainter(this.state);
+  const _RoomMapPainter({
+    required this.rooms,
+    required this.currentRoom,
+    required this.currentRoomId,
+  });
 
-  final GameState state;
+  static const _legendWidth = 112.0;
+  static const _maxGridStep = 22.0;
+  static const _nodeSize = 12.0;
+  static const _viewportDiameter = 7;
+
+  final List<RoomDefinition> rooms;
+  final RoomDefinition? currentRoom;
+  final String currentRoomId;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rooms = state.definitions?.rooms.values.toList() ?? const [];
-    if (rooms.isEmpty) {
+    final current = currentRoom;
+    if (rooms.isEmpty || current == null) {
       return;
     }
+
+    final mapWidth = math.max(80.0, size.width - _legendWidth);
+    final mapHeight = math.max(80.0, size.height);
+    final gridStep = math.min(
+      _maxGridStep,
+      math.min(mapWidth, mapHeight) / (_viewportDiameter + 1),
+    );
+    final center = Offset(mapWidth / 2, mapHeight / 2);
 
     final gridPaint =
         Paint()
           ..color = Colors.grey.shade300
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1;
-    for (var x = 0.0; x < size.width; x += size.width / 6) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
+    for (var x = center.dx % gridStep; x < mapWidth; x += gridStep) {
+      canvas.drawLine(Offset(x, 0), Offset(x, mapHeight), gridPaint);
     }
-    for (var y = 0.0; y < size.height; y += size.height / 4) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    for (var y = center.dy % gridStep; y < mapHeight; y += gridStep) {
+      canvas.drawLine(Offset(0, y), Offset(mapWidth, y), gridPaint);
     }
 
     final positions = <String, Offset>{
-      for (final room in rooms) room.id: _positionFor(room, size),
+      for (final room in rooms)
+        room.id: _positionFor(room, current, center, gridStep),
     };
     final linePaint =
         Paint()
@@ -278,15 +308,19 @@ class _RoomMapPainter extends CustomPainter {
     }
 
     for (final room in rooms) {
-      final center = positions[room.id];
-      if (center == null) {
+      final nodeCenter = positions[room.id];
+      if (nodeCenter == null) {
         continue;
       }
-      final current = room.id == state.currentRoomId;
-      final rect = Rect.fromCenter(center: center, width: 14, height: 14);
+      final isCurrent = room.id == currentRoomId;
+      final rect = Rect.fromCenter(
+        center: nodeCenter,
+        width: _nodeSize,
+        height: _nodeSize,
+      );
       final paint =
           Paint()
-            ..color = current ? Colors.black : Colors.white
+            ..color = isCurrent ? Colors.black : Colors.white
             ..style = PaintingStyle.fill;
       final border =
           Paint()
@@ -298,19 +332,24 @@ class _RoomMapPainter extends CustomPainter {
     }
   }
 
-  Offset _positionFor(RoomDefinition room, Size size) {
-    const gridStep = 24.0;
-    final mapWidth = size.width - 112;
-    final left =
-        ((mapWidth - gridStep * 4) / 2).clamp(16.0, 48.0) +
-        room.mapX * gridStep;
-    final top = 18 + room.mapY * gridStep;
-    return Offset(left, top);
+  Offset _positionFor(
+    RoomDefinition room,
+    RoomDefinition current,
+    Offset center,
+    double gridStep,
+  ) {
+    final relativeX = room.mapX - current.mapX;
+    final relativeY = room.mapY - current.mapY;
+    return Offset(
+      center.dx + relativeX * gridStep,
+      center.dy + relativeY * gridStep,
+    );
   }
 
   @override
   bool shouldRepaint(covariant _RoomMapPainter oldDelegate) {
-    return oldDelegate.state.currentRoomId != state.currentRoomId ||
-        oldDelegate.state.definitions != state.definitions;
+    return oldDelegate.currentRoomId != currentRoomId ||
+        oldDelegate.currentRoom != currentRoom ||
+        oldDelegate.rooms != rooms;
   }
 }
