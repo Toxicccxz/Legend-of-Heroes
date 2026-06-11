@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import 'ui/screens/game_screen.dart';
+import 'ui/screens/start_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   runApp(const ProviderScope(child: LegendOfHeroesApp()));
 }
 
@@ -23,7 +26,7 @@ class LegendOfHeroesApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
       ),
-      home: const GameScreen(),
+      home: const StartScreen(),
     );
   }
 }
