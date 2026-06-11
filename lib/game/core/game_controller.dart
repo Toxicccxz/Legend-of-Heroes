@@ -20,39 +20,51 @@ final gameDefinitionsProvider = FutureProvider<GameDefinitions>((ref) {
 });
 
 final saveRepositoryProvider = Provider<SaveRepository>((ref) {
-  return InMemorySaveRepository();
+  return HiveSaveRepository();
 });
 
-final gameControllerProvider =
-    StateNotifierProvider<GameController, GameState>((ref) {
-      final definitions = ref.watch(gameDefinitionsProvider);
-      return definitions.when(
-        data: (data) => GameController(
-          definitions: data,
-          saveRepository: ref.watch(saveRepositoryProvider),
-        ),
-        loading: GameController.loading,
-        error: (error, stackTrace) => GameController.error(error.toString()),
-      );
-    });
+final savedGameProvider = FutureProvider<GameState?>((ref) {
+  return ref.watch(saveRepositoryProvider).load();
+});
+
+final gameControllerProvider = StateNotifierProvider<GameController, GameState>(
+  (ref) {
+    final definitions = ref.watch(gameDefinitionsProvider);
+    return definitions.when(
+      data:
+          (data) => GameController(
+            definitions: data,
+            saveRepository: ref.watch(saveRepositoryProvider),
+          ),
+      loading: GameController.loading,
+      error: (error, stackTrace) => GameController.error(error.toString()),
+    );
+  },
+);
 
 class GameController extends StateNotifier<GameState> {
   GameController({
     required GameDefinitions definitions,
     required SaveRepository saveRepository,
-  }) : _saveRepository = saveRepository,
+  }) : _definitions = definitions,
+       _saveRepository = saveRepository,
        super(GameState.initial(definitions)) {
     _applyEnterRoomEvents();
   }
 
   GameController.loading()
-    : _saveRepository = InMemorySaveRepository(),
+    : _definitions = null,
+      _saveRepository = InMemorySaveRepository(),
       super(GameState.loading());
 
   GameController.error(String message)
-    : _saveRepository = InMemorySaveRepository(),
-      super(GameState.loading().copyWith(isLoading: false, errorMessage: message));
+    : _definitions = null,
+      _saveRepository = InMemorySaveRepository(),
+      super(
+        GameState.loading().copyWith(isLoading: false, errorMessage: message),
+      );
 
+  final GameDefinitions? _definitions;
   final SaveRepository _saveRepository;
   final MapSystem _mapSystem = const MapSystem();
   final QuestSystem _questSystem = const QuestSystem();
@@ -60,6 +72,33 @@ class GameController extends StateNotifier<GameState> {
   final EquipmentSystem _equipmentSystem = const EquipmentSystem();
   final DialogueSystem _dialogueSystem = const DialogueSystem();
   final EventSystem _eventSystem = const EventSystem();
+
+  Future<void> startNewGame() async {
+    final definitions = _definitions;
+    if (definitions == null) {
+      return;
+    }
+    state = GameState.initial(definitions);
+    _applyEnterRoomEvents();
+    await _saveRepository.save(state);
+  }
+
+  Future<bool> loadSavedGame() async {
+    final definitions = _definitions;
+    if (definitions == null) {
+      return false;
+    }
+    final savedState = await _saveRepository.load();
+    if (savedState == null) {
+      return false;
+    }
+    state = savedState.copyWith(
+      definitions: definitions,
+      isLoading: false,
+      errorMessage: null,
+    );
+    return true;
+  }
 
   void dispatch(GameAction action) {
     if (state.definitions == null) {
@@ -114,9 +153,7 @@ class GameController extends StateNotifier<GameState> {
     }
     final dialogue = _dialogueSystem.getDialogueForNpc(state, npcId);
     if (dialogue != null) {
-      _applyEvents(
-        _eventSystem.processActionEvents(state, dialogue.events),
-      );
+      _applyEvents(_eventSystem.processActionEvents(state, dialogue.events));
     }
   }
 
@@ -224,11 +261,7 @@ class GameController extends StateNotifier<GameState> {
     state = state.copyWith(
       logs: [
         ...state.logs,
-        GameLogEntry(
-          timestamp: DateTime.now(),
-          type: type,
-          message: message,
-        ),
+        GameLogEntry(timestamp: DateTime.now(), type: type, message: message),
       ],
     );
   }
