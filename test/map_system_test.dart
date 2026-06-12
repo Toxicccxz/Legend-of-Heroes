@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:legend_of_heroes/game/core/game_state.dart';
 import 'package:legend_of_heroes/game/models/room_definition.dart';
 import 'package:legend_of_heroes/game/repositories/game_definition_repository.dart';
+import 'package:legend_of_heroes/game/models/zone_definition.dart';
 import 'package:legend_of_heroes/game/systems/map_system.dart';
 
 void main() {
@@ -22,6 +23,14 @@ void main() {
               mapY: 10,
             ),
           },
+          zones: const {
+            'village': ZoneDefinition(
+              id: 'village',
+              name: '村庄',
+              description: '',
+              visibleRadius: 3,
+            ),
+          },
           npcs: const {},
           items: const {},
           quests: const {},
@@ -36,6 +45,7 @@ void main() {
           .getVisibleRooms(state, radius: 3)
           .map((room) => room.id);
 
+      expect(mapSystem.getCurrentZone(state)?.name, '村庄');
       expect(visibleIds, containsAll(<String>['current', 'nearby']));
       expect(visibleIds, isNot(contains('far')));
       expect(visibleIds, isNot(contains('other_zone')));

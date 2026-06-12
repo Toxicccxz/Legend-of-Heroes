@@ -1,5 +1,6 @@
 import '../core/game_state.dart';
 import '../models/room_definition.dart';
+import '../models/zone_definition.dart';
 
 class MapSystem {
   const MapSystem();
@@ -10,6 +11,14 @@ class MapSystem {
 
   Map<String, String> getAvailableExits(GameState state) {
     return getCurrentRoom(state)?.exits ?? const {};
+  }
+
+  ZoneDefinition? getCurrentZone(GameState state) {
+    final currentRoom = getCurrentRoom(state);
+    if (currentRoom == null) {
+      return null;
+    }
+    return state.definitions?.zones[currentRoom.zoneId];
   }
 
   List<RoomDefinition> getNearbyRooms(GameState state) {

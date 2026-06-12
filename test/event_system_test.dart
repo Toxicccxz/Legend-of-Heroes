@@ -21,6 +21,7 @@ void main() {
           'description': '井边',
         }),
       },
+      zones: const {},
       npcs: const {},
       items: const {},
       quests: const {},

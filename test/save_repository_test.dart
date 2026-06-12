@@ -19,6 +19,7 @@ void main() {
     final state = GameState.initial(
       const GameDefinitions(
         rooms: {},
+        zones: {},
         npcs: {},
         items: {},
         quests: {},
