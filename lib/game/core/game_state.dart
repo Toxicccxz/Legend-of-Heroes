@@ -18,6 +18,8 @@ class GameLogEntry {
   final String message;
 }
 
+const _unset = Object();
+
 class GameState {
   const GameState({
     required this.definitions,
@@ -61,11 +63,11 @@ class GameState {
     Set<String>? visitedRoomIds,
     Map<String, dynamic>? flags,
     List<GameLogEntry>? logs,
-    String? trackedQuestId,
+    Object? trackedQuestId = _unset,
     StatusTab? selectedStatusTab,
     MessageFilter? selectedMessageFilter,
     bool? isLoading,
-    String? errorMessage,
+    Object? errorMessage = _unset,
   }) {
     return GameState(
       definitions: definitions ?? this.definitions,
@@ -77,12 +79,18 @@ class GameState {
       visitedRoomIds: visitedRoomIds ?? this.visitedRoomIds,
       flags: flags ?? this.flags,
       logs: logs ?? this.logs,
-      trackedQuestId: trackedQuestId ?? this.trackedQuestId,
+      trackedQuestId:
+          identical(trackedQuestId, _unset)
+              ? this.trackedQuestId
+              : trackedQuestId as String?,
       selectedStatusTab: selectedStatusTab ?? this.selectedStatusTab,
       selectedMessageFilter:
           selectedMessageFilter ?? this.selectedMessageFilter,
       isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage:
+          identical(errorMessage, _unset)
+              ? this.errorMessage
+              : errorMessage as String?,
     );
   }
 

@@ -3,6 +3,7 @@
     "id": "village_entrance",
     "name": "废弃村口",
     "description": "前方是一条通往村庄的小路，四周安静，能听到风声。",
+    "zoneId": "abandoned_village",
     "tags": ["村庄", "安全区域", "新手引导"],
     "exits": {
       "north": "village_square",
@@ -12,6 +13,7 @@
     "npcs": ["wandering_merchant", "guard", "little_girl"],
     "onEnterEvents": ["event_first_enter_village"],
     "investigateEvents": ["event_investigate_village_entrance"],
+    "restEvents": ["event_rest"],
     "mapX": 2,
     "mapY": 2
   },
@@ -19,6 +21,7 @@
     "id": "village_square",
     "name": "村庄广场",
     "description": "破旧的广场中央堆着枯枝，几条小路从这里延伸出去。",
+    "zoneId": "abandoned_village",
     "tags": ["村庄", "安全区域"],
     "exits": {
       "south": "village_entrance",
@@ -28,6 +31,7 @@
     "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [],
+    "restEvents": ["event_rest"],
     "mapX": 2,
     "mapY": 1
   },
@@ -35,6 +39,7 @@
     "id": "old_well",
     "name": "老井",
     "description": "井口被藤蔓缠住，井边泥土上留着细小的脚印。",
+    "zoneId": "abandoned_village",
     "tags": ["村庄", "可调查"],
     "exits": {
       "west": "village_entrance"
@@ -42,6 +47,7 @@
     "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [],
+    "restEvents": ["event_rest"],
     "mapX": 3,
     "mapY": 2
   },
@@ -49,6 +55,7 @@
     "id": "forest_path",
     "name": "林间小路",
     "description": "林子里雾气很重，远处偶尔传来低沉的兽吼。",
+    "zoneId": "abandoned_village",
     "tags": ["野外", "危险边缘"],
     "exits": {
       "east": "village_entrance"
@@ -56,6 +63,7 @@
     "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [],
+    "restEvents": ["event_rest"],
     "mapX": 1,
     "mapY": 2
   },
@@ -63,6 +71,7 @@
     "id": "guard_post",
     "name": "守卫哨所",
     "description": "一处临时哨所挡在村庄北侧，几面旧旗在风中摇晃。",
+    "zoneId": "abandoned_village",
     "tags": ["村庄", "安全区域"],
     "exits": {
       "south": "village_square"
@@ -70,6 +79,7 @@
     "npcs": ["guard"],
     "onEnterEvents": [],
     "investigateEvents": [],
+    "restEvents": ["event_rest"],
     "mapX": 2,
     "mapY": 0
   },
@@ -77,6 +87,7 @@
     "id": "qingyun_contact_point",
     "name": "青云门接引点",
     "description": "一块青石碑立在路旁，碑前站着青云门接引人。",
+    "zoneId": "abandoned_village",
     "tags": ["门派", "新手引导"],
     "exits": {
       "west": "village_square"
@@ -84,6 +95,7 @@
     "npcs": ["qingyun_guide"],
     "onEnterEvents": [],
     "investigateEvents": [],
+    "restEvents": ["event_rest"],
     "mapX": 3,
     "mapY": 1
   }

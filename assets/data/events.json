@@ -40,8 +40,12 @@
   {
     "id": "event_rest",
     "type": "rest",
-    "message": "你短暂休息，恢复了体力。",
+    "message": "你短暂休息，恢复了一些 HP、MP 和体力。",
     "logType": "system",
-    "effects": {}
+    "effects": {
+      "restoreHp": 10,
+      "restoreMp": 8,
+      "restoreStamina": 20
+    }
   }
 ]
