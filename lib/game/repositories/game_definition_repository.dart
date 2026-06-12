@@ -10,10 +10,12 @@ import '../models/quest_definition.dart';
 import '../models/room_definition.dart';
 import '../models/sect_definition.dart';
 import '../models/skill_definition.dart';
+import '../models/zone_definition.dart';
 
 class GameDefinitions {
   const GameDefinitions({
     required this.rooms,
+    required this.zones,
     required this.npcs,
     required this.items,
     required this.quests,
@@ -24,6 +26,7 @@ class GameDefinitions {
   });
 
   final Map<String, RoomDefinition> rooms;
+  final Map<String, ZoneDefinition> zones;
   final Map<String, NpcDefinition> npcs;
   final Map<String, ItemDefinition> items;
   final Map<String, QuestDefinition> quests;
@@ -38,7 +41,7 @@ abstract class GameDefinitionRepository {
 }
 
 class AssetGameDefinitionRepository implements GameDefinitionRepository {
-  const AssetGameDefinitionRepository({AssetBundle? bundle})
+  AssetGameDefinitionRepository({AssetBundle? bundle})
     : _bundle = bundle ?? rootBundle;
 
   final AssetBundle _bundle;
@@ -47,6 +50,7 @@ class AssetGameDefinitionRepository implements GameDefinitionRepository {
   Future<GameDefinitions> load() async {
     return GameDefinitions(
       rooms: await _loadMap('assets/data/rooms.json', RoomDefinition.fromJson),
+      zones: await _loadMap('assets/data/zones.json', ZoneDefinition.fromJson),
       npcs: await _loadMap('assets/data/npcs.json', NpcDefinition.fromJson),
       items: await _loadMap('assets/data/items.json', ItemDefinition.fromJson),
       quests: await _loadMap(
