@@ -7,7 +7,7 @@ class ItemDefinition {
     required this.description,
     required this.type,
     required this.effects,
-    required this.useEvents,
+    this.useEvents = const [],
     this.slot,
   });
 

@@ -15,7 +15,7 @@ import '../models/zone_definition.dart';
 class GameDefinitions {
   const GameDefinitions({
     required this.rooms,
-    required this.zones,
+    this.zones = const {},
     required this.npcs,
     required this.items,
     required this.quests,
