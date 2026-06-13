@@ -31,42 +31,90 @@ class MapPanel extends ConsumerWidget {
       child: Column(
         children: [
           Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: CustomPaint(
-                    painter: _RoomMapPainter(
-                      rooms: visibleRooms,
-                      currentRoom: room,
-                      currentRoomId: state.currentRoomId,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: 112,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            _LegendItem(label: '其他房间', current: false),
-                            SizedBox(height: 8),
-                            _LegendItem(label: '当前位置', current: true),
-                          ],
-                        ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final compact = constraints.maxWidth < 300;
+                final interactionWidth = math.min(
+                  compact ? 112.0 : 136.0,
+                  constraints.maxWidth * (compact ? 0.42 : 0.36),
+                );
+                return Row(
+                  children: [
+                    Expanded(
+                      child: _MapCanvas(
+                        rooms: visibleRooms,
+                        currentRoom: room,
+                        currentRoomId: state.currentRoomId,
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  width: 132,
-                  child: _MapInteractionList(state: state, ref: ref),
-                ),
-              ],
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: interactionWidth,
+                      child: _MapInteractionList(state: state, ref: ref),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 6),
           _RoomInfo(room: room, zoneName: zone?.name),
         ],
+      ),
+    );
+  }
+}
+
+class _MapCanvas extends StatelessWidget {
+  const _MapCanvas({
+    required this.rooms,
+    required this.currentRoom,
+    required this.currentRoomId,
+  });
+
+  final List<RoomDefinition> rooms;
+  final RoomDefinition? currentRoom;
+  final String currentRoomId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        CustomPaint(
+          painter: _RoomMapPainter(
+            rooms: rooms,
+            currentRoom: currentRoom,
+            currentRoomId: currentRoomId,
+          ),
+        ),
+        const Positioned(right: 4, top: 4, child: _MapLegend()),
+      ],
+    );
+  }
+}
+
+class _MapLegend extends StatelessWidget {
+  const _MapLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.88),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _LegendItem(label: '其他房间', current: false),
+            SizedBox(height: 6),
+            _LegendItem(label: '当前位置', current: true),
+          ],
+        ),
       ),
     );
   }
@@ -241,8 +289,8 @@ class _LegendItem extends StatelessWidget {
             color: current ? Colors.black : Colors.white,
           ),
         ),
-        const SizedBox(width: 8),
-        Text(label),
+        const SizedBox(width: 6),
+        Text(label, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
@@ -255,7 +303,6 @@ class _RoomMapPainter extends CustomPainter {
     required this.currentRoomId,
   });
 
-  static const _legendWidth = 112.0;
   static const _maxGridStep = 22.0;
   static const _nodeSize = 12.0;
   static const _viewportDiameter = 7;
@@ -271,7 +318,7 @@ class _RoomMapPainter extends CustomPainter {
       return;
     }
 
-    final mapWidth = math.max(80.0, size.width - _legendWidth);
+    final mapWidth = math.max(80.0, size.width);
     final mapHeight = math.max(80.0, size.height);
     final gridStep = math.min(
       _maxGridStep,
