@@ -419,10 +419,19 @@ class _RoomMapPainter extends CustomPainter {
       if (from == null) {
         continue;
       }
-      for (final toId in room.exits.values) {
-        final to = positions[toId];
+      for (final exit in room.exits.entries) {
+        final to = positions[exit.value];
         if (to != null) {
           canvas.drawLine(from, to, linePaint);
+        } else {
+          final direction = _directionOffset(exit.key);
+          if (direction != Offset.zero) {
+            canvas.drawLine(
+              from,
+              from + direction * (gridStep * 0.45),
+              linePaint,
+            );
+          }
         }
       }
     }
@@ -481,6 +490,16 @@ class _RoomMapPainter extends CustomPainter {
       center.dx + relativeX * gridStep,
       center.dy + relativeY * gridStep,
     );
+  }
+
+  Offset _directionOffset(String direction) {
+    return switch (direction) {
+      'north' => const Offset(0, -1),
+      'south' => const Offset(0, 1),
+      'east' => const Offset(1, 0),
+      'west' => const Offset(-1, 0),
+      _ => Offset.zero,
+    };
   }
 
   void _drawRoomNode(Canvas canvas, Offset center, {required bool current}) {

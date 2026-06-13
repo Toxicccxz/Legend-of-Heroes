@@ -66,7 +66,8 @@
     ],
     "exits": {
       "west": "village_entrance",
-      "north": "herbal_patch"
+      "north": "qingyun_contact_point",
+      "east": "herbal_patch"
     },
     "npcs": [],
     "onEnterEvents": [],
@@ -135,6 +136,7 @@
     ],
     "exits": {
       "west": "village_square",
+      "south": "old_well",
       "north": "mountain_foot"
     },
     "npcs": [
@@ -160,7 +162,7 @@
     ],
     "exits": {
       "east": "village_square",
-      "south": "cellar_door"
+      "west": "cellar_door"
     },
     "npcs": [],
     "onEnterEvents": [],
@@ -183,7 +185,7 @@
       "可调查"
     ],
     "exits": {
-      "north": "abandoned_house"
+      "east": "abandoned_house"
     },
     "npcs": [],
     "onEnterEvents": [],
@@ -191,8 +193,8 @@
       "event_investigate_cellar_door"
     ],
     "restEvents": [],
-    "mapX": 1,
-    "mapY": 2
+    "mapX": 0,
+    "mapY": 1
   },
   {
     "id": "herbal_patch",
@@ -204,7 +206,7 @@
       "草药"
     ],
     "exits": {
-      "south": "old_well"
+      "west": "old_well"
     },
     "npcs": [
       "herb_gatherer"
@@ -214,8 +216,8 @@
       "event_investigate_herbal_patch"
     ],
     "restEvents": [],
-    "mapX": 3,
-    "mapY": 1
+    "mapX": 4,
+    "mapY": 2
   },
   {
     "id": "mist_forest_gate",
