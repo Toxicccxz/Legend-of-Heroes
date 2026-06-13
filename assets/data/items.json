@@ -4,9 +4,7 @@
     "name": "小红药水",
     "description": "恢复 20 HP。",
     "type": "consumable",
-    "effects": {
-      "restoreHp": 20
-    },
+    "effects": {},
     "useEvents": [
       "event_use_small_potion"
     ]
@@ -23,9 +21,10 @@
     "name": "面包",
     "description": "恢复少量体力。",
     "type": "consumable",
-    "effects": {
-      "restoreStamina": 15
-    }
+    "effects": {},
+    "useEvents": [
+      "event_use_bread"
+    ]
   },
   {
     "id": "novice_cloth",
