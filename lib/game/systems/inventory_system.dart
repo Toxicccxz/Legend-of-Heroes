@@ -37,16 +37,7 @@ class InventorySystem {
     if (item == null || item.type != ItemType.consumable) {
       return state;
     }
-    final hpRestore = item.effects['restoreHp'] ?? 0;
-    final staminaRestore = item.effects['restoreStamina'] ?? 0;
-    final player = state.player.copyWith(
-      hp: (state.player.hp + hpRestore).clamp(0, state.player.maxHp) as int,
-      stamina: (state.player.stamina + staminaRestore).clamp(
-        0,
-        state.player.maxStamina,
-      ) as int,
-    );
-    return removeItem(state.copyWith(player: player), itemId, 1);
+    return removeItem(state, itemId, 1);
   }
 
   int getItemCount(GameState state, String itemId) {
