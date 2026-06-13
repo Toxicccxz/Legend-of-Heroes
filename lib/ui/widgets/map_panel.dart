@@ -79,6 +79,8 @@ class _MapPanelState extends ConsumerState<MapPanel> {
                 );
               },
             ),
+            onPressed: onPressed,
+            child: Text(actionLabel, style: const TextStyle(fontSize: 12)),
           ),
           const SizedBox(height: 6),
           _RoomInfo(room: room, zoneName: zone?.name),
@@ -346,23 +348,34 @@ class _RoomInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '区域： ${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
-            style: const TextStyle(fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 4),
-          Text('描述： ${room?.description ?? ''}'),
-        ],
+    return SizedBox(
+      height: 88,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '区域： ${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 4),
+            Expanded(
+              child: Text(
+                '描述： ${room?.description ?? ''}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
