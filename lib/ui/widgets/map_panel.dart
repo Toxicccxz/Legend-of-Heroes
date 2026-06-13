@@ -392,17 +392,33 @@ class _RoomMapPainter extends CustomPainter {
       math.min(mapWidth, mapHeight) / (_viewportDiameter + 1),
     );
     final center = Offset(mapWidth / 2, mapHeight / 2);
-    final anchor = _viewportAnchor(current, rooms);
+    final currentAnchor = _viewportAnchor(current, rooms);
+    final previous = previousRoom;
+    final previousAnchor =
+        previous == null ? null : _viewportAnchor(previous, rooms);
+    final anchor =
+        previousAnchor == null
+            ? currentAnchor
+            : Offset.lerp(previousAnchor, currentAnchor, moveProgress) ??
+                currentAnchor;
 
     final gridPaint =
         Paint()
           ..color = Colors.grey.shade300
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1;
-    for (var x = center.dx % gridStep; x < mapWidth; x += gridStep) {
+    for (
+      var x = _gridStart(center.dx - anchor.dx * gridStep, gridStep);
+      x < mapWidth;
+      x += gridStep
+    ) {
       canvas.drawLine(Offset(x, 0), Offset(x, mapHeight), gridPaint);
     }
-    for (var y = center.dy % gridStep; y < mapHeight; y += gridStep) {
+    for (
+      var y = _gridStart(center.dy - anchor.dy * gridStep, gridStep);
+      y < mapHeight;
+      y += gridStep
+    ) {
       canvas.drawLine(Offset(0, y), Offset(mapWidth, y), gridPaint);
     }
 
@@ -490,6 +506,14 @@ class _RoomMapPainter extends CustomPainter {
       center.dx + relativeX * gridStep,
       center.dy + relativeY * gridStep,
     );
+  }
+
+  double _gridStart(double origin, double gridStep) {
+    var start = origin % gridStep;
+    if (start > 0) {
+      start -= gridStep;
+    }
+    return start;
   }
 
   Offset _directionOffset(String direction) {
