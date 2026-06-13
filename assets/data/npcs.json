@@ -22,5 +22,41 @@
     "name": "青云门接引人",
     "description": "衣袍整洁的年轻修士。",
     "dialogueId": "dialogue_qingyun_guide"
+  },
+  {
+    "id": "herb_gatherer",
+    "name": "草药客",
+    "description": "背着竹篓的采药人，熟悉附近药草的生长位置。",
+    "dialogueId": "dialogue_herb_gatherer"
+  },
+  {
+    "id": "old_hunter",
+    "name": "老猎户",
+    "description": "常年在雾林活动的猎人，知道野兽出没的路线。",
+    "dialogueId": "dialogue_old_hunter"
+  },
+  {
+    "id": "wounded_ranger",
+    "name": "受伤巡林人",
+    "description": "腿上缠着布条的巡林人，仍警惕地盯着狼穴。",
+    "dialogueId": "dialogue_wounded_ranger"
+  },
+  {
+    "id": "shrine_keeper",
+    "name": "守碑老人",
+    "description": "守着石祠的老人，说话总像在背一段旧传说。",
+    "dialogueId": "dialogue_shrine_keeper"
+  },
+  {
+    "id": "bamboo_sweeper",
+    "name": "扫竹童子",
+    "description": "负责打扫山道的小童，对门规倒背如流。",
+    "dialogueId": "dialogue_bamboo_sweeper"
+  },
+  {
+    "id": "sword_instructor",
+    "name": "传剑执事",
+    "description": "青云门外门执事，负责检查新人的根骨与心性。",
+    "dialogueId": "dialogue_sword_instructor"
   }
 ]
