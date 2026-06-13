@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/sample_game_data_loader.dart';
 import '../models/event_definition.dart';
+import '../models/item_definition.dart';
 import '../repositories/game_definition_repository.dart';
 import '../repositories/save_repository.dart';
 import '../systems/dialogue_system.dart';
@@ -14,44 +15,56 @@ import 'game_action.dart';
 import 'game_state.dart';
 
 final gameDefinitionsProvider = FutureProvider<GameDefinitions>((ref) {
-  const repository = AssetGameDefinitionRepository();
-  return const SampleGameDataLoader(repository).load();
+  final repository = AssetGameDefinitionRepository();
+  return SampleGameDataLoader(repository).load();
 });
 
 final saveRepositoryProvider = Provider<SaveRepository>((ref) {
-  return InMemorySaveRepository();
+  return HiveSaveRepository();
 });
 
-final gameControllerProvider =
-    StateNotifierProvider<GameController, GameState>((ref) {
-      final definitions = ref.watch(gameDefinitionsProvider);
-      return definitions.when(
-        data: (data) => GameController(
-          definitions: data,
-          saveRepository: ref.watch(saveRepositoryProvider),
-        ),
-        loading: GameController.loading,
-        error: (error, stackTrace) => GameController.error(error.toString()),
-      );
-    });
+final savedGameProvider = FutureProvider<GameState?>((ref) {
+  return ref.watch(saveRepositoryProvider).load();
+});
+
+final gameControllerProvider = StateNotifierProvider<GameController, GameState>(
+  (ref) {
+    final definitions = ref.watch(gameDefinitionsProvider);
+    return definitions.when(
+      data:
+          (data) => GameController(
+            definitions: data,
+            saveRepository: ref.watch(saveRepositoryProvider),
+          ),
+      loading: GameController.loading,
+      error: (error, stackTrace) => GameController.error(error.toString()),
+    );
+  },
+);
 
 class GameController extends StateNotifier<GameState> {
   GameController({
     required GameDefinitions definitions,
     required SaveRepository saveRepository,
-  }) : _saveRepository = saveRepository,
+  }) : _definitions = definitions,
+       _saveRepository = saveRepository,
        super(GameState.initial(definitions)) {
     _applyEnterRoomEvents();
   }
 
   GameController.loading()
-    : _saveRepository = InMemorySaveRepository(),
+    : _definitions = null,
+      _saveRepository = InMemorySaveRepository(),
       super(GameState.loading());
 
   GameController.error(String message)
-    : _saveRepository = InMemorySaveRepository(),
-      super(GameState.loading().copyWith(isLoading: false, errorMessage: message));
+    : _definitions = null,
+      _saveRepository = InMemorySaveRepository(),
+      super(
+        GameState.loading().copyWith(isLoading: false, errorMessage: message),
+      );
 
+  final GameDefinitions? _definitions;
   final SaveRepository _saveRepository;
   final MapSystem _mapSystem = const MapSystem();
   final QuestSystem _questSystem = const QuestSystem();
@@ -59,6 +72,33 @@ class GameController extends StateNotifier<GameState> {
   final EquipmentSystem _equipmentSystem = const EquipmentSystem();
   final DialogueSystem _dialogueSystem = const DialogueSystem();
   final EventSystem _eventSystem = const EventSystem();
+
+  Future<void> startNewGame() async {
+    final definitions = _definitions;
+    if (definitions == null) {
+      return;
+    }
+    state = GameState.initial(definitions);
+    _applyEnterRoomEvents();
+    await _saveRepository.save(state);
+  }
+
+  Future<bool> loadSavedGame() async {
+    final definitions = _definitions;
+    if (definitions == null) {
+      return false;
+    }
+    final savedState = await _saveRepository.load();
+    if (savedState == null) {
+      return false;
+    }
+    state = savedState.copyWith(
+      definitions: definitions,
+      isLoading: false,
+      errorMessage: null,
+    );
+    return true;
+  }
 
   void dispatch(GameAction action) {
     if (state.definitions == null) {
@@ -113,22 +153,29 @@ class GameController extends StateNotifier<GameState> {
     }
     final dialogue = _dialogueSystem.getDialogueForNpc(state, npcId);
     if (dialogue != null) {
-      _applyEvents(
-        _eventSystem.processActionEvents(state, dialogue.events),
-      );
+      _applyEvents(_eventSystem.processActionEvents(state, dialogue.events));
     }
-    state = _questSystem.checkProgressAfterAction(
-      state,
-      TalkToNpcAction(npcId),
-    );
   }
 
   void _useItem(String itemId) {
     final item = state.definitions?.items[itemId];
-    state = _inventorySystem.useItem(state, itemId);
-    if (item != null) {
-      _addLog(GameLogType.system, '你使用了${item.name}。');
+    if (item == null) {
+      return;
     }
+    if (item.type != ItemType.consumable) {
+      _addLog(GameLogType.system, '${item.name}无法直接使用。');
+      return;
+    }
+    if (_inventorySystem.getItemCount(state, itemId) <= 0) {
+      _addLog(GameLogType.system, '背包中没有${item.name}。');
+      return;
+    }
+    state = _inventorySystem.useItem(state, itemId);
+    if (item.useEvents.isEmpty) {
+      _addLog(GameLogType.system, '你使用了${item.name}。');
+      return;
+    }
+    _applyEvents(_eventSystem.processActionEvents(state, item.useEvents));
   }
 
   void _equipItem(String itemId) {
@@ -149,14 +196,12 @@ class GameController extends StateNotifier<GameState> {
   }
 
   void _rest() {
-    final player = state.player.copyWith(
-      hp: (state.player.hp + 10).clamp(0, state.player.maxHp) as int,
-      mp: (state.player.mp + 8).clamp(0, state.player.maxMp) as int,
-      stamina:
-          (state.player.stamina + 20).clamp(0, state.player.maxStamina) as int,
-    );
-    state = state.copyWith(player: player);
-    _addLog(GameLogType.system, '你短暂休息，恢复了一些 HP、MP 和体力。');
+    final events = _eventSystem.processRestEvents(state);
+    if (events.isEmpty) {
+      _addLog(GameLogType.system, '你短暂休息，但没有恢复效果。');
+      return;
+    }
+    _applyEvents(events);
   }
 
   void _applyEnterRoomEvents() {
@@ -182,23 +227,41 @@ class GameController extends StateNotifier<GameState> {
           progressKey,
           progressValue,
         );
+        state = _questSystem.completeQuestIfProgressMet(state, questId);
       }
       final completeQuestId = event.effects['completeQuestId'] as String?;
       if (completeQuestId != null) {
         state = _questSystem.completeQuest(state, completeQuestId);
       }
+      _applyPlayerRestoreEffects(event.effects);
     }
+  }
+
+  void _applyPlayerRestoreEffects(Map<String, dynamic> effects) {
+    final restoreHp = effects['restoreHp'] as int? ?? 0;
+    final restoreMp = effects['restoreMp'] as int? ?? 0;
+    final restoreStamina = effects['restoreStamina'] as int? ?? 0;
+    if (restoreHp == 0 && restoreMp == 0 && restoreStamina == 0) {
+      return;
+    }
+
+    state = state.copyWith(
+      player: state.player.copyWith(
+        hp: (state.player.hp + restoreHp).clamp(0, state.player.maxHp),
+        mp: (state.player.mp + restoreMp).clamp(0, state.player.maxMp),
+        stamina: (state.player.stamina + restoreStamina).clamp(
+          0,
+          state.player.maxStamina,
+        ),
+      ),
+    );
   }
 
   void _addLog(GameLogType type, String message) {
     state = state.copyWith(
       logs: [
         ...state.logs,
-        GameLogEntry(
-          timestamp: DateTime.now(),
-          type: type,
-          message: message,
-        ),
+        GameLogEntry(timestamp: DateTime.now(), type: type, message: message),
       ],
     );
   }

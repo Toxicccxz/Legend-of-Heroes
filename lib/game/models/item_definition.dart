@@ -7,6 +7,7 @@ class ItemDefinition {
     required this.description,
     required this.type,
     required this.effects,
+    this.useEvents = const [],
     this.slot,
   });
 
@@ -15,6 +16,7 @@ class ItemDefinition {
   final String description;
   final ItemType type;
   final Map<String, int> effects;
+  final List<String> useEvents;
   final String? slot;
 
   factory ItemDefinition.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,9 @@ class ItemDefinition {
       description: json['description'] as String? ?? '',
       type: ItemType.values.byName(json['type'] as String? ?? 'quest'),
       effects: Map<String, int>.from(json['effects'] as Map? ?? const {}),
+      useEvents: List<String>.from(
+        json['useEvents'] as List<dynamic>? ?? const [],
+      ),
       slot: json['slot'] as String?,
     );
   }
