@@ -11,20 +11,30 @@ import '../../game/models/room_definition.dart';
 import '../../game/systems/map_system.dart';
 import 'panel_frame.dart';
 
-class MapPanel extends ConsumerWidget {
+class MapPanel extends ConsumerStatefulWidget {
   const MapPanel({super.key});
 
   static const _mapSystem = MapSystem();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MapPanel> createState() => _MapPanelState();
+}
+
+class _MapPanelState extends ConsumerState<MapPanel> {
+  String? _lastRoomId;
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(gameControllerProvider);
     final room = state.definitions?.rooms[state.currentRoomId];
-    final zone = _mapSystem.getCurrentZone(state);
-    final visibleRooms = _mapSystem.getVisibleRooms(
+    final zone = MapPanel._mapSystem.getCurrentZone(state);
+    final visibleRooms = MapPanel._mapSystem.getVisibleRooms(
       state,
       radius: zone?.visibleRadius ?? 3,
     );
+    final previousRoom = _previousRoomFor(state, room);
+    final mapRooms = _mapRooms(visibleRooms, room, previousRoom);
+    _rememberRoomAfterBuild(state.currentRoomId);
 
     return PanelFrame(
       title: '',
@@ -42,8 +52,9 @@ class MapPanel extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: _MapCanvas(
-                        rooms: visibleRooms,
+                        rooms: mapRooms,
                         currentRoom: room,
+                        previousRoom: previousRoom,
                         currentRoomId: state.currentRoomId,
                       ),
                     ),
@@ -63,17 +74,59 @@ class MapPanel extends ConsumerWidget {
       ),
     );
   }
+
+  RoomDefinition? _previousRoomFor(
+    GameState state,
+    RoomDefinition? currentRoom,
+  ) {
+    final previousRoomId = _lastRoomId;
+    if (previousRoomId == null || previousRoomId == state.currentRoomId) {
+      return null;
+    }
+    final previousRoom = state.definitions?.rooms[previousRoomId];
+    if (currentRoom == null || previousRoom?.zoneId != currentRoom.zoneId) {
+      return null;
+    }
+    return previousRoom;
+  }
+
+  List<RoomDefinition> _mapRooms(
+    List<RoomDefinition> visibleRooms,
+    RoomDefinition? currentRoom,
+    RoomDefinition? previousRoom,
+  ) {
+    final roomsById = <String, RoomDefinition>{
+      for (final room in visibleRooms) room.id: room,
+    };
+    if (previousRoom != null) {
+      roomsById[previousRoom.id] = previousRoom;
+    }
+    if (currentRoom != null) {
+      roomsById[currentRoom.id] = currentRoom;
+    }
+    return roomsById.values.toList();
+  }
+
+  void _rememberRoomAfterBuild(String currentRoomId) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _lastRoomId != currentRoomId) {
+        _lastRoomId = currentRoomId;
+      }
+    });
+  }
 }
 
 class _MapCanvas extends StatelessWidget {
   const _MapCanvas({
     required this.rooms,
     required this.currentRoom,
+    required this.previousRoom,
     required this.currentRoomId,
   });
 
   final List<RoomDefinition> rooms;
   final RoomDefinition? currentRoom;
+  final RoomDefinition? previousRoom;
   final String currentRoomId;
 
   @override
@@ -81,12 +134,22 @@ class _MapCanvas extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CustomPaint(
-          painter: _RoomMapPainter(
-            rooms: rooms,
-            currentRoom: currentRoom,
-            currentRoomId: currentRoomId,
-          ),
+        TweenAnimationBuilder<double>(
+          key: ValueKey('${previousRoom?.id ?? currentRoomId}->$currentRoomId'),
+          tween: Tween(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          builder: (context, progress, child) {
+            return CustomPaint(
+              painter: _RoomMapPainter(
+                rooms: rooms,
+                currentRoom: currentRoom,
+                previousRoom: previousRoom,
+                currentRoomId: currentRoomId,
+                moveProgress: progress,
+              ),
+            );
+          },
         ),
         const Positioned(right: 4, top: 4, child: _MapLegend()),
       ],
@@ -300,7 +363,9 @@ class _RoomMapPainter extends CustomPainter {
   const _RoomMapPainter({
     required this.rooms,
     required this.currentRoom,
+    required this.previousRoom,
     required this.currentRoomId,
+    required this.moveProgress,
   });
 
   static const _maxGridStep = 22.0;
@@ -309,7 +374,9 @@ class _RoomMapPainter extends CustomPainter {
 
   final List<RoomDefinition> rooms;
   final RoomDefinition? currentRoom;
+  final RoomDefinition? previousRoom;
   final String currentRoomId;
+  final double moveProgress;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -325,6 +392,7 @@ class _RoomMapPainter extends CustomPainter {
       math.min(mapWidth, mapHeight) / (_viewportDiameter + 1),
     );
     final center = Offset(mapWidth / 2, mapHeight / 2);
+    final anchor = _viewportAnchor(current, rooms);
 
     final gridPaint =
         Paint()
@@ -340,7 +408,7 @@ class _RoomMapPainter extends CustomPainter {
 
     final positions = <String, Offset>{
       for (final room in rooms)
-        room.id: _positionFor(room, current, center, gridStep),
+        room.id: _positionFor(room, anchor, center, gridStep),
     };
     final linePaint =
         Paint()
@@ -364,44 +432,82 @@ class _RoomMapPainter extends CustomPainter {
       if (nodeCenter == null) {
         continue;
       }
-      final isCurrent = room.id == currentRoomId;
-      final rect = Rect.fromCenter(
-        center: nodeCenter,
-        width: _nodeSize,
-        height: _nodeSize,
-      );
-      final paint =
-          Paint()
-            ..color = isCurrent ? Colors.black : Colors.white
-            ..style = PaintingStyle.fill;
-      final border =
-          Paint()
-            ..color = Colors.black
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1.5;
-      canvas.drawRect(rect, paint);
-      canvas.drawRect(rect, border);
+      _drawRoomNode(canvas, nodeCenter, current: false);
     }
+
+    final currentPosition = positions[currentRoomId];
+    if (currentPosition == null) {
+      return;
+    }
+    final previousPosition =
+        previousRoom == null ? null : positions[previousRoom?.id];
+    final markerPosition =
+        previousPosition == null
+            ? currentPosition
+            : Offset.lerp(previousPosition, currentPosition, moveProgress) ??
+                currentPosition;
+    _drawRoomNode(canvas, markerPosition, current: true);
+  }
+
+  Offset _viewportAnchor(RoomDefinition current, List<RoomDefinition> rooms) {
+    final minX = rooms.map((room) => room.mapX).reduce(math.min).toDouble();
+    final maxX = rooms.map((room) => room.mapX).reduce(math.max).toDouble();
+    final minY = rooms.map((room) => room.mapY).reduce(math.min).toDouble();
+    final maxY = rooms.map((room) => room.mapY).reduce(math.max).toDouble();
+    const centralRadius = 1.2;
+    final zoneCenterX = (minX + maxX) / 2;
+    final zoneCenterY = (minY + maxY) / 2;
+    return Offset(
+      zoneCenterX.clamp(
+        current.mapX - centralRadius,
+        current.mapX + centralRadius,
+      ),
+      zoneCenterY.clamp(
+        current.mapY - centralRadius,
+        current.mapY + centralRadius,
+      ),
+    );
   }
 
   Offset _positionFor(
     RoomDefinition room,
-    RoomDefinition current,
+    Offset anchor,
     Offset center,
     double gridStep,
   ) {
-    final relativeX = room.mapX - current.mapX;
-    final relativeY = room.mapY - current.mapY;
+    final relativeX = room.mapX - anchor.dx;
+    final relativeY = room.mapY - anchor.dy;
     return Offset(
       center.dx + relativeX * gridStep,
       center.dy + relativeY * gridStep,
     );
   }
 
+  void _drawRoomNode(Canvas canvas, Offset center, {required bool current}) {
+    final rect = Rect.fromCenter(
+      center: center,
+      width: _nodeSize,
+      height: _nodeSize,
+    );
+    final paint =
+        Paint()
+          ..color = current ? Colors.black : Colors.white
+          ..style = PaintingStyle.fill;
+    final border =
+        Paint()
+          ..color = Colors.black
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = current ? 1.8 : 1.5;
+    canvas.drawRect(rect, paint);
+    canvas.drawRect(rect, border);
+  }
+
   @override
   bool shouldRepaint(covariant _RoomMapPainter oldDelegate) {
     return oldDelegate.currentRoomId != currentRoomId ||
         oldDelegate.currentRoom != currentRoom ||
+        oldDelegate.previousRoom != previousRoom ||
+        oldDelegate.moveProgress != moveProgress ||
         oldDelegate.rooms != rooms;
   }
 }
