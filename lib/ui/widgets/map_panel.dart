@@ -79,6 +79,8 @@ class _MapPanelState extends ConsumerState<MapPanel> {
                 );
               },
             ),
+            onPressed: onPressed,
+            child: Text(actionLabel, style: const TextStyle(fontSize: 12)),
           ),
           const SizedBox(height: 6),
           _RoomInfo(room: room, zoneName: zone?.name),
