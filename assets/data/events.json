@@ -35,13 +35,28 @@
     "type": "useItem",
     "message": "你使用了小红药水，恢复 20 HP。",
     "logType": "system",
-    "effects": {}
+    "effects": {
+      "restoreHp": 20
+    }
+  },
+  {
+    "id": "event_use_bread",
+    "type": "useItem",
+    "message": "你吃下了面包，恢复 15 点体力。",
+    "logType": "system",
+    "effects": {
+      "restoreStamina": 15
+    }
   },
   {
     "id": "event_rest",
     "type": "rest",
-    "message": "你短暂休息，恢复了体力。",
+    "message": "你短暂休息，恢复了一些 HP、MP 和体力。",
     "logType": "system",
-    "effects": {}
+    "effects": {
+      "restoreHp": 10,
+      "restoreMp": 8,
+      "restoreStamina": 20
+    }
   }
 ]
