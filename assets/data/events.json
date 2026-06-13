@@ -58,5 +58,130 @@
       "restoreMp": 8,
       "restoreStamina": 20
     }
+  },
+  {
+    "id": "event_investigate_old_well",
+    "type": "investigate",
+    "message": "井壁上刻着半枚青云符记，似乎指向山门方向。",
+    "logType": "system",
+    "onceFlag": "investigated_old_well",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_abandoned_house",
+    "type": "investigate",
+    "message": "你在床板下找到一枚发黑的铜钱，屋里曾有人匆忙躲藏。",
+    "logType": "system",
+    "onceFlag": "investigated_abandoned_house",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_cellar_door",
+    "type": "investigate",
+    "message": "地窖门口有新鲜泥印，像是有人拖着重物下去。",
+    "logType": "system",
+    "onceFlag": "investigated_cellar_door",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_herbal_patch",
+    "type": "investigate",
+    "message": "你辨认出几株止血草，确认这里适合采集药材。",
+    "logType": "quest",
+    "onceFlag": "investigated_herbal_patch",
+    "effects": {
+      "questId": "side_guard_herb",
+      "progressKey": "collected",
+      "progressValue": 2
+    }
+  },
+  {
+    "id": "event_enter_mist_forest",
+    "type": "enterRoom",
+    "message": "雾气吞没了来路，你踏入了村西的雾林。",
+    "logType": "system",
+    "onceFlag": "entered_mist_forest",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_herb_grove",
+    "type": "investigate",
+    "message": "灵草旁有被压断的枝叶，最近有人在这里停留过。",
+    "logType": "system",
+    "onceFlag": "investigated_herb_grove",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_wolf_den",
+    "type": "investigate",
+    "message": "狼穴前的兽骨还很新，继续深入前最好做好准备。",
+    "logType": "combat",
+    "onceFlag": "investigated_wolf_den",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_stone_shrine",
+    "type": "investigate",
+    "message": "石祠剑痕中残留微弱灵光，与你身上的木制令牌产生共鸣。",
+    "logType": "system",
+    "onceFlag": "investigated_stone_shrine",
+    "effects": {}
+  },
+  {
+    "id": "event_talk_wounded_ranger",
+    "type": "dialogue",
+    "message": "受伤巡林人告诉你，狼群最近被某种异响惊扰。",
+    "logType": "system",
+    "effects": {}
+  },
+  {
+    "id": "event_enter_qingyun_outskirts",
+    "type": "enterRoom",
+    "message": "你抵达青云山麓，山门方向传来悠长钟声。",
+    "logType": "quest",
+    "onceFlag": "entered_qingyun_outskirts",
+    "effects": {
+      "questId": "sect_intro_qingyun",
+      "progressKey": "arrived",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_investigate_bamboo_steps",
+    "type": "investigate",
+    "message": "木牌上写着：入门先正心，持剑先守礼。",
+    "logType": "system",
+    "onceFlag": "investigated_bamboo_steps",
+    "effects": {}
+  },
+  {
+    "id": "event_investigate_sword_platform",
+    "type": "investigate",
+    "message": "你凝视石栏剑痕，隐约体会到一丝基础剑势。",
+    "logType": "system",
+    "onceFlag": "investigated_sword_platform",
+    "effects": {}
+  },
+  {
+    "id": "event_talk_sword_instructor",
+    "type": "dialogue",
+    "message": "传剑执事记下你的名字，让你明日再来演武场。",
+    "logType": "quest",
+    "effects": {
+      "questId": "sect_intro_qingyun",
+      "progressKey": "arrived",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_rest_guest_lodge",
+    "type": "rest",
+    "message": "你在客舍安稳休息，恢复了较多 HP、MP 和体力。",
+    "logType": "system",
+    "effects": {
+      "restoreHp": 18,
+      "restoreMp": 14,
+      "restoreStamina": 30
+    }
   }
 ]

@@ -4,16 +4,30 @@
     "name": "废弃村口",
     "description": "前方是一条通往村庄的小路，四周安静，能听到风声。",
     "zoneId": "abandoned_village",
-    "tags": ["村庄", "安全区域", "新手引导"],
+    "tags": [
+      "村庄",
+      "安全区域",
+      "新手引导"
+    ],
     "exits": {
       "north": "village_square",
       "east": "old_well",
       "west": "forest_path"
     },
-    "npcs": ["wandering_merchant", "guard", "little_girl"],
-    "onEnterEvents": ["event_first_enter_village"],
-    "investigateEvents": ["event_investigate_village_entrance"],
-    "restEvents": ["event_rest"],
+    "npcs": [
+      "wandering_merchant",
+      "guard",
+      "little_girl"
+    ],
+    "onEnterEvents": [
+      "event_first_enter_village"
+    ],
+    "investigateEvents": [
+      "event_investigate_village_entrance"
+    ],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 2,
     "mapY": 2
   },
@@ -22,16 +36,22 @@
     "name": "村庄广场",
     "description": "破旧的广场中央堆着枯枝，几条小路从这里延伸出去。",
     "zoneId": "abandoned_village",
-    "tags": ["村庄", "安全区域"],
+    "tags": [
+      "村庄",
+      "安全区域"
+    ],
     "exits": {
       "south": "village_entrance",
       "north": "guard_post",
-      "east": "qingyun_contact_point"
+      "east": "qingyun_contact_point",
+      "west": "abandoned_house"
     },
     "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [],
-    "restEvents": ["event_rest"],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 2,
     "mapY": 1
   },
@@ -40,14 +60,22 @@
     "name": "老井",
     "description": "井口被藤蔓缠住，井边泥土上留着细小的脚印。",
     "zoneId": "abandoned_village",
-    "tags": ["村庄", "可调查"],
+    "tags": [
+      "村庄",
+      "可调查"
+    ],
     "exits": {
-      "west": "village_entrance"
+      "west": "village_entrance",
+      "north": "herbal_patch"
     },
     "npcs": [],
     "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": ["event_rest"],
+    "investigateEvents": [
+      "event_investigate_old_well"
+    ],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 3,
     "mapY": 2
   },
@@ -56,14 +84,20 @@
     "name": "林间小路",
     "description": "林子里雾气很重，远处偶尔传来低沉的兽吼。",
     "zoneId": "abandoned_village",
-    "tags": ["野外", "危险边缘"],
+    "tags": [
+      "野外",
+      "危险边缘"
+    ],
     "exits": {
-      "east": "village_entrance"
+      "east": "village_entrance",
+      "west": "mist_forest_gate"
     },
     "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [],
-    "restEvents": ["event_rest"],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 1,
     "mapY": 2
   },
@@ -72,14 +106,21 @@
     "name": "守卫哨所",
     "description": "一处临时哨所挡在村庄北侧，几面旧旗在风中摇晃。",
     "zoneId": "abandoned_village",
-    "tags": ["村庄", "安全区域"],
+    "tags": [
+      "村庄",
+      "安全区域"
+    ],
     "exits": {
       "south": "village_square"
     },
-    "npcs": ["guard"],
+    "npcs": [
+      "guard"
+    ],
     "onEnterEvents": [],
     "investigateEvents": [],
-    "restEvents": ["event_rest"],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 2,
     "mapY": 0
   },
@@ -88,15 +129,323 @@
     "name": "青云门接引点",
     "description": "一块青石碑立在路旁，碑前站着青云门接引人。",
     "zoneId": "abandoned_village",
-    "tags": ["门派", "新手引导"],
+    "tags": [
+      "门派",
+      "新手引导"
+    ],
     "exits": {
-      "west": "village_square"
+      "west": "village_square",
+      "north": "mountain_foot"
     },
-    "npcs": ["qingyun_guide"],
+    "npcs": [
+      "qingyun_guide"
+    ],
     "onEnterEvents": [],
     "investigateEvents": [],
-    "restEvents": ["event_rest"],
+    "restEvents": [
+      "event_rest"
+    ],
     "mapX": 3,
     "mapY": 1
+  },
+  {
+    "id": "abandoned_house",
+    "name": "废屋",
+    "description": "半塌的木屋里堆满灰尘，角落还摆着一张能勉强躺下的旧床。",
+    "zoneId": "abandoned_village",
+    "tags": [
+      "村庄",
+      "可调查",
+      "休息点"
+    ],
+    "exits": {
+      "east": "village_square",
+      "south": "cellar_door"
+    },
+    "npcs": [],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_abandoned_house"
+    ],
+    "restEvents": [
+      "event_rest"
+    ],
+    "mapX": 1,
+    "mapY": 1
+  },
+  {
+    "id": "cellar_door",
+    "name": "地窖门口",
+    "description": "木门半掩着，潮湿的气味从地下涌出，像是有人刚刚来过。",
+    "zoneId": "abandoned_village",
+    "tags": [
+      "村庄",
+      "可调查"
+    ],
+    "exits": {
+      "north": "abandoned_house"
+    },
+    "npcs": [],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_cellar_door"
+    ],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 2
+  },
+  {
+    "id": "herbal_patch",
+    "name": "药草坡",
+    "description": "老井北侧的缓坡长着几簇止血草，草药客正在辨认叶脉。",
+    "zoneId": "abandoned_village",
+    "tags": [
+      "村庄",
+      "草药"
+    ],
+    "exits": {
+      "south": "old_well"
+    },
+    "npcs": [
+      "herb_gatherer"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_herbal_patch"
+    ],
+    "restEvents": [],
+    "mapX": 3,
+    "mapY": 1
+  },
+  {
+    "id": "mist_forest_gate",
+    "name": "雾林入口",
+    "description": "树影像帘幕一样垂下，雾气把村外的小路吞进林中。",
+    "zoneId": "mist_forest",
+    "tags": [
+      "森林",
+      "危险"
+    ],
+    "exits": {
+      "east": "forest_path",
+      "west": "hunter_camp",
+      "north": "herb_grove"
+    },
+    "npcs": [],
+    "onEnterEvents": [
+      "event_enter_mist_forest"
+    ],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 3,
+    "mapY": 2
+  },
+  {
+    "id": "hunter_camp",
+    "name": "猎人营地",
+    "description": "几顶旧帐篷围着快要熄灭的火堆，老猎户正擦拭弓弦。",
+    "zoneId": "mist_forest",
+    "tags": [
+      "森林",
+      "休息点"
+    ],
+    "exits": {
+      "east": "mist_forest_gate",
+      "west": "wolf_den",
+      "north": "stone_shrine"
+    },
+    "npcs": [
+      "old_hunter"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [
+      "event_rest"
+    ],
+    "mapX": 2,
+    "mapY": 2
+  },
+  {
+    "id": "herb_grove",
+    "name": "雾中药圃",
+    "description": "厚雾中透出淡淡药香，几株发光的灵草夹在荆棘之间。",
+    "zoneId": "mist_forest",
+    "tags": [
+      "森林",
+      "草药",
+      "可调查"
+    ],
+    "exits": {
+      "south": "mist_forest_gate",
+      "west": "stone_shrine"
+    },
+    "npcs": [],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_herb_grove"
+    ],
+    "restEvents": [],
+    "mapX": 3,
+    "mapY": 1
+  },
+  {
+    "id": "wolf_den",
+    "name": "狼穴外缘",
+    "description": "岩缝里散落着兽骨，低沉的喘息声从更深处传来。",
+    "zoneId": "mist_forest",
+    "tags": [
+      "森林",
+      "危险",
+      "可调查"
+    ],
+    "exits": {
+      "east": "hunter_camp"
+    },
+    "npcs": [
+      "wounded_ranger"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_wolf_den"
+    ],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 2
+  },
+  {
+    "id": "stone_shrine",
+    "name": "石祠",
+    "description": "青苔覆盖的石祠立在林间，石面刻着几道古旧剑痕。",
+    "zoneId": "mist_forest",
+    "tags": [
+      "森林",
+      "遗迹",
+      "可调查"
+    ],
+    "exits": {
+      "south": "hunter_camp",
+      "east": "herb_grove"
+    },
+    "npcs": [
+      "shrine_keeper"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_stone_shrine"
+    ],
+    "restEvents": [],
+    "mapX": 2,
+    "mapY": 1
+  },
+  {
+    "id": "mountain_foot",
+    "name": "青云山脚",
+    "description": "山门石阶从这里向上延伸，云气顺着台阶缓缓流动。",
+    "zoneId": "qingyun_outskirts",
+    "tags": [
+      "山地",
+      "门派"
+    ],
+    "exits": {
+      "south": "qingyun_contact_point",
+      "north": "bamboo_steps"
+    },
+    "npcs": [],
+    "onEnterEvents": [
+      "event_enter_qingyun_outskirts"
+    ],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 2,
+    "mapY": 3
+  },
+  {
+    "id": "bamboo_steps",
+    "name": "竹林石阶",
+    "description": "竹影摇动，石阶两侧挂着写有门规的木牌。",
+    "zoneId": "qingyun_outskirts",
+    "tags": [
+      "山地",
+      "竹林"
+    ],
+    "exits": {
+      "south": "mountain_foot",
+      "north": "training_yard",
+      "east": "guest_lodge"
+    },
+    "npcs": [
+      "bamboo_sweeper"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_bamboo_steps"
+    ],
+    "restEvents": [],
+    "mapX": 2,
+    "mapY": 2
+  },
+  {
+    "id": "training_yard",
+    "name": "演武场",
+    "description": "宽阔的石坪上摆着木桩和剑架，传剑执事正在巡视新弟子。",
+    "zoneId": "qingyun_outskirts",
+    "tags": [
+      "门派",
+      "训练"
+    ],
+    "exits": {
+      "south": "bamboo_steps",
+      "north": "sword_platform"
+    },
+    "npcs": [
+      "sword_instructor"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 2,
+    "mapY": 1
+  },
+  {
+    "id": "sword_platform",
+    "name": "观剑台",
+    "description": "高台临风，可以俯瞰山脚与雾林，石栏上残留着剑气划痕。",
+    "zoneId": "qingyun_outskirts",
+    "tags": [
+      "门派",
+      "可调查"
+    ],
+    "exits": {
+      "south": "training_yard"
+    },
+    "npcs": [],
+    "onEnterEvents": [],
+    "investigateEvents": [
+      "event_investigate_sword_platform"
+    ],
+    "restEvents": [],
+    "mapX": 2,
+    "mapY": 0
+  },
+  {
+    "id": "guest_lodge",
+    "name": "客舍",
+    "description": "接引弟子临时留宿的客舍，炉火温暖，床铺整齐。",
+    "zoneId": "qingyun_outskirts",
+    "tags": [
+      "门派",
+      "休息点"
+    ],
+    "exits": {
+      "west": "bamboo_steps"
+    },
+    "npcs": [],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [
+      "event_rest_guest_lodge"
+    ],
+    "mapX": 3,
+    "mapY": 2
   }
 ]

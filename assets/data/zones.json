@@ -2,7 +2,19 @@
   {
     "id": "abandoned_village",
     "name": "废弃村",
-    "description": "村口、广场、老井与哨所组成的新手探索区域。",
+    "description": "村口、广场、老井、废屋与药草坡组成的新手探索区域。",
+    "visibleRadius": 3
+  },
+  {
+    "id": "mist_forest",
+    "name": "雾林",
+    "description": "村西的浓雾森林，分布着猎人营地、狼穴与古旧石祠。",
+    "visibleRadius": 3
+  },
+  {
+    "id": "qingyun_outskirts",
+    "name": "青云山麓",
+    "description": "青云门山脚到演武场之间的外门接引区域。",
     "visibleRadius": 3
   }
 ]
