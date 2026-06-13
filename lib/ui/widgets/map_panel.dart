@@ -1,44 +1,303 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../game/core/game_action.dart';
 import '../../game/core/game_controller.dart';
 import '../../game/core/game_state.dart';
+import '../../game/models/npc_definition.dart';
 import '../../game/models/room_definition.dart';
+import '../../game/systems/map_system.dart';
 import 'panel_frame.dart';
 
-class MapPanel extends ConsumerWidget {
+class MapPanel extends ConsumerStatefulWidget {
   const MapPanel({super.key});
 
+  static const _mapSystem = MapSystem();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MapPanel> createState() => _MapPanelState();
+}
+
+class _MapPanelState extends ConsumerState<MapPanel> {
+  String? _lastRoomId;
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(gameControllerProvider);
     final room = state.definitions?.rooms[state.currentRoomId];
+    final zone = MapPanel._mapSystem.getCurrentZone(state);
+    final visibleRooms = MapPanel._mapSystem.getVisibleRooms(
+      state,
+      radius: zone?.visibleRadius ?? 3,
+    );
+    final previousRoom = _previousRoomFor(state, room);
+    final mapRooms = _mapRooms(visibleRooms, room, previousRoom);
+    _rememberRoomAfterBuild(state.currentRoomId);
 
     return PanelFrame(
-      title: '地图',
+      title: '',
       child: Column(
         children: [
           Expanded(
-            child: CustomPaint(
-              painter: _RoomMapPainter(state),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: SizedBox(
-                  width: 112,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      _LegendItem(label: '其他房间', thick: false),
-                      SizedBox(height: 8),
-                      _LegendItem(label: '当前位置', thick: true),
-                    ],
-                  ),
-                ),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final compact = constraints.maxWidth < 300;
+                final interactionWidth = math.min(
+                  compact ? 112.0 : 136.0,
+                  constraints.maxWidth * (compact ? 0.42 : 0.36),
+                );
+                return Row(
+                  children: [
+                    Expanded(
+                      child: _MapCanvas(
+                        rooms: mapRooms,
+                        currentRoom: room,
+                        previousRoom: previousRoom,
+                        currentRoomId: state.currentRoomId,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: interactionWidth,
+                      child: _MapInteractionList(state: state, ref: ref),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-          const SizedBox(height: 8),
-          _RoomInfo(room: room),
+          const SizedBox(height: 6),
+          _RoomInfo(room: room, zoneName: zone?.name),
+        ],
+      ),
+    );
+  }
+
+  RoomDefinition? _previousRoomFor(
+    GameState state,
+    RoomDefinition? currentRoom,
+  ) {
+    final previousRoomId = _lastRoomId;
+    if (previousRoomId == null || previousRoomId == state.currentRoomId) {
+      return null;
+    }
+    final previousRoom = state.definitions?.rooms[previousRoomId];
+    if (currentRoom == null || previousRoom?.zoneId != currentRoom.zoneId) {
+      return null;
+    }
+    return previousRoom;
+  }
+
+  List<RoomDefinition> _mapRooms(
+    List<RoomDefinition> visibleRooms,
+    RoomDefinition? currentRoom,
+    RoomDefinition? previousRoom,
+  ) {
+    final roomsById = <String, RoomDefinition>{
+      for (final room in visibleRooms) room.id: room,
+    };
+    if (previousRoom != null) {
+      roomsById[previousRoom.id] = previousRoom;
+    }
+    if (currentRoom != null) {
+      roomsById[currentRoom.id] = currentRoom;
+    }
+    return roomsById.values.toList();
+  }
+
+  void _rememberRoomAfterBuild(String currentRoomId) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _lastRoomId != currentRoomId) {
+        _lastRoomId = currentRoomId;
+      }
+    });
+  }
+}
+
+class _MapCanvas extends StatelessWidget {
+  const _MapCanvas({
+    required this.rooms,
+    required this.currentRoom,
+    required this.previousRoom,
+    required this.currentRoomId,
+  });
+
+  final List<RoomDefinition> rooms;
+  final RoomDefinition? currentRoom;
+  final RoomDefinition? previousRoom;
+  final String currentRoomId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        TweenAnimationBuilder<double>(
+          key: ValueKey('${previousRoom?.id ?? currentRoomId}->$currentRoomId'),
+          tween: Tween(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          builder: (context, progress, child) {
+            return CustomPaint(
+              painter: _RoomMapPainter(
+                rooms: rooms,
+                currentRoom: currentRoom,
+                previousRoom: previousRoom,
+                currentRoomId: currentRoomId,
+                moveProgress: progress,
+              ),
+            );
+          },
+        ),
+        const Positioned(right: 4, top: 4, child: _MapLegend()),
+      ],
+    );
+  }
+}
+
+class _MapLegend extends StatelessWidget {
+  const _MapLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.88),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _LegendItem(label: '其他房间', current: false),
+            SizedBox(height: 6),
+            _LegendItem(label: '当前位置', current: true),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MapInteractionList extends StatelessWidget {
+  const _MapInteractionList({required this.state, required this.ref});
+
+  final GameState state;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final room = state.definitions?.rooms[state.currentRoomId];
+    final npcs =
+        room?.npcs
+            .map((id) => state.definitions?.npcs[id])
+            .whereType<NpcDefinition>()
+            .toList() ??
+        const <NpcDefinition>[];
+    final hasInvestigate = room?.investigateEvents.isNotEmpty ?? false;
+    final hasRest = room?.restEvents.isNotEmpty ?? false;
+    final hasInteractions = npcs.isNotEmpty || hasInvestigate || hasRest;
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('可互动', style: TextStyle(fontWeight: FontWeight.w800)),
+          const SizedBox(height: 4),
+          Expanded(
+            child:
+                hasInteractions
+                    ? ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        for (final npc in npcs)
+                          _InteractionRow(
+                            icon: Icons.person_outline,
+                            label: npc.name,
+                            actionLabel: '交谈',
+                            onPressed:
+                                () => ref
+                                    .read(gameControllerProvider.notifier)
+                                    .dispatch(TalkToNpcAction(npc.id)),
+                          ),
+                        if (hasInvestigate)
+                          _InteractionRow(
+                            icon: Icons.search,
+                            label: '可疑线索',
+                            actionLabel: '调查',
+                            onPressed:
+                                () => ref
+                                    .read(gameControllerProvider.notifier)
+                                    .dispatch(const InvestigateAction()),
+                          ),
+                        if (hasRest)
+                          _InteractionRow(
+                            icon: Icons.bed,
+                            label: '休息点',
+                            actionLabel: '休息',
+                            onPressed:
+                                () => ref
+                                    .read(gameControllerProvider.notifier)
+                                    .dispatch(const RestAction()),
+                          ),
+                      ],
+                    )
+                    : const Center(child: Text('无')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InteractionRow extends StatelessWidget {
+  const _InteractionRow({
+    required this.icon,
+    required this.label,
+    required this.actionLabel,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final String actionLabel;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          Icon(icon, size: 18),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(0, 28),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
+            ),
+            onPressed: onPressed,
+            child: Text(actionLabel, style: const TextStyle(fontSize: 12)),
+          ),
         ],
       ),
     );
@@ -46,9 +305,10 @@ class MapPanel extends ConsumerWidget {
 }
 
 class _RoomInfo extends StatelessWidget {
-  const _RoomInfo({required this.room});
+  const _RoomInfo({required this.room, required this.zoneName});
 
   final RoomDefinition? room;
+  final String? zoneName;
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +322,12 @@ class _RoomInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('区域： ${room?.name ?? '未知区域'}',
-              style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(
+            '区域： ${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
+            style: const TextStyle(fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 4),
           Text('描述： ${room?.description ?? ''}'),
-          const Divider(thickness: 1),
-          Text('环境标签： ${(room?.tags ?? const []).join(' / ')}'),
         ],
       ),
     );
@@ -75,59 +335,85 @@ class _RoomInfo extends StatelessWidget {
 }
 
 class _LegendItem extends StatelessWidget {
-  const _LegendItem({required this.label, required this.thick});
+  const _LegendItem({required this.label, required this.current});
 
   final String label;
-  final bool thick;
+  final bool current;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-          width: 18,
-          height: 18,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
-            border: Border.all(width: thick ? 3 : 1.4),
-            color: Colors.white,
+            border: Border.all(width: 1.4),
+            color: current ? Colors.black : Colors.white,
           ),
         ),
-        const SizedBox(width: 8),
-        Text(label),
+        const SizedBox(width: 6),
+        Text(label, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
 }
 
 class _RoomMapPainter extends CustomPainter {
-  const _RoomMapPainter(this.state);
+  const _RoomMapPainter({
+    required this.rooms,
+    required this.currentRoom,
+    required this.previousRoom,
+    required this.currentRoomId,
+    required this.moveProgress,
+  });
 
-  final GameState state;
+  static const _maxGridStep = 22.0;
+  static const _nodeSize = 12.0;
+  static const _viewportDiameter = 7;
+
+  final List<RoomDefinition> rooms;
+  final RoomDefinition? currentRoom;
+  final RoomDefinition? previousRoom;
+  final String currentRoomId;
+  final double moveProgress;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rooms = state.definitions?.rooms.values.toList() ?? const [];
-    if (rooms.isEmpty) {
+    final current = currentRoom;
+    if (rooms.isEmpty || current == null) {
       return;
     }
 
-    final gridPaint = Paint()
-      ..color = Colors.grey.shade300
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    for (var x = 0.0; x < size.width; x += size.width / 6) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
+    final mapWidth = math.max(80.0, size.width);
+    final mapHeight = math.max(80.0, size.height);
+    final gridStep = math.min(
+      _maxGridStep,
+      math.min(mapWidth, mapHeight) / (_viewportDiameter + 1),
+    );
+    final center = Offset(mapWidth / 2, mapHeight / 2);
+    final anchor = _viewportAnchor(current, rooms);
+
+    final gridPaint =
+        Paint()
+          ..color = Colors.grey.shade300
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1;
+    for (var x = center.dx % gridStep; x < mapWidth; x += gridStep) {
+      canvas.drawLine(Offset(x, 0), Offset(x, mapHeight), gridPaint);
     }
-    for (var y = 0.0; y < size.height; y += size.height / 4) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    for (var y = center.dy % gridStep; y < mapHeight; y += gridStep) {
+      canvas.drawLine(Offset(0, y), Offset(mapWidth, y), gridPaint);
     }
 
     final positions = <String, Offset>{
-      for (final room in rooms) room.id: _positionFor(room, size),
+      for (final room in rooms)
+        room.id: _positionFor(room, anchor, center, gridStep),
     };
-    final linePaint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 2;
+    final linePaint =
+        Paint()
+          ..color = Colors.black
+          ..strokeWidth = 2;
     for (final room in rooms) {
       final from = positions[room.id];
       if (from == null) {
@@ -142,33 +428,86 @@ class _RoomMapPainter extends CustomPainter {
     }
 
     for (final room in rooms) {
-      final center = positions[room.id];
-      if (center == null) {
+      final nodeCenter = positions[room.id];
+      if (nodeCenter == null) {
         continue;
       }
-      final current = room.id == state.currentRoomId;
-      final rect = Rect.fromCenter(center: center, width: 30, height: 30);
-      final paint = Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.fill;
-      final border = Paint()
-        ..color = Colors.black
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = current ? 4 : 1.5;
-      canvas.drawRect(rect, paint);
-      canvas.drawRect(rect, border);
+      _drawRoomNode(canvas, nodeCenter, current: false);
     }
+
+    final currentPosition = positions[currentRoomId];
+    if (currentPosition == null) {
+      return;
+    }
+    final previousPosition =
+        previousRoom == null ? null : positions[previousRoom?.id];
+    final markerPosition =
+        previousPosition == null
+            ? currentPosition
+            : Offset.lerp(previousPosition, currentPosition, moveProgress) ??
+                currentPosition;
+    _drawRoomNode(canvas, markerPosition, current: true);
   }
 
-  Offset _positionFor(RoomDefinition room, Size size) {
-    final left = 46 + room.mapX * ((size.width - 160) / 4);
-    final top = 22 + room.mapY * ((size.height - 44) / 3);
-    return Offset(left, top);
+  Offset _viewportAnchor(RoomDefinition current, List<RoomDefinition> rooms) {
+    final minX = rooms.map((room) => room.mapX).reduce(math.min).toDouble();
+    final maxX = rooms.map((room) => room.mapX).reduce(math.max).toDouble();
+    final minY = rooms.map((room) => room.mapY).reduce(math.min).toDouble();
+    final maxY = rooms.map((room) => room.mapY).reduce(math.max).toDouble();
+    const centralRadius = 1.2;
+    final zoneCenterX = (minX + maxX) / 2;
+    final zoneCenterY = (minY + maxY) / 2;
+    return Offset(
+      zoneCenterX.clamp(
+        current.mapX - centralRadius,
+        current.mapX + centralRadius,
+      ),
+      zoneCenterY.clamp(
+        current.mapY - centralRadius,
+        current.mapY + centralRadius,
+      ),
+    );
+  }
+
+  Offset _positionFor(
+    RoomDefinition room,
+    Offset anchor,
+    Offset center,
+    double gridStep,
+  ) {
+    final relativeX = room.mapX - anchor.dx;
+    final relativeY = room.mapY - anchor.dy;
+    return Offset(
+      center.dx + relativeX * gridStep,
+      center.dy + relativeY * gridStep,
+    );
+  }
+
+  void _drawRoomNode(Canvas canvas, Offset center, {required bool current}) {
+    final rect = Rect.fromCenter(
+      center: center,
+      width: _nodeSize,
+      height: _nodeSize,
+    );
+    final paint =
+        Paint()
+          ..color = current ? Colors.black : Colors.white
+          ..style = PaintingStyle.fill;
+    final border =
+        Paint()
+          ..color = Colors.black
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = current ? 1.8 : 1.5;
+    canvas.drawRect(rect, paint);
+    canvas.drawRect(rect, border);
   }
 
   @override
   bool shouldRepaint(covariant _RoomMapPainter oldDelegate) {
-    return oldDelegate.state.currentRoomId != state.currentRoomId ||
-        oldDelegate.state.definitions != state.definitions;
+    return oldDelegate.currentRoomId != currentRoomId ||
+        oldDelegate.currentRoom != currentRoom ||
+        oldDelegate.previousRoom != previousRoom ||
+        oldDelegate.moveProgress != moveProgress ||
+        oldDelegate.rooms != rooms;
   }
 }
