@@ -33,7 +33,17 @@ class _MapPanelState extends ConsumerState<MapPanel> {
       radius: zone?.visibleRadius ?? 3,
     );
     final previousRoom = _previousRoomFor(state, room);
-    final mapRooms = _mapRooms(visibleRooms, room, previousRoom);
+    final previousVisibleRooms = _previousVisibleRooms(
+      state,
+      previousRoom,
+      radius: zone?.visibleRadius ?? 3,
+    );
+    final mapRooms = _mapRooms(
+      visibleRooms,
+      previousVisibleRooms,
+      room,
+      previousRoom,
+    );
     _rememberRoomAfterBuild(state.currentRoomId);
 
     return PanelFrame(
@@ -53,6 +63,8 @@ class _MapPanelState extends ConsumerState<MapPanel> {
                     Expanded(
                       child: _MapCanvas(
                         rooms: mapRooms,
+                        currentRooms: visibleRooms,
+                        previousRooms: previousVisibleRooms,
                         currentRoom: room,
                         previousRoom: previousRoom,
                         currentRoomId: state.currentRoomId,
@@ -92,11 +104,13 @@ class _MapPanelState extends ConsumerState<MapPanel> {
 
   List<RoomDefinition> _mapRooms(
     List<RoomDefinition> visibleRooms,
+    List<RoomDefinition> previousVisibleRooms,
     RoomDefinition? currentRoom,
     RoomDefinition? previousRoom,
   ) {
     final roomsById = <String, RoomDefinition>{
       for (final room in visibleRooms) room.id: room,
+      for (final room in previousVisibleRooms) room.id: room,
     };
     if (previousRoom != null) {
       roomsById[previousRoom.id] = previousRoom;
@@ -105,6 +119,20 @@ class _MapPanelState extends ConsumerState<MapPanel> {
       roomsById[currentRoom.id] = currentRoom;
     }
     return roomsById.values.toList();
+  }
+
+  List<RoomDefinition> _previousVisibleRooms(
+    GameState state,
+    RoomDefinition? previousRoom, {
+    required int radius,
+  }) {
+    if (previousRoom == null) {
+      return const [];
+    }
+    return MapPanel._mapSystem.getVisibleRooms(
+      state.copyWith(currentRoomId: previousRoom.id),
+      radius: radius,
+    );
   }
 
   void _rememberRoomAfterBuild(String currentRoomId) {
@@ -119,12 +147,16 @@ class _MapPanelState extends ConsumerState<MapPanel> {
 class _MapCanvas extends StatelessWidget {
   const _MapCanvas({
     required this.rooms,
+    required this.currentRooms,
+    required this.previousRooms,
     required this.currentRoom,
     required this.previousRoom,
     required this.currentRoomId,
   });
 
   final List<RoomDefinition> rooms;
+  final List<RoomDefinition> currentRooms;
+  final List<RoomDefinition> previousRooms;
   final RoomDefinition? currentRoom;
   final RoomDefinition? previousRoom;
   final String currentRoomId;
@@ -143,6 +175,8 @@ class _MapCanvas extends StatelessWidget {
             return CustomPaint(
               painter: _RoomMapPainter(
                 rooms: rooms,
+                currentRooms: currentRooms,
+                previousRooms: previousRooms,
                 currentRoom: currentRoom,
                 previousRoom: previousRoom,
                 currentRoomId: currentRoomId,
@@ -362,6 +396,8 @@ class _LegendItem extends StatelessWidget {
 class _RoomMapPainter extends CustomPainter {
   const _RoomMapPainter({
     required this.rooms,
+    required this.currentRooms,
+    required this.previousRooms,
     required this.currentRoom,
     required this.previousRoom,
     required this.currentRoomId,
@@ -373,6 +409,8 @@ class _RoomMapPainter extends CustomPainter {
   static const _viewportDiameter = 7;
 
   final List<RoomDefinition> rooms;
+  final List<RoomDefinition> currentRooms;
+  final List<RoomDefinition> previousRooms;
   final RoomDefinition? currentRoom;
   final RoomDefinition? previousRoom;
   final String currentRoomId;
@@ -392,10 +430,18 @@ class _RoomMapPainter extends CustomPainter {
       math.min(mapWidth, mapHeight) / (_viewportDiameter + 1),
     );
     final center = Offset(mapWidth / 2, mapHeight / 2);
-    final currentAnchor = _viewportAnchor(current, rooms);
+    final currentAnchor = _viewportAnchor(
+      current,
+      currentRooms.isEmpty ? rooms : currentRooms,
+    );
     final previous = previousRoom;
     final previousAnchor =
-        previous == null ? null : _viewportAnchor(previous, rooms);
+        previous == null
+            ? null
+            : _viewportAnchor(
+              previous,
+              previousRooms.isEmpty ? rooms : previousRooms,
+            );
     final anchor =
         previousAnchor == null
             ? currentAnchor
@@ -548,6 +594,8 @@ class _RoomMapPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _RoomMapPainter oldDelegate) {
     return oldDelegate.currentRoomId != currentRoomId ||
+        oldDelegate.currentRooms != currentRooms ||
+        oldDelegate.previousRooms != previousRooms ||
         oldDelegate.currentRoom != currentRoom ||
         oldDelegate.previousRoom != previousRoom ||
         oldDelegate.moveProgress != moveProgress ||
