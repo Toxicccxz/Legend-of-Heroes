@@ -466,20 +466,14 @@ class _RoomMapPainter extends CustomPainter {
           ..color = Colors.grey.shade300
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1;
-    for (
-      var x = _gridStart(center.dx - anchor.dx * gridStep, gridStep);
-      x < mapWidth;
-      x += gridStep
-    ) {
-      canvas.drawLine(Offset(x, 0), Offset(x, mapHeight), gridPaint);
-    }
-    for (
-      var y = _gridStart(center.dy - anchor.dy * gridStep, gridStep);
-      y < mapHeight;
-      y += gridStep
-    ) {
-      canvas.drawLine(Offset(0, y), Offset(mapWidth, y), gridPaint);
-    }
+    _drawGrid(
+      canvas,
+      Size(mapWidth, mapHeight),
+      center,
+      anchor,
+      gridStep,
+      gridPaint,
+    );
 
     final positions = <String, Offset>{
       for (final room in rooms)
@@ -567,12 +561,29 @@ class _RoomMapPainter extends CustomPainter {
     );
   }
 
-  double _gridStart(double origin, double gridStep) {
-    var start = origin % gridStep;
-    if (start > 0) {
-      start -= gridStep;
+  void _drawGrid(
+    Canvas canvas,
+    Size size,
+    Offset center,
+    Offset anchor,
+    double gridStep,
+    Paint paint,
+  ) {
+    final minGridX = (anchor.dx - center.dx / gridStep).floor() - 1;
+    final maxGridX =
+        (anchor.dx + (size.width - center.dx) / gridStep).ceil() + 1;
+    for (var gridX = minGridX; gridX <= maxGridX; gridX += 1) {
+      final x = center.dx + (gridX - anchor.dx) * gridStep;
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
-    return start;
+
+    final minGridY = (anchor.dy - center.dy / gridStep).floor() - 1;
+    final maxGridY =
+        (anchor.dy + (size.height - center.dy) / gridStep).ceil() + 1;
+    for (var gridY = minGridY; gridY <= maxGridY; gridY += 1) {
+      final y = center.dy + (gridY - anchor.dy) * gridStep;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
   }
 
   Offset _directionOffset(String direction) {
