@@ -17,6 +17,8 @@ class ActionMessagePanel extends ConsumerWidget {
       title: '',
       child: Column(
         children: [
+          _MessageFilterBar(state: state, ref: ref),
+          const SizedBox(height: 6),
           Expanded(child: _MessageLog(state: state)),
           const SizedBox(height: 6),
           const SizedBox(height: 86, child: _ExitButtons()),
@@ -47,7 +49,9 @@ class _MessageLogState extends State<_MessageLog> {
   @override
   void didUpdateWidget(covariant _MessageLog oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.state.logs.length != widget.state.logs.length) {
+    if (oldWidget.state.logs.length != widget.state.logs.length ||
+        oldWidget.state.selectedMessageFilter !=
+            widget.state.selectedMessageFilter) {
       _scrollToBottomAfterLayout();
     }
   }
@@ -60,7 +64,7 @@ class _MessageLogState extends State<_MessageLog> {
 
   @override
   Widget build(BuildContext context) {
-    final logs = widget.state.logs;
+    final logs = _filteredLogs(widget.state);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
@@ -68,14 +72,33 @@ class _MessageLogState extends State<_MessageLog> {
         border: Border.all(),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: ListView(
-        controller: _scrollController,
-        children:
-            logs.map((log) {
-              return Text('[${_formatTime(log.timestamp)}] ${log.message}');
-            }).toList(),
-      ),
+      child:
+          logs.isEmpty
+              ? const Center(child: Text('暂无消息'))
+              : ListView(
+                controller: _scrollController,
+                children:
+                    logs.map((log) {
+                      return Text(
+                        '[${_formatTime(log.timestamp)}] ${log.message}',
+                      );
+                    }).toList(),
+              ),
     );
+  }
+
+  List<GameLogEntry> _filteredLogs(GameState state) {
+    return switch (state.selectedMessageFilter) {
+      MessageFilter.all => state.logs,
+      MessageFilter.dialogue =>
+        state.logs.where((log) => log.type == GameLogType.dialogue).toList(),
+      MessageFilter.combat =>
+        state.logs.where((log) => log.type == GameLogType.combat).toList(),
+      MessageFilter.system =>
+        state.logs.where((log) => log.type == GameLogType.system).toList(),
+      MessageFilter.quest =>
+        state.logs.where((log) => log.type == GameLogType.quest).toList(),
+    };
   }
 
   void _scrollToBottomAfterLayout() {
@@ -91,6 +114,68 @@ class _MessageLogState extends State<_MessageLog> {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
+  }
+}
+
+class _MessageFilterBar extends StatelessWidget {
+  const _MessageFilterBar({required this.state, required this.ref});
+
+  final GameState state;
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children:
+          MessageFilter.values.map((filter) {
+            final selected = state.selectedMessageFilter == filter;
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                    foregroundColor: Colors.black,
+                    backgroundColor:
+                        selected ? Colors.grey.shade200 : Colors.white,
+                    side: BorderSide(
+                      color: Colors.black,
+                      width: selected ? 2 : 1,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  onPressed:
+                      () => ref
+                          .read(gameControllerProvider.notifier)
+                          .dispatch(SelectMessageFilterAction(filter)),
+                  child: Text(
+                    filter.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+}
+
+extension MessageFilterLabel on MessageFilter {
+  String get label {
+    return switch (this) {
+      MessageFilter.all => '全部',
+      MessageFilter.dialogue => '对话',
+      MessageFilter.combat => '战斗',
+      MessageFilter.system => '系统',
+      MessageFilter.quest => '任务',
+    };
   }
 }
 

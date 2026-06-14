@@ -1,6 +1,6 @@
 enum StatusTab { inventory, quest, skill, equipment, sect }
 
-enum MessageFilter { all, dialogue, combat, system }
+enum MessageFilter { all, dialogue, combat, system, quest }
 
 sealed class GameAction {
   const GameAction();
