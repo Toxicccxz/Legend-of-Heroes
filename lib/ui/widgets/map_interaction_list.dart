@@ -22,6 +22,7 @@ class _MapInteractionList extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(),
         borderRadius: BorderRadius.circular(6),
       ),
@@ -107,8 +108,8 @@ class _InteractionRow extends StatelessWidget {
           ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size(0, 28),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              minimumSize: const Size(42, 28),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               visualDensity: VisualDensity.compact,
             ),

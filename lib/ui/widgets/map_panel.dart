@@ -58,8 +58,8 @@ class _MapPanelState extends ConsumerState<MapPanel> {
               builder: (context, constraints) {
                 final compact = constraints.maxWidth < 300;
                 final interactionWidth = math.min(
-                  compact ? 112.0 : 136.0,
-                  constraints.maxWidth * (compact ? 0.42 : 0.36),
+                  compact ? 130.0 : 156.0,
+                  constraints.maxWidth * (compact ? 0.46 : 0.42),
                 );
                 return Row(
                   children: [

@@ -19,30 +19,34 @@ class _MapCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        TweenAnimationBuilder<double>(
-          key: ValueKey('${previousRoom?.id ?? currentRoomId}->$currentRoomId'),
-          tween: Tween(begin: 0, end: 1),
-          duration: const Duration(milliseconds: 280),
-          curve: Curves.easeOutCubic,
-          builder: (context, progress, child) {
-            return CustomPaint(
-              painter: _RoomMapPainter(
-                rooms: rooms,
-                currentRooms: currentRooms,
-                previousRooms: previousRooms,
-                currentRoom: currentRoom,
-                previousRoom: previousRoom,
-                currentRoomId: currentRoomId,
-                moveProgress: progress,
-              ),
-            );
-          },
-        ),
-        const Positioned(right: 4, top: 4, child: _MapLegend()),
-      ],
+    return ClipRect(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          TweenAnimationBuilder<double>(
+            key: ValueKey(
+              '${previousRoom?.id ?? currentRoomId}->$currentRoomId',
+            ),
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 280),
+            curve: Curves.easeOutCubic,
+            builder: (context, progress, child) {
+              return CustomPaint(
+                painter: _RoomMapPainter(
+                  rooms: rooms,
+                  currentRooms: currentRooms,
+                  previousRooms: previousRooms,
+                  currentRoom: currentRoom,
+                  previousRoom: previousRoom,
+                  currentRoomId: currentRoomId,
+                  moveProgress: progress,
+                ),
+              );
+            },
+          ),
+          const Positioned(right: 4, top: 4, child: _MapLegend()),
+        ],
+      ),
     );
   }
 }
@@ -128,6 +132,7 @@ class _RoomMapPainter extends CustomPainter {
       return;
     }
 
+    canvas.clipRect(Offset.zero & size);
     final mapWidth = math.max(80.0, size.width);
     final mapHeight = math.max(80.0, size.height);
     final gridStep = math.min(
