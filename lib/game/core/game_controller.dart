@@ -263,6 +263,8 @@ class GameController extends StateNotifier<GameState> {
         ...state.logs,
         GameLogEntry(timestamp: DateTime.now(), type: type, message: message),
       ],
+      selectedMessageFilter:
+          type == GameLogType.combat ? MessageFilter.combat : null,
     );
   }
 
