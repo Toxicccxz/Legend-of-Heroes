@@ -34,6 +34,93 @@ class GameDefinitions {
   final Map<String, EventDefinition> events;
   final Map<String, SectDefinition> sects;
   final Map<String, SkillDefinition> skills;
+
+  void validateIntegrity() {
+    final errors = <String>[];
+
+    for (final room in rooms.values) {
+      _requireId(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'zoneId',
+        id: room.zoneId,
+        targetIds: zones.keys,
+      );
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'exits',
+        ids: room.exits.values,
+        targetIds: rooms.keys,
+      );
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'npcs',
+        ids: room.npcs,
+        targetIds: npcs.keys,
+      );
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'onEnterEvents',
+        ids: room.onEnterEvents,
+        targetIds: events.keys,
+      );
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'investigateEvents',
+        ids: room.investigateEvents,
+        targetIds: events.keys,
+      );
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
+        field: 'restEvents',
+        ids: room.restEvents,
+        targetIds: events.keys,
+      );
+    }
+
+    for (final npc in npcs.values) {
+      _requireId(
+        errors,
+        source: 'Npc ${npc.id}',
+        field: 'dialogueId',
+        id: npc.dialogueId,
+        targetIds: dialogues.keys,
+      );
+    }
+
+    for (final dialogue in dialogues.values) {
+      _requireAllIds(
+        errors,
+        source: 'Dialogue ${dialogue.id}',
+        field: 'events',
+        ids: dialogue.events,
+        targetIds: events.keys,
+      );
+    }
+
+    for (final item in items.values) {
+      _requireAllIds(
+        errors,
+        source: 'Item ${item.id}',
+        field: 'useEvents',
+        ids: item.useEvents,
+        targetIds: events.keys,
+      );
+    }
+
+    for (final event in events.values) {
+      _validateEventEffectReferences(errors, event, this);
+    }
+
+    if (errors.isNotEmpty) {
+      throw StateError('Invalid game definitions:\n${errors.join('\n')}');
+    }
+  }
 }
 
 abstract class GameDefinitionRepository {
@@ -48,7 +135,7 @@ class AssetGameDefinitionRepository implements GameDefinitionRepository {
 
   @override
   Future<GameDefinitions> load() async {
-    return GameDefinitions(
+    final definitions = GameDefinitions(
       rooms: await _loadMap('assets/data/rooms.json', RoomDefinition.fromJson),
       zones: await _loadMap('assets/data/zones.json', ZoneDefinition.fromJson),
       npcs: await _loadMap('assets/data/npcs.json', NpcDefinition.fromJson),
@@ -71,6 +158,8 @@ class AssetGameDefinitionRepository implements GameDefinitionRepository {
         SkillDefinition.fromJson,
       ),
     );
+    definitions.validateIntegrity();
+    return definitions;
   }
 
   Future<Map<String, T>> _loadMap<T>(
@@ -79,11 +168,103 @@ class AssetGameDefinitionRepository implements GameDefinitionRepository {
   ) async {
     final jsonText = await _bundle.loadString(assetPath);
     final jsonList = jsonDecode(jsonText) as List<dynamic>;
-    final entries = jsonList.map((item) {
-      final object = fromJson(item as Map<String, dynamic>);
-      final id = item['id'] as String;
-      return MapEntry(id, object);
-    });
+    final entries = <MapEntry<String, T>>[];
+    final ids = <String>{};
+    for (final item in jsonList) {
+      final json = item as Map<String, dynamic>;
+      final id = json['id'] as String;
+      if (!ids.add(id)) {
+        throw StateError('Duplicate id "$id" in $assetPath.');
+      }
+      final object = fromJson(json);
+      entries.add(MapEntry(id, object));
+    }
     return Map<String, T>.fromEntries(entries);
   }
+}
+
+void _requireAllIds(
+  List<String> errors, {
+  required String source,
+  required String field,
+  required Iterable<String> ids,
+  required Iterable<String> targetIds,
+}) {
+  for (final id in ids) {
+    _requireId(
+      errors,
+      source: source,
+      field: field,
+      id: id,
+      targetIds: targetIds,
+    );
+  }
+}
+
+void _requireId(
+  List<String> errors, {
+  required String source,
+  required String field,
+  required String id,
+  required Iterable<String> targetIds,
+}) {
+  if (!targetIds.contains(id)) {
+    errors.add('$source references missing $field "$id".');
+  }
+}
+
+void _validateEventEffectReferences(
+  List<String> errors,
+  EventDefinition event,
+  GameDefinitions definitions,
+) {
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'questId',
+    targetIds: definitions.quests.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'completeQuestId',
+    targetIds: definitions.quests.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'itemId',
+    targetIds: definitions.items.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'npcId',
+    targetIds: definitions.npcs.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'roomId',
+    targetIds: definitions.rooms.keys,
+  );
+}
+
+void _requireOptionalEffectId(
+  List<String> errors, {
+  required EventDefinition event,
+  required String key,
+  required Iterable<String> targetIds,
+}) {
+  final value = event.effects[key];
+  if (value is! String) {
+    return;
+  }
+  _requireId(
+    errors,
+    source: 'Event ${event.id}',
+    field: 'effects.$key',
+    id: value,
+    targetIds: targetIds,
+  );
 }
