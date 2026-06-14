@@ -239,6 +239,18 @@ void _validateEventEffectReferences(
   _requireOptionalEffectId(
     errors,
     event: event,
+    key: 'giveItemId',
+    targetIds: definitions.items.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'removeItemId',
+    targetIds: definitions.items.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
     key: 'npcId',
     targetIds: definitions.npcs.keys,
   );
@@ -247,6 +259,12 @@ void _validateEventEffectReferences(
     event: event,
     key: 'roomId',
     targetIds: definitions.rooms.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'joinSectId',
+    targetIds: definitions.sects.keys,
   );
 }
 

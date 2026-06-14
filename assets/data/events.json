@@ -92,7 +92,9 @@
     "effects": {
       "questId": "side_guard_herb",
       "progressKey": "collected",
-      "progressValue": 2
+      "progressValue": 2,
+      "giveItemId": "healing_herb",
+      "giveItemCount": 1
     }
   },
   {

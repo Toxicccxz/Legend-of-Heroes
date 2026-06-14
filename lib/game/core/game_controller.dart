@@ -11,6 +11,7 @@ import '../systems/event_system.dart';
 import '../systems/inventory_system.dart';
 import '../systems/map_system.dart';
 import '../systems/quest_system.dart';
+import '../systems/sect_system.dart';
 import 'game_action.dart';
 import 'game_state.dart';
 
@@ -72,6 +73,7 @@ class GameController extends StateNotifier<GameState> {
   final EquipmentSystem _equipmentSystem = const EquipmentSystem();
   final DialogueSystem _dialogueSystem = const DialogueSystem();
   final EventSystem _eventSystem = const EventSystem();
+  final SectSystem _sectSystem = const SectSystem();
 
   Future<void> startNewGame() async {
     final definitions = _definitions;
@@ -233,8 +235,41 @@ class GameController extends StateNotifier<GameState> {
       if (completeQuestId != null) {
         state = _questSystem.completeQuest(state, completeQuestId);
       }
+      _applyInventoryEffects(event.effects);
+      _applySectEffects(event.effects);
+      _applyCombatEffects(event.effects);
       _applyPlayerRestoreEffects(event.effects);
     }
+  }
+
+  void _applyInventoryEffects(Map<String, dynamic> effects) {
+    final giveItemId = effects['giveItemId'] as String?;
+    final giveItemCount = effects['giveItemCount'] as int? ?? 1;
+    if (giveItemId != null && giveItemCount > 0) {
+      state = _inventorySystem.addItem(state, giveItemId, giveItemCount);
+    }
+
+    final removeItemId = effects['removeItemId'] as String?;
+    final removeItemCount = effects['removeItemCount'] as int? ?? 1;
+    if (removeItemId != null && removeItemCount > 0) {
+      state = _inventorySystem.removeItem(state, removeItemId, removeItemCount);
+    }
+  }
+
+  void _applySectEffects(Map<String, dynamic> effects) {
+    final joinSectId = effects['joinSectId'] as String?;
+    if (joinSectId == null) {
+      return;
+    }
+    state = _sectSystem.joinSect(state, joinSectId);
+  }
+
+  void _applyCombatEffects(Map<String, dynamic> effects) {
+    final combatLogMessage = effects['combatLogMessage'] as String?;
+    if (combatLogMessage == null || combatLogMessage.isEmpty) {
+      return;
+    }
+    _addLog(GameLogType.combat, combatLogMessage);
   }
 
   void _applyPlayerRestoreEffects(Map<String, dynamic> effects) {
