@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/core/game_action.dart';
 import '../../../game/core/game_controller.dart';
 import '../../../game/core/game_state.dart';
+import '../../../game/models/item_definition.dart';
 import '../../../game/systems/equipment_system.dart';
 
 class EquipmentTab extends StatelessWidget {
@@ -16,24 +17,21 @@ class EquipmentTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state.equippedItems.isEmpty) {
-      return const Text('当前未装备物品。');
-    }
     final effects = _equipmentSystem.getEquippedEffects(state);
     return ListView(
       children: [
-        for (final entry in state.equippedItems.entries)
+        for (final slot in EquipmentSystem.slots)
           _EquipmentRow(
-            slot: entry.key,
-            itemName:
-                state.definitions?.items[entry.value]?.name ?? entry.value,
+            slot: slot,
+            itemName: _itemNameFor(slot),
+            equipped: state.equippedItems.containsKey(slot),
             ref: ref,
           ),
         if (effects.isNotEmpty) ...[
           const Divider(height: 12),
           Text(
             '属性：${_formatEffects(effects)}',
-            maxLines: 2,
+            maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -41,9 +39,17 @@ class EquipmentTab extends StatelessWidget {
     );
   }
 
+  String _itemNameFor(String slot) {
+    final itemId = state.equippedItems[slot];
+    if (itemId == null) {
+      return '未装备';
+    }
+    return state.definitions?.items[itemId]?.name ?? itemId;
+  }
+
   String _formatEffects(Map<String, int> effects) {
     return effects.entries
-        .map((entry) => '${entry.key} +${entry.value}')
+        .map((entry) => '${ItemEffectKeys.labelFor(entry.key)} +${entry.value}')
         .join('，');
   }
 }
@@ -52,11 +58,13 @@ class _EquipmentRow extends StatelessWidget {
   const _EquipmentRow({
     required this.slot,
     required this.itemName,
+    required this.equipped,
     required this.ref,
   });
 
   final String slot;
   final String itemName;
+  final bool equipped;
   final WidgetRef ref;
 
   @override
@@ -67,24 +75,25 @@ class _EquipmentRow extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '$slot：$itemName',
+              '${EquipmentSlotIds.labelFor(slot)}：$itemName',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(42, 28),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
+          if (equipped)
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(42, 28),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
+              onPressed:
+                  () => ref
+                      .read(gameControllerProvider.notifier)
+                      .dispatch(UnequipItemAction(slot)),
+              child: const Text('卸下', style: TextStyle(fontSize: 12)),
             ),
-            onPressed:
-                () => ref
-                    .read(gameControllerProvider.notifier)
-                    .dispatch(UnequipItemAction(slot)),
-            child: const Text('卸下', style: TextStyle(fontSize: 12)),
-          ),
         ],
       ),
     );

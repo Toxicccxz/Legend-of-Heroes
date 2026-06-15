@@ -14,7 +14,7 @@ void main() {
 
     final nextState = equipmentSystem.equipItem(state, 'cloth');
 
-    expect(nextState.equippedItems['body'], 'cloth');
+    expect(nextState.equippedItems['upperBody'], 'cloth');
     expect(
       nextState.inventory.where((entry) => entry.itemId == 'cloth'),
       isEmpty,
@@ -25,12 +25,12 @@ void main() {
     const equipmentSystem = EquipmentSystem();
     final state = GameState.initial(_definitions()).copyWith(
       inventory: const [InventoryEntry(itemId: 'robe', count: 1)],
-      equippedItems: const {'body': 'cloth'},
+      equippedItems: const {'upperBody': 'cloth'},
     );
 
     final nextState = equipmentSystem.equipItem(state, 'robe');
 
-    expect(nextState.equippedItems['body'], 'robe');
+    expect(nextState.equippedItems['upperBody'], 'robe');
     expect(
       nextState.inventory.singleWhere((entry) => entry.itemId == 'cloth').count,
       1,
@@ -39,13 +39,14 @@ void main() {
 
   test('unequipItem returns equipment to inventory', () {
     const equipmentSystem = EquipmentSystem();
-    final state = GameState.initial(
-      _definitions(),
-    ).copyWith(inventory: const [], equippedItems: const {'body': 'cloth'});
+    final state = GameState.initial(_definitions()).copyWith(
+      inventory: const [],
+      equippedItems: const {'upperBody': 'cloth'},
+    );
 
-    final nextState = equipmentSystem.unequipItem(state, 'body');
+    final nextState = equipmentSystem.unequipItem(state, 'upperBody');
 
-    expect(nextState.equippedItems, isNot(contains('body')));
+    expect(nextState.equippedItems, isNot(contains('upperBody')));
     expect(
       nextState.inventory.singleWhere((entry) => entry.itemId == 'cloth').count,
       1,
@@ -56,12 +57,24 @@ void main() {
     const equipmentSystem = EquipmentSystem();
     final state = GameState.initial(
       _definitions(),
-    ).copyWith(equippedItems: const {'body': 'cloth', 'head': 'hat'});
+    ).copyWith(equippedItems: const {'upperBody': 'cloth', 'head': 'hat'});
 
     expect(equipmentSystem.getEquippedEffects(state), {
       'defense': 3,
-      'maxHp': 5,
+      'maxHp': 15,
     });
+  });
+
+  test('calculatePlayerStats applies equipped player stat effects', () {
+    const equipmentSystem = EquipmentSystem();
+    final state = GameState.initial(
+      _definitions(),
+    ).copyWith(equippedItems: const {'upperBody': 'cloth', 'head': 'hat'});
+
+    final player = equipmentSystem.calculatePlayerStats(state);
+
+    expect(player.maxHp, GameState.initial(_definitions()).player.maxHp + 15);
+    expect(player.level, GameState.initial(_definitions()).player.level);
   });
 }
 
@@ -75,8 +88,8 @@ GameDefinitions _definitions() {
         name: 'Cloth',
         description: '',
         type: ItemType.equipment,
-        effects: {'defense': 1},
-        slot: 'body',
+        effects: {'defense': 1, 'maxHp': 10},
+        slot: 'upperBody',
       ),
       'robe': ItemDefinition(
         id: 'robe',
@@ -84,7 +97,7 @@ GameDefinitions _definitions() {
         description: '',
         type: ItemType.equipment,
         effects: {'defense': 2},
-        slot: 'body',
+        slot: 'upperBody',
       ),
       'hat': ItemDefinition(
         id: 'hat',

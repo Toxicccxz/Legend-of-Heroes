@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/core/game_action.dart';
 import '../../game/core/game_controller.dart';
 import '../../game/core/game_state.dart';
+import '../../game/systems/equipment_system.dart';
 import 'panel_frame.dart';
 import 'status_tabs/equipment_tab.dart';
 import 'status_tabs/inventory_tab.dart';
@@ -42,10 +43,11 @@ class _PlayerStats extends StatelessWidget {
   const _PlayerStats({required this.state});
 
   final GameState state;
+  static const _equipmentSystem = EquipmentSystem();
 
   @override
   Widget build(BuildContext context) {
-    final player = state.player;
+    final player = _equipmentSystem.calculatePlayerStats(state);
     return FittedBox(
       alignment: Alignment.topLeft,
       fit: BoxFit.scaleDown,
@@ -56,7 +58,6 @@ class _PlayerStats extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _StatText(label: '姓名', value: player.name),
-            _StatText(label: '等级', value: '${player.level}'),
             _BarStat(label: 'HP', value: player.hp, max: player.maxHp),
             _BarStat(label: 'MP', value: player.mp, max: player.maxMp),
             _BarStat(

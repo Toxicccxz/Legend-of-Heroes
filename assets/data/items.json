@@ -27,12 +27,75 @@
     ]
   },
   {
+    "id": "novice_hat",
+    "name": "新手布帽",
+    "description": "粗布缝成的帽子，能挡一点风。",
+    "type": "equipment",
+    "slot": "head",
+    "effects": {
+      "maxMp": 3
+    }
+  },
+  {
     "id": "novice_cloth",
     "name": "新手布衣",
     "description": "粗布缝成的基础防具。",
     "type": "equipment",
-    "slot": "body",
+    "slot": "upperBody",
     "effects": {
+      "maxHp": 5,
+      "defense": 1
+    }
+  },
+  {
+    "id": "novice_wristguards",
+    "name": "新手护腕",
+    "description": "布条缠成的护腕，方便握持武器。",
+    "type": "equipment",
+    "slot": "wrist",
+    "effects": {
+      "attack": 1
+    }
+  },
+  {
+    "id": "novice_pants",
+    "name": "新手布裤",
+    "description": "便于赶路的粗布长裤。",
+    "type": "equipment",
+    "slot": "lowerBody",
+    "effects": {
+      "maxStamina": 4
+    }
+  },
+  {
+    "id": "novice_shoes",
+    "name": "新手布鞋",
+    "description": "鞋底很薄，但比赤脚强。",
+    "type": "equipment",
+    "slot": "feet",
+    "effects": {
+      "maxStamina": 2
+    }
+  },
+  {
+    "id": "wooden_necklace",
+    "name": "木珠项链",
+    "description": "一串朴素木珠，能让人稍稍安心。",
+    "type": "equipment",
+    "slot": "necklace",
+    "effects": {
+      "maxHp": 2,
+      "maxMp": 2
+    }
+  },
+  {
+    "id": "rusty_sword",
+    "name": "生锈铁剑",
+    "description": "剑刃有些钝，但足以防身。",
+    "type": "equipment",
+    "slot": "weapon",
+    "effects": {
+      "attack": 2,
       "defense": 1
     }
   },

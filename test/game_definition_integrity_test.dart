@@ -84,6 +84,39 @@ void main() {
       ),
     );
   });
+
+  test('validateIntegrity rejects oversized equipment effects', () {
+    const definitions = GameDefinitions(
+      rooms: {},
+      npcs: {},
+      items: {
+        'artifact': ItemDefinition(
+          id: 'artifact',
+          name: 'Artifact',
+          description: '',
+          type: ItemType.equipment,
+          effects: {'attack': 99},
+          slot: 'weapon',
+        ),
+      },
+      quests: {},
+      dialogues: {},
+      events: {},
+      sects: {},
+      skills: {},
+    );
+
+    expect(
+      definitions.validateIntegrity,
+      throwsA(
+        isA<StateError>().having(
+          (error) => error.message,
+          'message',
+          contains('above cap'),
+        ),
+      ),
+    );
+  });
 }
 
 RoomDefinition _room({

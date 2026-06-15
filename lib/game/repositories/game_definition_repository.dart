@@ -104,6 +104,7 @@ class GameDefinitions {
     }
 
     for (final item in items.values) {
+      _validateItemDefinition(errors, item);
       _requireAllIds(
         errors,
         source: 'Item ${item.id}',
@@ -119,6 +120,34 @@ class GameDefinitions {
 
     if (errors.isNotEmpty) {
       throw StateError('Invalid game definitions:\n${errors.join('\n')}');
+    }
+  }
+}
+
+void _validateItemDefinition(List<String> errors, ItemDefinition item) {
+  final slot = item.slot;
+  if (item.type == ItemType.equipment) {
+    if (slot == null) {
+      errors.add('Item ${item.id} is equipment but has no slot.');
+    } else if (!EquipmentSlotIds.all.contains(slot)) {
+      errors.add('Item ${item.id} uses unknown equipment slot "$slot".');
+    }
+  }
+
+  for (final effectKey in item.effects.keys) {
+    if (!ItemEffectKeys.all.contains(effectKey)) {
+      errors.add('Item ${item.id} uses unknown effect "$effectKey".');
+      continue;
+    }
+    final value = item.effects[effectKey] ?? 0;
+    final cap = ItemEffectKeys.equipmentCaps[effectKey];
+    if (value < 0) {
+      errors.add('Item ${item.id} effect "$effectKey" cannot be negative.');
+    }
+    if (cap != null && value > cap) {
+      errors.add(
+        'Item ${item.id} effect "$effectKey" is $value, above cap $cap.',
+      );
     }
   }
 }
