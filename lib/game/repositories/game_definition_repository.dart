@@ -91,6 +91,7 @@ class GameDefinitions {
         id: npc.dialogueId,
         targetIds: dialogues.keys,
       );
+      _validateNpcInteractionReferences(errors, npc, this);
     }
 
     for (final dialogue in dialogues.values) {
@@ -121,6 +122,44 @@ class GameDefinitions {
     if (errors.isNotEmpty) {
       throw StateError('Invalid game definitions:\n${errors.join('\n')}');
     }
+  }
+}
+
+void _validateNpcInteractionReferences(
+  List<String> errors,
+  NpcDefinition npc,
+  GameDefinitions definitions,
+) {
+  for (final option in npc.interactions) {
+    final source = 'Npc ${npc.id} interaction ${option.type}';
+    _requireAllIds(
+      errors,
+      source: source,
+      field: 'eventIds',
+      ids: option.eventIds,
+      targetIds: definitions.events.keys,
+    );
+    _requireAllIds(
+      errors,
+      source: source,
+      field: 'itemIds',
+      ids: option.itemIds,
+      targetIds: definitions.items.keys,
+    );
+    _requireOptionalId(
+      errors,
+      source: source,
+      field: 'sectId',
+      id: option.sectId,
+      targetIds: definitions.sects.keys,
+    );
+    _requireOptionalId(
+      errors,
+      source: source,
+      field: 'requiresSectId',
+      id: option.requiresSectId,
+      targetIds: definitions.sects.keys,
+    );
   }
 }
 
@@ -240,6 +279,25 @@ void _requireId(
   if (!targetIds.contains(id)) {
     errors.add('$source references missing $field "$id".');
   }
+}
+
+void _requireOptionalId(
+  List<String> errors, {
+  required String source,
+  required String field,
+  required String? id,
+  required Iterable<String> targetIds,
+}) {
+  if (id == null) {
+    return;
+  }
+  _requireId(
+    errors,
+    source: source,
+    field: field,
+    id: id,
+    targetIds: targetIds,
+  );
 }
 
 void _validateEventEffectReferences(

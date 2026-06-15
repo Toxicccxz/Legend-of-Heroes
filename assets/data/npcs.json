@@ -3,13 +3,27 @@
     "id": "wandering_merchant",
     "name": "流浪商人",
     "description": "背着旧货箱的商人，眼神谨慎。",
-    "dialogueId": "dialogue_wandering_merchant"
+    "dialogueId": "dialogue_wandering_merchant",
+    "interactions": [
+      {
+        "type": "trade",
+        "label": "交易",
+        "itemIds": ["small_potion", "bread"]
+      }
+    ]
   },
   {
     "id": "guard",
     "name": "守卫",
     "description": "疲惫但仍尽责的村口守卫。",
-    "dialogueId": "dialogue_guard"
+    "dialogueId": "dialogue_guard",
+    "interactions": [
+      {
+        "type": "quest",
+        "label": "任务",
+        "eventIds": ["event_talk_guard_herb"]
+      }
+    ]
   },
   {
     "id": "little_girl",
@@ -21,7 +35,19 @@
     "id": "qingyun_guide",
     "name": "青云门接引人",
     "description": "衣袍整洁的年轻修士。",
-    "dialogueId": "dialogue_qingyun_guide"
+    "dialogueId": "dialogue_qingyun_guide",
+    "interactions": [
+      {
+        "type": "quest",
+        "label": "任务",
+        "eventIds": ["event_enter_qingyun_outskirts"]
+      },
+      {
+        "type": "joinSect",
+        "label": "拜师",
+        "sectId": "qingyun_sect"
+      }
+    ]
   },
   {
     "id": "herb_gatherer",
@@ -33,18 +59,31 @@
     "id": "old_hunter",
     "name": "老猎户",
     "description": "常年在雾林活动的猎人，知道野兽出没的路线。",
-    "dialogueId": "dialogue_old_hunter"
+    "dialogueId": "dialogue_old_hunter",
+    "interactions": [
+      {
+        "type": "battle",
+        "label": "战斗"
+      }
+    ]
   },
   {
     "id": "wounded_ranger",
     "name": "受伤巡林人",
-    "description": "腿上缠着布条的巡林人，仍警惕地盯着狼穴。",
-    "dialogueId": "dialogue_wounded_ranger"
+    "description": "腿上缠着布条的巡林人，仍警惕地盯着狼窟。",
+    "dialogueId": "dialogue_wounded_ranger",
+    "interactions": [
+      {
+        "type": "quest",
+        "label": "任务",
+        "eventIds": ["event_talk_wounded_ranger"]
+      }
+    ]
   },
   {
     "id": "shrine_keeper",
     "name": "守碑老人",
-    "description": "守着石祠的老人，说话总像在背一段旧传说。",
+    "description": "守着石碑的老人，说话总像在背一段旧传说。",
     "dialogueId": "dialogue_shrine_keeper"
   },
   {
@@ -57,6 +96,28 @@
     "id": "sword_instructor",
     "name": "传剑执事",
     "description": "青云门外门执事，负责检查新人的根骨与心性。",
-    "dialogueId": "dialogue_sword_instructor"
+    "dialogueId": "dialogue_sword_instructor",
+    "interactions": [
+      {
+        "type": "quest",
+        "label": "任务",
+        "eventIds": ["event_talk_sword_instructor"]
+      },
+      {
+        "type": "joinSect",
+        "label": "拜师",
+        "sectId": "qingyun_sect"
+      },
+      {
+        "type": "learn",
+        "label": "请教",
+        "sectId": "qingyun_sect",
+        "requiresSectId": "qingyun_sect"
+      },
+      {
+        "type": "battle",
+        "label": "战斗"
+      }
+    ]
   }
 ]

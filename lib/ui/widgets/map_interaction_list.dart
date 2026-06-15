@@ -41,11 +41,8 @@ class _MapInteractionList extends StatelessWidget {
                           _InteractionRow(
                             icon: Icons.person_outline,
                             label: npc.name,
-                            actionLabel: '交谈',
-                            onPressed:
-                                () => ref
-                                    .read(gameControllerProvider.notifier)
-                                    .dispatch(TalkToNpcAction(npc.id)),
+                            actionLabel: '对话',
+                            onPressed: () => _showNpcDialog(context, npc),
                           ),
                         if (hasInvestigate)
                           _InteractionRow(
@@ -75,6 +72,91 @@ class _MapInteractionList extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _showNpcDialog(BuildContext context, NpcDefinition npc) {
+    final options = [
+      const _NpcDialogOption(type: 'talk', label: '交谈', icon: Icons.chat),
+      const _NpcDialogOption(
+        type: 'spar',
+        label: '切磋',
+        icon: Icons.sports_martial_arts,
+      ),
+      for (final option in npc.interactions)
+        _NpcDialogOption(
+          type: option.type,
+          label: option.label,
+          icon: _iconForOption(option.type),
+        ),
+    ];
+
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(npc.name),
+          content: SizedBox(
+            width: 280,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(npc.description),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final option in options)
+                      OutlinedButton.icon(
+                        icon: Icon(option.icon, size: 16),
+                        label: Text(option.label),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          ref
+                              .read(gameControllerProvider.notifier)
+                              .dispatch(
+                                InteractWithNpcAction(npc.id, option.type),
+                              );
+                        },
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('取消'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  IconData _iconForOption(String type) {
+    return switch (type) {
+      'trade' => Icons.storefront,
+      'quest' => Icons.assignment_outlined,
+      'joinSect' => Icons.account_balance,
+      'learn' => Icons.school_outlined,
+      'battle' => Icons.local_fire_department_outlined,
+      _ => Icons.more_horiz,
+    };
+  }
+}
+
+class _NpcDialogOption {
+  const _NpcDialogOption({
+    required this.type,
+    required this.label,
+    required this.icon,
+  });
+
+  final String type;
+  final String label;
+  final IconData icon;
 }
 
 class _InteractionRow extends StatelessWidget {

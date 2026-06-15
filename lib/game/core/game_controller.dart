@@ -112,6 +112,8 @@ class GameController extends StateNotifier<GameState> {
         _move(action.direction);
       case TalkToNpcAction():
         _talkToNpc(action.npcId);
+      case InteractWithNpcAction():
+        _interactWithNpc(action.npcId, action.interactionType);
       case UseItemAction():
         _useItem(action.itemId);
       case EquipItemAction():
@@ -159,6 +161,93 @@ class GameController extends StateNotifier<GameState> {
     if (dialogue != null) {
       _applyEvents(_eventSystem.processActionEvents(state, dialogue.events));
     }
+  }
+
+  void _interactWithNpc(String npcId, String interactionType) {
+    switch (interactionType) {
+      case 'talk':
+        _talkToNpc(npcId);
+      case 'spar':
+        _sparWithNpc(npcId);
+      case 'cancel':
+        return;
+      default:
+        _performNpcOption(npcId, interactionType);
+    }
+  }
+
+  void _performNpcOption(String npcId, String interactionType) {
+    final npc = state.definitions?.npcs[npcId];
+    if (npc == null) {
+      return;
+    }
+    final matchingOptions = npc.interactions.where(
+      (item) => item.type == interactionType,
+    );
+    if (matchingOptions.isEmpty) {
+      return;
+    }
+    final option = matchingOptions.first;
+    final requiredSectId = option.requiresSectId;
+    if (requiredSectId != null && state.player.sectId != requiredSectId) {
+      _addLog(GameLogType.system, '${npc.name}摇了摇头：你尚非本门弟子。');
+      return;
+    }
+    if (option.eventIds.isNotEmpty) {
+      _applyEvents(_eventSystem.processActionEvents(state, option.eventIds));
+    }
+    switch (option.type) {
+      case 'trade':
+        _addLog(GameLogType.system, '${npc.name}打开随身货箱，交易功能尚未开放。');
+      case 'quest':
+        _addLog(GameLogType.quest, '你向${npc.name}询问可托付之事。');
+      case 'joinSect':
+        _joinSectFromNpc(npc.id, option.sectId);
+      case 'learn':
+        _askNpcForTeaching(npc.id, option.sectId);
+      case 'battle':
+        _addLog(GameLogType.combat, '${npc.name}摆开架势，真正的战斗尚未开放。');
+      default:
+        _addLog(GameLogType.system, '你选择了${option.label}。');
+    }
+  }
+
+  void _sparWithNpc(String npcId) {
+    final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
+    _addLog(GameLogType.combat, '你向$npcName提出切磋，点到即止。');
+  }
+
+  void _joinSectFromNpc(String npcId, String? sectId) {
+    if (sectId == null) {
+      return;
+    }
+    final before = state.player.sectId;
+    state = _sectSystem.joinSect(state, sectId);
+    if (state.player.sectId != before) {
+      final sectName = state.definitions?.sects[sectId]?.name ?? sectId;
+      final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
+      _addLog(GameLogType.system, '$npcName点头收你入门，你拜入了$sectName。');
+    }
+  }
+
+  void _askNpcForTeaching(String npcId, String? sectId) {
+    final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
+    final sect =
+        sectId == null
+            ? _sectSystem.getCurrentSect(state)
+            : state.definitions?.sects[sectId];
+    if (sect == null) {
+      _addLog(GameLogType.system, '$npcName说：先有师承，再谈请教。');
+      return;
+    }
+    final skillNames = sect.skills
+        .map((id) => state.definitions?.skills[id]?.name ?? id)
+        .join('、');
+    if (skillNames.isEmpty) {
+      _addLog(GameLogType.system, '$npcName暂时没有可传授的功法。');
+      return;
+    }
+    _addLog(GameLogType.system, '$npcName可指点：$skillNames。');
   }
 
   void _useItem(String itemId) {

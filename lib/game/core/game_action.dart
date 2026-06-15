@@ -18,6 +18,13 @@ class TalkToNpcAction extends GameAction {
   final String npcId;
 }
 
+class InteractWithNpcAction extends GameAction {
+  const InteractWithNpcAction(this.npcId, this.interactionType);
+
+  final String npcId;
+  final String interactionType;
+}
+
 class UseItemAction extends GameAction {
   const UseItemAction(this.itemId);
 
