@@ -116,6 +116,8 @@ class GameController extends StateNotifier<GameState> {
         _useItem(action.itemId);
       case EquipItemAction():
         _equipItem(action.itemId);
+      case UnequipItemAction():
+        _unequipItem(action.slot);
       case AcceptQuestAction():
         state = _questSystem.startQuest(state, action.questId);
         _addLog(GameLogType.quest, '已接取任务。');
@@ -182,9 +184,21 @@ class GameController extends StateNotifier<GameState> {
 
   void _equipItem(String itemId) {
     final item = state.definitions?.items[itemId];
+    if (item == null ||
+        item.type != ItemType.equipment ||
+        _inventorySystem.getItemCount(state, itemId) <= 0) {
+      return;
+    }
     state = _equipmentSystem.equipItem(state, itemId);
+    _addLog(GameLogType.system, 'Equipped ${item.name}.');
+  }
+
+  void _unequipItem(String slot) {
+    final itemId = state.equippedItems[slot];
+    state = _equipmentSystem.unequipItem(state, slot);
+    final item = itemId == null ? null : state.definitions?.items[itemId];
     if (item != null) {
-      _addLog(GameLogType.system, '你装备了${item.name}。');
+      _addLog(GameLogType.system, 'Unequipped ${item.name}.');
     }
   }
 

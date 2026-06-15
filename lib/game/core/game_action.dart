@@ -30,6 +30,12 @@ class EquipItemAction extends GameAction {
   final String itemId;
 }
 
+class UnequipItemAction extends GameAction {
+  const UnequipItemAction(this.slot);
+
+  final String slot;
+}
+
 class AcceptQuestAction extends GameAction {
   const AcceptQuestAction(this.questId);
 
