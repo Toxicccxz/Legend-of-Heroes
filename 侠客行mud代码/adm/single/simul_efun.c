@@ -1,0 +1,19 @@
+// 继承mudcore框架的simul_efun
+inherit CORE_SIMUL_EFUN_OB;
+
+#include "/adm/simul_efun/override.c"
+#include "/adm/simul_efun/chinese.c"
+#include "/adm/simul_efun/file.c"
+#include "/adm/simul_efun/gender.c"
+#include "/adm/simul_efun/object.c"
+#include "/adm/simul_efun/path.c"
+#include "/adm/simul_efun/wizard.c"
+
+// This must be after gender.c
+#include "/adm/simul_efun/message.c"
+
+void create()
+{
+	seteuid(getuid());
+	write("simul_efun loaded successfully.\n");
+}
