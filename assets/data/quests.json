@@ -31,5 +31,68 @@
       "arrived": 0,
       "required": 1
     }
+  },
+  {
+    "id": "sect_intro_shaolin",
+    "title": "前往少林山门",
+    "category": "门派引导",
+    "description": "沿青石碑东行，抵达少林山门，听知客僧说明少林戒律。",
+    "objectives": ["抵达少林山门", "与少林知客僧交谈"],
+    "initialProgress": {
+      "arrived": 0,
+      "required": 1
+    },
+    "giverNpcId": "shaolin_monk",
+    "stages": [
+      {
+        "id": "arrive_shaolin_gate",
+        "description": "抵达少林山门。",
+        "roomId": "shaolin_gate",
+        "npcId": "shaolin_monk",
+        "eventIds": ["event_enter_shaolin_outskirts"]
+      }
+    ]
+  },
+  {
+    "id": "sect_intro_wudang",
+    "title": "前往武当山门",
+    "category": "门派引导",
+    "description": "从村北哨所继续上山，抵达武当山门，见武当道童。",
+    "objectives": ["抵达武当山门", "与武当道童交谈"],
+    "initialProgress": {
+      "arrived": 0,
+      "required": 1
+    },
+    "giverNpcId": "wudang_daotong",
+    "stages": [
+      {
+        "id": "arrive_wudang_gate",
+        "description": "抵达武当山门。",
+        "roomId": "wudang_gate",
+        "npcId": "wudang_daotong",
+        "eventIds": ["event_enter_wudang_outskirts"]
+      }
+    ]
+  },
+  {
+    "id": "sect_intro_huashan",
+    "title": "前往华山山道",
+    "category": "门派引导",
+    "description": "从村西林间小路北上，抵达华山山道，见华山剑客。",
+    "objectives": ["抵达华山山道", "与华山剑客交谈"],
+    "initialProgress": {
+      "arrived": 0,
+      "required": 1
+    },
+    "giverNpcId": "huashan_swordsman",
+    "stages": [
+      {
+        "id": "arrive_huashan_gate",
+        "description": "抵达华山山道。",
+        "roomId": "huashan_gate",
+        "npcId": "huashan_swordsman",
+        "eventIds": ["event_enter_huashan_outskirts"]
+      }
+    ]
   }
 ]

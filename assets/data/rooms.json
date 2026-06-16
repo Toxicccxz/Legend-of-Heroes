@@ -91,7 +91,8 @@
     ],
     "exits": {
       "east": "village_entrance",
-      "west": "mist_forest_gate"
+      "west": "mist_forest_gate",
+      "north": "huashan_gate"
     },
     "npcs": [],
     "onEnterEvents": [],
@@ -112,7 +113,8 @@
       "安全区域"
     ],
     "exits": {
-      "south": "village_square"
+      "south": "village_square",
+      "north": "wudang_gate"
     },
     "npcs": [
       "guard"
@@ -137,7 +139,8 @@
     "exits": {
       "west": "village_square",
       "south": "old_well",
-      "north": "mountain_foot"
+      "north": "mountain_foot",
+      "east": "shaolin_gate"
     },
     "npcs": [
       "qingyun_guide"
@@ -402,13 +405,7 @@
     "npcs": [
       "sword_instructor",
       "qingyun_senior",
-      "qingyun_elder",
-      "shaolin_luohan",
-      "shaolin_elder",
-      "wudang_senior",
-      "wudang_elder",
-      "huashan_senior",
-      "huashan_elder"
+      "qingyun_elder"
     ],
     "onEnterEvents": [],
     "investigateEvents": [],
@@ -428,11 +425,7 @@
     "exits": {
       "south": "training_yard"
     },
-    "npcs": [
-      "shaolin_monk",
-      "wudang_daotong",
-      "huashan_swordsman"
-    ],
+    "npcs": [],
     "onEnterEvents": [],
     "investigateEvents": [
       "event_investigate_sword_platform"
@@ -461,5 +454,215 @@
     ],
     "mapX": 3,
     "mapY": 2
+  },
+  {
+    "id": "shaolin_gate",
+    "name": "少林山门",
+    "description": "石阶尽头立着古朴山门，少林知客僧在门前合十迎客。",
+    "zoneId": "shaolin_outskirts",
+    "tags": [
+      "门派",
+      "山门",
+      "少林"
+    ],
+    "exits": {
+      "west": "qingyun_contact_point",
+      "north": "shaolin_luohan_hall"
+    },
+    "npcs": [
+      "shaolin_monk"
+    ],
+    "onEnterEvents": [
+      "event_enter_shaolin_outskirts"
+    ],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 2
+  },
+  {
+    "id": "shaolin_luohan_hall",
+    "name": "罗汉堂",
+    "description": "堂中木人排列如阵，罗汉堂首座正校看弟子拳架。",
+    "zoneId": "shaolin_outskirts",
+    "tags": [
+      "门派",
+      "训练",
+      "少林"
+    ],
+    "exits": {
+      "south": "shaolin_gate",
+      "north": "shaolin_damo_yard"
+    },
+    "npcs": [
+      "shaolin_luohan"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 1
+  },
+  {
+    "id": "shaolin_damo_yard",
+    "name": "达摩院",
+    "description": "院内古松低垂，达摩院长老静坐蒲团，掌心气息沉稳。",
+    "zoneId": "shaolin_outskirts",
+    "tags": [
+      "门派",
+      "长老",
+      "少林"
+    ],
+    "exits": {
+      "south": "shaolin_luohan_hall"
+    },
+    "npcs": [
+      "shaolin_elder"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 0
+  },
+  {
+    "id": "wudang_gate",
+    "name": "武当山门",
+    "description": "松风穿过山门，武当道童背着木剑立在石阶旁。",
+    "zoneId": "wudang_outskirts",
+    "tags": [
+      "门派",
+      "山门",
+      "武当"
+    ],
+    "exits": {
+      "south": "guard_post",
+      "north": "wudang_sword_yard"
+    },
+    "npcs": [
+      "wudang_daotong"
+    ],
+    "onEnterEvents": [
+      "event_enter_wudang_outskirts"
+    ],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 2
+  },
+  {
+    "id": "wudang_sword_yard",
+    "name": "武当剑坪",
+    "description": "青石坪上画着太极圆，武当师兄缓缓演示剑随身转。",
+    "zoneId": "wudang_outskirts",
+    "tags": [
+      "门派",
+      "训练",
+      "武当"
+    ],
+    "exits": {
+      "south": "wudang_gate",
+      "north": "wudang_zhenwu_hall"
+    },
+    "npcs": [
+      "wudang_senior"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 1
+  },
+  {
+    "id": "wudang_zhenwu_hall",
+    "name": "真武殿",
+    "description": "殿中香烟袅袅，武当长老垂目而坐，木剑横放膝前。",
+    "zoneId": "wudang_outskirts",
+    "tags": [
+      "门派",
+      "长老",
+      "武当"
+    ],
+    "exits": {
+      "south": "wudang_sword_yard"
+    },
+    "npcs": [
+      "wudang_elder"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 0
+  },
+  {
+    "id": "huashan_gate",
+    "name": "华山山道",
+    "description": "石阶贴着峭壁盘旋，华山剑客迎风而立，剑穗猎猎作响。",
+    "zoneId": "huashan_outskirts",
+    "tags": [
+      "门派",
+      "山门",
+      "华山"
+    ],
+    "exits": {
+      "south": "forest_path",
+      "north": "huashan_sword_platform"
+    },
+    "npcs": [
+      "huashan_swordsman"
+    ],
+    "onEnterEvents": [
+      "event_enter_huashan_outskirts"
+    ],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 2
+  },
+  {
+    "id": "huashan_sword_platform",
+    "name": "华山剑台",
+    "description": "剑台临空，华山师兄收剑于肘后，紫气在袖间隐约流转。",
+    "zoneId": "huashan_outskirts",
+    "tags": [
+      "门派",
+      "训练",
+      "华山"
+    ],
+    "exits": {
+      "south": "huashan_gate",
+      "north": "huashan_cliff"
+    },
+    "npcs": [
+      "huashan_senior"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 1
+  },
+  {
+    "id": "huashan_cliff",
+    "name": "试剑崖",
+    "description": "崖边云气翻涌，华山长老衣袖微动，似乎已经看穿来者招式。",
+    "zoneId": "huashan_outskirts",
+    "tags": [
+      "门派",
+      "长老",
+      "华山"
+    ],
+    "exits": {
+      "south": "huashan_sword_platform"
+    },
+    "npcs": [
+      "huashan_elder"
+    ],
+    "onEnterEvents": [],
+    "investigateEvents": [],
+    "restEvents": [],
+    "mapX": 1,
+    "mapY": 0
   }
 ]

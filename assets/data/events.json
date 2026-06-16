@@ -149,6 +149,42 @@
     }
   },
   {
+    "id": "event_enter_shaolin_outskirts",
+    "type": "enterRoom",
+    "message": "你抵达少林山门，古刹钟声在松林间回荡。",
+    "logType": "quest",
+    "onceFlag": "entered_shaolin_outskirts",
+    "effects": {
+      "questId": "sect_intro_shaolin",
+      "progressKey": "arrived",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_enter_wudang_outskirts",
+    "type": "enterRoom",
+    "message": "你抵达武当山门，云气随山风缓缓流转。",
+    "logType": "quest",
+    "onceFlag": "entered_wudang_outskirts",
+    "effects": {
+      "questId": "sect_intro_wudang",
+      "progressKey": "arrived",
+      "progressValue": 1
+    }
+  },
+  {
+    "id": "event_enter_huashan_outskirts",
+    "type": "enterRoom",
+    "message": "你抵达华山山道，陡峭石阶直入云间。",
+    "logType": "quest",
+    "onceFlag": "entered_huashan_outskirts",
+    "effects": {
+      "questId": "sect_intro_huashan",
+      "progressKey": "arrived",
+      "progressValue": 1
+    }
+  },
+  {
     "id": "event_investigate_bamboo_steps",
     "type": "investigate",
     "message": "木牌上写着：入门先正心，持剑先守礼。",

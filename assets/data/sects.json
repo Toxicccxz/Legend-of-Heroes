@@ -3,6 +3,9 @@
     "id": "qingyun_sect",
     "name": "青云门",
     "description": "以剑法和身法闻名的门派，讲究先正心，再持剑。",
+    "aliases": ["qingyun"],
+    "headquartersRoomId": "training_yard",
+    "alignment": "orthodox",
     "features": "剑法稳准，身法轻灵，后期可习云海剑意。",
     "rules": [
       "每名弟子须按入门、进阶、长老三个阶段拜师。",
@@ -39,6 +42,9 @@
     "id": "shaolin_sect",
     "name": "少林派",
     "description": "禅武合一的名门正派，重根基、重戒律、重体魄。",
+    "aliases": ["shaolin"],
+    "headquartersRoomId": "shaolin_luohan_hall",
+    "alignment": "orthodox",
     "features": "拳掌刚猛，内功厚重，防守和续战能力强。",
     "rules": [
       "每名弟子须按入门、进阶、长老三个阶段拜师。",
@@ -75,6 +81,9 @@
     "id": "wudang_sect",
     "name": "武当派",
     "description": "以道入武的山门，讲究圆转如意、以静制动。",
+    "aliases": ["wudang"],
+    "headquartersRoomId": "wudang_sword_yard",
+    "alignment": "orthodox",
     "features": "剑法绵密，身法灵活，后期擅长后发制人。",
     "rules": [
       "每名弟子须按入门、进阶、长老三个阶段拜师。",
@@ -111,6 +120,9 @@
     "id": "huashan_sect",
     "name": "华山派",
     "description": "剑气并重的险峰门派，出手凌厉，讲究胆识与悟性。",
+    "aliases": ["huashan"],
+    "headquartersRoomId": "huashan_sword_platform",
+    "alignment": "orthodox",
     "features": "剑法爆发高，进阶内功增强攻势，绝学偏向破招。",
     "rules": [
       "每名弟子须按入门、进阶、长老三个阶段拜师。",
