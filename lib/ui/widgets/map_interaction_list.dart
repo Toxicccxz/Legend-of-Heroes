@@ -86,12 +86,13 @@ class _MapInteractionList extends StatelessWidget {
           type: option.type,
           label: option.label,
           icon: _iconForOption(option.type),
+          sectId: option.sectId,
         ),
     ];
 
     return showDialog<void>(
       context: context,
-      builder: (context) {
+      builder: (dialogContext) {
         return AlertDialog(
           title: Text(npc.name),
           content: SizedBox(
@@ -110,14 +111,13 @@ class _MapInteractionList extends StatelessWidget {
                       OutlinedButton.icon(
                         icon: Icon(option.icon, size: 16),
                         label: Text(option.label),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          ref
-                              .read(gameControllerProvider.notifier)
-                              .dispatch(
-                                InteractWithNpcAction(npc.id, option.type),
-                              );
-                        },
+                        onPressed:
+                            () => _handleNpcOption(
+                              context,
+                              dialogContext,
+                              npc,
+                              option,
+                            ),
                       ),
                   ],
                 ),
@@ -126,13 +126,84 @@ class _MapInteractionList extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: const Text('取消'),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _handleNpcOption(
+    BuildContext parentContext,
+    BuildContext dialogContext,
+    NpcDefinition npc,
+    _NpcDialogOption option,
+  ) async {
+    Navigator.of(dialogContext).pop();
+    if (option.type == 'joinSect' &&
+        state.player.sectId == null &&
+        option.sectId != null) {
+      final confirmed = await _confirmFirstApprenticeship(
+        parentContext,
+        option.sectId!,
+      );
+      if (!confirmed) {
+        return;
+      }
+    }
+    ref
+        .read(gameControllerProvider.notifier)
+        .dispatch(InteractWithNpcAction(npc.id, option.type));
+  }
+
+  Future<bool> _confirmFirstApprenticeship(
+    BuildContext context,
+    String sectId,
+  ) async {
+    final sect = state.definitions?.sects[sectId];
+    if (sect == null) {
+      return true;
+    }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('拜入${sect.name}？'),
+          content: SizedBox(
+            width: 320,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(sect.description),
+                if (sect.features.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text('门派特点：${sect.features}'),
+                ],
+                const SizedBox(height: 8),
+                const Text('拜师规则：'),
+                for (final rule in sect.rules) Text('· $rule'),
+                const SizedBox(height: 8),
+                const Text('此为第一次拜师，请三思而后行。'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('再想想'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('确认拜师'),
+            ),
+          ],
+        );
+      },
+    );
+    return confirmed ?? false;
   }
 
   IconData _iconForOption(String type) {
@@ -152,11 +223,13 @@ class _NpcDialogOption {
     required this.type,
     required this.label,
     required this.icon,
+    this.sectId,
   });
 
   final String type;
   final String label;
   final IconData icon;
+  final String? sectId;
 }
 
 class _InteractionRow extends StatelessWidget {

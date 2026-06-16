@@ -190,7 +190,7 @@ class GameController extends StateNotifier<GameState> {
     final option = matchingOptions.first;
     final requiredSectId = option.requiresSectId;
     if (requiredSectId != null && state.player.sectId != requiredSectId) {
-      _addLog(GameLogType.system, '${npc.name}摇了摇头：你尚非本门弟子。');
+      _addLog(GameLogType.system, '${npc.name}摇头：你尚非本门弟子。');
       return;
     }
     if (option.eventIds.isNotEmpty) {
@@ -221,33 +221,41 @@ class GameController extends StateNotifier<GameState> {
     if (sectId == null) {
       return;
     }
-    final before = state.player.sectId;
-    state = _sectSystem.joinSect(state, sectId);
-    if (state.player.sectId != before) {
-      final sectName = state.definitions?.sects[sectId]?.name ?? sectId;
-      final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
-      _addLog(GameLogType.system, '$npcName点头收你入门，你拜入了$sectName。');
+    final result = _sectSystem.joinMaster(
+      state,
+      sectId: sectId,
+      masterNpcId: npcId,
+    );
+    if (!result.success) {
+      _addLog(GameLogType.system, result.message);
+      return;
     }
+    state = result.state;
+    final sectName = result.sect?.name ?? sectId;
+    final masterName = state.definitions?.npcs[npcId]?.name ?? npcId;
+    _addLog(GameLogType.system, '$masterName点头收你入门，你拜入了$sectName。');
   }
 
   void _askNpcForTeaching(String npcId, String? sectId) {
     final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
-    final sect =
-        sectId == null
-            ? _sectSystem.getCurrentSect(state)
-            : state.definitions?.sects[sectId];
-    if (sect == null) {
-      _addLog(GameLogType.system, '$npcName说：先有师承，再谈请教。');
+    if (sectId != null && state.player.sectId != sectId) {
+      _addLog(GameLogType.system, '$npcName摇头：不可跨门派请教。');
       return;
     }
-    final skillNames = sect.skills
+    if (state.player.masterNpcId != npcId) {
+      _addLog(GameLogType.system, '$npcName说：我并非你的授业师父，不可偷师学艺。');
+      return;
+    }
+    final result = _sectSystem.learnFromCurrentMaster(state);
+    if (!result.success) {
+      _addLog(GameLogType.system, result.message);
+      return;
+    }
+    state = result.state;
+    final skillNames = result.learnedSkillIds
         .map((id) => state.definitions?.skills[id]?.name ?? id)
         .join('、');
-    if (skillNames.isEmpty) {
-      _addLog(GameLogType.system, '$npcName暂时没有可传授的功法。');
-      return;
-    }
-    _addLog(GameLogType.system, '$npcName可指点：$skillNames。');
+    _addLog(GameLogType.system, '$npcName传授了你：$skillNames。');
   }
 
   void _useItem(String itemId) {
@@ -279,7 +287,7 @@ class GameController extends StateNotifier<GameState> {
       return;
     }
     state = _equipmentSystem.equipItem(state, itemId);
-    _addLog(GameLogType.system, 'Equipped ${item.name}.');
+    _addLog(GameLogType.system, '已装备${item.name}。');
   }
 
   void _unequipItem(String slot) {
@@ -287,7 +295,7 @@ class GameController extends StateNotifier<GameState> {
     state = _equipmentSystem.unequipItem(state, slot);
     final item = itemId == null ? null : state.definitions?.items[itemId];
     if (item != null) {
-      _addLog(GameLogType.system, 'Unequipped ${item.name}.');
+      _addLog(GameLogType.system, '已卸下${item.name}。');
     }
   }
 

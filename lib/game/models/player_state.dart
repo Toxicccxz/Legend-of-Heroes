@@ -12,6 +12,8 @@ class PlayerState {
     required this.exp,
     this.sectId,
     this.sectRank,
+    this.masterNpcId,
+    this.learnedSectSkillIds = const [],
   });
 
   final String name;
@@ -26,6 +28,8 @@ class PlayerState {
   final int exp;
   final String? sectId;
   final String? sectRank;
+  final String? masterNpcId;
+  final List<String> learnedSectSkillIds;
 
   PlayerState copyWith({
     String? name,
@@ -40,6 +44,8 @@ class PlayerState {
     int? exp,
     String? sectId,
     String? sectRank,
+    String? masterNpcId,
+    List<String>? learnedSectSkillIds,
   }) {
     return PlayerState(
       name: name ?? this.name,
@@ -54,6 +60,8 @@ class PlayerState {
       exp: exp ?? this.exp,
       sectId: sectId ?? this.sectId,
       sectRank: sectRank ?? this.sectRank,
+      masterNpcId: masterNpcId ?? this.masterNpcId,
+      learnedSectSkillIds: learnedSectSkillIds ?? this.learnedSectSkillIds,
     );
   }
 }

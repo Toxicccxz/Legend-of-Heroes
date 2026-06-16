@@ -400,7 +400,9 @@
       "north": "sword_platform"
     },
     "npcs": [
-      "sword_instructor"
+      "sword_instructor",
+      "qingyun_senior",
+      "qingyun_elder"
     ],
     "onEnterEvents": [],
     "investigateEvents": [],

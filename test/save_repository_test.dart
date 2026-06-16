@@ -16,7 +16,7 @@ void main() {
     });
 
     final repository = HiveSaveRepository(boxName: 'test_save');
-    final state = GameState.initial(
+    final initialState = GameState.initial(
       const GameDefinitions(
         rooms: {},
         zones: {},
@@ -28,7 +28,17 @@ void main() {
         sects: {},
         skills: {},
       ),
-    ).copyWith(currentRoomId: 'old_well', logs: []);
+    );
+    final state = initialState.copyWith(
+      currentRoomId: 'old_well',
+      player: initialState.player.copyWith(
+        sectId: 'qingyun_sect',
+        sectRank: '青云门弟子',
+        masterNpcId: 'sword_instructor',
+        learnedSectSkillIds: ['basic_sword'],
+      ),
+      logs: [],
+    );
 
     await repository.save(state);
     final loaded = await repository.load();
@@ -36,6 +46,10 @@ void main() {
     expect(loaded, isNotNull);
     expect(loaded?.currentRoomId, 'old_well');
     expect(loaded?.player.name, '冒险者');
+    expect(loaded?.player.sectId, 'qingyun_sect');
+    expect(loaded?.player.sectRank, '青云门弟子');
+    expect(loaded?.player.masterNpcId, 'sword_instructor');
+    expect(loaded?.player.learnedSectSkillIds, ['basic_sword']);
     expect(loaded?.definitions, isNull);
   });
 }

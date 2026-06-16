@@ -115,6 +115,8 @@ Map<String, dynamic> _playerToJson(PlayerState player) {
     'exp': player.exp,
     'sectId': player.sectId,
     'sectRank': player.sectRank,
+    'masterNpcId': player.masterNpcId,
+    'learnedSectSkillIds': player.learnedSectSkillIds,
   };
 }
 
@@ -132,6 +134,10 @@ PlayerState _playerFromJson(Map<String, dynamic> json) {
     exp: json['exp'] as int? ?? 0,
     sectId: json['sectId'] as String?,
     sectRank: json['sectRank'] as String?,
+    masterNpcId: json['masterNpcId'] as String?,
+    learnedSectSkillIds: List<String>.from(
+      json['learnedSectSkillIds'] as List? ?? const [],
+    ),
   );
 }
 

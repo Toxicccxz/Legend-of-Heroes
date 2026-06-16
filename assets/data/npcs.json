@@ -34,18 +34,13 @@
   {
     "id": "qingyun_guide",
     "name": "青云门接引人",
-    "description": "衣袍整洁的年轻修士。",
+    "description": "衣袍整洁的年轻修士，负责向来客说明山门规矩。",
     "dialogueId": "dialogue_qingyun_guide",
     "interactions": [
       {
         "type": "quest",
         "label": "任务",
         "eventIds": ["event_enter_qingyun_outskirts"]
-      },
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "qingyun_sect"
       }
     ]
   },
@@ -95,7 +90,7 @@
   {
     "id": "sword_instructor",
     "name": "传剑执事",
-    "description": "青云门外门执事，负责检查新人的根骨与心性。",
+    "description": "青云门入门师父，负责传授基础剑诀。",
     "dialogueId": "dialogue_sword_instructor",
     "interactions": [
       {
@@ -113,10 +108,46 @@
         "label": "请教",
         "sectId": "qingyun_sect",
         "requiresSectId": "qingyun_sect"
+      }
+    ]
+  },
+  {
+    "id": "qingyun_senior",
+    "name": "清风师兄",
+    "description": "青云门进阶师父，步法轻快，最擅清风步。",
+    "dialogueId": "dialogue_qingyun_senior",
+    "interactions": [
+      {
+        "type": "joinSect",
+        "label": "拜师",
+        "sectId": "qingyun_sect",
+        "requiresSectId": "qingyun_sect"
       },
       {
-        "type": "battle",
-        "label": "战斗"
+        "type": "learn",
+        "label": "请教",
+        "sectId": "qingyun_sect",
+        "requiresSectId": "qingyun_sect"
+      }
+    ]
+  },
+  {
+    "id": "qingyun_elder",
+    "name": "青云长老",
+    "description": "青云门长老，掌管门派绝学云海剑意。",
+    "dialogueId": "dialogue_qingyun_elder",
+    "interactions": [
+      {
+        "type": "joinSect",
+        "label": "拜师",
+        "sectId": "qingyun_sect",
+        "requiresSectId": "qingyun_sect"
+      },
+      {
+        "type": "learn",
+        "label": "请教",
+        "sectId": "qingyun_sect",
+        "requiresSectId": "qingyun_sect"
       }
     ]
   }

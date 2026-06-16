@@ -9,7 +9,7 @@ import 'package:legend_of_heroes/game/repositories/game_definition_repository.da
 import 'package:legend_of_heroes/game/repositories/save_repository.dart';
 
 void main() {
-  test('NPC joinSect interaction joins the configured sect', () {
+  test('entry master joins sect and teaches entry skill', () {
     final controller = GameController(
       definitions: _definitions(),
       saveRepository: InMemorySaveRepository(),
@@ -18,22 +18,62 @@ void main() {
     controller.dispatch(
       const InteractWithNpcAction('sword_instructor', 'joinSect'),
     );
+    controller.dispatch(
+      const InteractWithNpcAction('sword_instructor', 'learn'),
+    );
 
     expect(controller.state.player.sectId, 'qingyun_sect');
     expect(controller.state.player.sectRank, 'outer_disciple');
+    expect(controller.state.player.masterNpcId, 'sword_instructor');
+    expect(controller.state.player.learnedSectSkillIds, ['basic_sword']);
   });
 
-  test('NPC learn interaction requires matching sect membership', () {
+  test('advanced master requires previous learning', () {
     final controller = GameController(
       definitions: _definitions(),
       saveRepository: InMemorySaveRepository(),
     );
 
     controller.dispatch(
-      const InteractWithNpcAction('sword_instructor', 'learn'),
+      const InteractWithNpcAction('sword_instructor', 'joinSect'),
+    );
+    controller.dispatch(
+      const InteractWithNpcAction('advanced_master', 'joinSect'),
     );
 
-    expect(controller.state.logs.last.message, contains('尚非本门弟子'));
+    expect(controller.state.player.masterNpcId, 'sword_instructor');
+    expect(controller.state.logs.last.message, contains('须先完成前一阶段学习'));
+  });
+
+  test('learning progression unlocks higher masters but blocks stealing', () {
+    final controller = GameController(
+      definitions: _definitions(),
+      saveRepository: InMemorySaveRepository(),
+    );
+
+    controller.dispatch(
+      const InteractWithNpcAction('sword_instructor', 'joinSect'),
+    );
+    controller.dispatch(
+      const InteractWithNpcAction('sword_instructor', 'learn'),
+    );
+    controller.dispatch(
+      const InteractWithNpcAction('advanced_master', 'joinSect'),
+    );
+    controller.dispatch(const InteractWithNpcAction('elder_master', 'learn'));
+    controller.dispatch(
+      const InteractWithNpcAction('advanced_master', 'learn'),
+    );
+
+    expect(controller.state.player.masterNpcId, 'advanced_master');
+    expect(controller.state.player.learnedSectSkillIds, [
+      'basic_sword',
+      'wind_step',
+    ]);
+    expect(
+      controller.state.logs.any((log) => log.message.contains('不可偷师学艺')),
+      isTrue,
+    );
   });
 }
 
@@ -44,7 +84,7 @@ GameDefinitions _definitions() {
     npcs: {
       'sword_instructor': NpcDefinition(
         id: 'sword_instructor',
-        name: 'Sword Instructor',
+        name: 'Entry Master',
         description: '',
         dialogueId: 'dialogue_sword_instructor',
         interactions: [
@@ -52,6 +92,46 @@ GameDefinitions _definitions() {
             type: 'joinSect',
             label: '拜师',
             sectId: 'qingyun_sect',
+          ),
+          NpcInteractionOption(
+            type: 'learn',
+            label: '请教',
+            sectId: 'qingyun_sect',
+            requiresSectId: 'qingyun_sect',
+          ),
+        ],
+      ),
+      'advanced_master': NpcDefinition(
+        id: 'advanced_master',
+        name: 'Advanced Master',
+        description: '',
+        dialogueId: 'dialogue_advanced_master',
+        interactions: [
+          NpcInteractionOption(
+            type: 'joinSect',
+            label: '拜师',
+            sectId: 'qingyun_sect',
+            requiresSectId: 'qingyun_sect',
+          ),
+          NpcInteractionOption(
+            type: 'learn',
+            label: '请教',
+            sectId: 'qingyun_sect',
+            requiresSectId: 'qingyun_sect',
+          ),
+        ],
+      ),
+      'elder_master': NpcDefinition(
+        id: 'elder_master',
+        name: 'Elder Master',
+        description: '',
+        dialogueId: 'dialogue_elder_master',
+        interactions: [
+          NpcInteractionOption(
+            type: 'joinSect',
+            label: '拜师',
+            sectId: 'qingyun_sect',
+            requiresSectId: 'qingyun_sect',
           ),
           NpcInteractionOption(
             type: 'learn',
@@ -70,6 +150,16 @@ GameDefinitions _definitions() {
         lines: [],
         events: [],
       ),
+      'dialogue_advanced_master': DialogueDefinition(
+        id: 'dialogue_advanced_master',
+        lines: [],
+        events: [],
+      ),
+      'dialogue_elder_master': DialogueDefinition(
+        id: 'dialogue_elder_master',
+        lines: [],
+        events: [],
+      ),
     },
     events: {},
     sects: {
@@ -77,14 +167,49 @@ GameDefinitions _definitions() {
         id: 'qingyun_sect',
         name: 'Qingyun',
         description: '',
-        ranks: ['outer_disciple'],
-        skills: ['basic_sword'],
+        ranks: ['outer_disciple', 'inner_disciple', 'true_disciple'],
+        skills: ['basic_sword', 'wind_step', 'ultimate_sword'],
+        masters: [
+          SectMasterDefinition(
+            npcId: 'sword_instructor',
+            level: 0,
+            title: 'Entry',
+            rank: 'outer_disciple',
+            skillIds: ['basic_sword'],
+          ),
+          SectMasterDefinition(
+            npcId: 'advanced_master',
+            level: 1,
+            title: 'Advanced',
+            rank: 'inner_disciple',
+            skillIds: ['wind_step'],
+          ),
+          SectMasterDefinition(
+            npcId: 'elder_master',
+            level: 2,
+            title: 'Elder',
+            rank: 'true_disciple',
+            skillIds: ['ultimate_sword'],
+          ),
+        ],
       ),
     },
     skills: {
       'basic_sword': SkillDefinition(
         id: 'basic_sword',
         name: 'Basic Sword',
+        description: '',
+        category: 'martial',
+      ),
+      'wind_step': SkillDefinition(
+        id: 'wind_step',
+        name: 'Wind Step',
+        description: '',
+        category: 'martial',
+      ),
+      'ultimate_sword': SkillDefinition(
+        id: 'ultimate_sword',
+        name: 'Ultimate Sword',
         description: '',
         category: 'martial',
       ),

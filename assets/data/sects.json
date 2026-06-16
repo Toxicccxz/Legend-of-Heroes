@@ -2,8 +2,37 @@
   {
     "id": "qingyun_sect",
     "name": "青云门",
-    "description": "以剑法和身法闻名的门派。",
-    "ranks": ["外门弟子", "内门弟子"],
-    "skills": ["basic_sword", "wind_step"]
+    "description": "以剑法和身法闻名的门派，讲究先正心，再持剑。",
+    "features": "剑法稳准，身法轻灵，后期可习云海剑意。",
+    "rules": [
+      "每名弟子须按入门、进阶、长老三个阶段拜师。",
+      "学完当前师父传授的功法后，才可拜更高一层师父。",
+      "不可偷师学艺，不可跨门派拜师。"
+    ],
+    "ranks": ["青云门弟子", "青云门内门", "青云门真传"],
+    "skills": ["basic_sword", "wind_step", "cloud_sword_ultimate"],
+    "masters": [
+      {
+        "npcId": "sword_instructor",
+        "level": 0,
+        "title": "入门师父",
+        "rank": "青云门弟子",
+        "skillIds": ["basic_sword"]
+      },
+      {
+        "npcId": "qingyun_senior",
+        "level": 1,
+        "title": "进阶师父",
+        "rank": "青云门内门",
+        "skillIds": ["wind_step"]
+      },
+      {
+        "npcId": "qingyun_elder",
+        "level": 2,
+        "title": "门派长老",
+        "rank": "青云门真传",
+        "skillIds": ["cloud_sword_ultimate"]
+      }
+    ]
   }
 ]

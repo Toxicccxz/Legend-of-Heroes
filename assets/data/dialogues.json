@@ -1,78 +1,62 @@
 [
   {
     "id": "dialogue_wandering_merchant",
-    "lines": [
-      "最近村里不太平……"
-    ],
+    "lines": ["最近村里不太平，买点药在身上总没错。"],
     "events": []
   },
   {
     "id": "dialogue_guard",
-    "lines": [
-      "如果你能找到 3 株止血草，我会感谢你的。"
-    ],
-    "events": [
-      "event_talk_guard_herb"
-    ]
+    "lines": ["如果你能找到 3 株止血草，我会感谢你的。"],
+    "events": ["event_talk_guard_herb"]
   },
   {
     "id": "dialogue_little_girl",
-    "lines": [
-      "我看到有人往老井方向去了。"
-    ],
+    "lines": ["我看到有人往老井方向去了。"],
     "events": []
   },
   {
     "id": "dialogue_qingyun_guide",
-    "lines": [
-      "若想入门，先证明你的心性。"
-    ],
+    "lines": ["若想入门，先听清门规，再去演武场拜见传剑执事。"],
     "events": []
   },
   {
     "id": "dialogue_herb_gatherer",
-    "lines": [
-      "止血草喜阴，井边坡上还能找到几株。"
-    ],
+    "lines": ["止血草喜阴，井边坡上还能找到几株。"],
     "events": []
   },
   {
     "id": "dialogue_old_hunter",
-    "lines": [
-      "雾林夜里别乱走，狼群会顺着血腥味追人。"
-    ],
+    "lines": ["雾林夜里别乱走，狼群会顺着血腥味追人。"],
     "events": []
   },
   {
     "id": "dialogue_wounded_ranger",
-    "lines": [
-      "狼穴里不止一头野狼，我需要先把伤口处理好。"
-    ],
-    "events": [
-      "event_talk_wounded_ranger"
-    ]
+    "lines": ["狼窟里不止一头野狼，我需要先把伤口处理好。"],
+    "events": ["event_talk_wounded_ranger"]
   },
   {
     "id": "dialogue_shrine_keeper",
-    "lines": [
-      "这座石祠比村子还老，剑痕不是凡铁留下的。"
-    ],
+    "lines": ["这座石碑比村子还老，剑痕不是凡铁留下的。"],
     "events": []
   },
   {
     "id": "dialogue_bamboo_sweeper",
-    "lines": [
-      "上山先静心，石阶上的门规可不能踩脏。"
-    ],
+    "lines": ["上山先静心，石阶上的门规可不能踏脏。"],
     "events": []
   },
   {
     "id": "dialogue_sword_instructor",
-    "lines": [
-      "想入青云门，先在演武场站稳，再谈学剑。"
-    ],
-    "events": [
-      "event_talk_sword_instructor"
-    ]
+    "lines": ["想入青云门，先把基础剑诀练稳。"],
+    "events": ["event_talk_sword_instructor"]
+  },
+  {
+    "id": "dialogue_qingyun_senior",
+    "lines": ["剑稳之后，脚下也要跟得上风。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_qingyun_elder",
+    "lines": ["云海剑意不可急求，心中无门，剑上无云。"],
+    "events": []
   }
 ]

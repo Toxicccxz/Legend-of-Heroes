@@ -8,7 +8,13 @@
   {
     "id": "wind_step",
     "name": "清风步",
-    "description": "轻盈灵动的基础身法。",
+    "description": "轻盈灵动的进阶身法。",
     "category": "身法"
+  },
+  {
+    "id": "cloud_sword_ultimate",
+    "name": "云海剑意",
+    "description": "青云门长老才会传授的门派绝学。",
+    "category": "绝学"
   }
 ]

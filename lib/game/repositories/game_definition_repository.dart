@@ -115,12 +115,59 @@ class GameDefinitions {
       );
     }
 
+    for (final sect in sects.values) {
+      _validateSectDefinition(errors, sect, this);
+    }
+
     for (final event in events.values) {
       _validateEventEffectReferences(errors, event, this);
     }
 
     if (errors.isNotEmpty) {
       throw StateError('Invalid game definitions:\n${errors.join('\n')}');
+    }
+  }
+}
+
+void _validateSectDefinition(
+  List<String> errors,
+  SectDefinition sect,
+  GameDefinitions definitions,
+) {
+  _requireAllIds(
+    errors,
+    source: 'Sect ${sect.id}',
+    field: 'skills',
+    ids: sect.skills,
+    targetIds: definitions.skills.keys,
+  );
+  if (sect.masters.length != 3) {
+    errors.add('Sect ${sect.id} must define exactly three masters.');
+  }
+  final levels = sect.masters.map((master) => master.level).toSet();
+  for (final level in const [0, 1, 2]) {
+    if (!levels.contains(level)) {
+      errors.add('Sect ${sect.id} is missing master level $level.');
+    }
+  }
+  for (final master in sect.masters) {
+    final source = 'Sect ${sect.id} master ${master.npcId}';
+    _requireId(
+      errors,
+      source: source,
+      field: 'npcId',
+      id: master.npcId,
+      targetIds: definitions.npcs.keys,
+    );
+    _requireAllIds(
+      errors,
+      source: source,
+      field: 'skillIds',
+      ids: master.skillIds,
+      targetIds: definitions.skills.keys,
+    );
+    if (master.rank.isNotEmpty && !sect.ranks.contains(master.rank)) {
+      errors.add('$source rank "${master.rank}" is not listed in ranks.');
     }
   }
 }
