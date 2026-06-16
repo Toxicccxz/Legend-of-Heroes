@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/sample_game_data_loader.dart';
 import '../models/event_definition.dart';
 import '../models/item_definition.dart';
+import '../models/npc_definition.dart';
+import '../models/skill_definition.dart';
 import '../repositories/game_definition_repository.dart';
 import '../repositories/save_repository.dart';
 import '../systems/combat_system.dart';
@@ -11,6 +13,7 @@ import '../systems/equipment_system.dart';
 import '../systems/event_system.dart';
 import '../systems/inventory_system.dart';
 import '../systems/map_system.dart';
+import '../systems/mud_command_system.dart';
 import '../systems/quest_system.dart';
 import '../systems/sect_system.dart';
 import '../systems/skill_system.dart';
@@ -75,6 +78,7 @@ class GameController extends StateNotifier<GameState> {
   final InventorySystem _inventorySystem = const InventorySystem();
   final EquipmentSystem _equipmentSystem = const EquipmentSystem();
   final DialogueSystem _dialogueSystem = const DialogueSystem();
+  final MudCommandSystem _mudCommandSystem = const MudCommandSystem();
   final EventSystem _eventSystem = const EventSystem();
   final SectSystem _sectSystem = const SectSystem();
   final SkillSystem _skillSystem = const SkillSystem();
@@ -112,6 +116,8 @@ class GameController extends StateNotifier<GameState> {
     }
 
     switch (action) {
+      case ExecuteCommandAction():
+        _executeCommand(action.input);
       case MoveAction():
         _move(action.direction);
       case TalkToNpcAction():
@@ -142,6 +148,211 @@ class GameController extends StateNotifier<GameState> {
     }
 
     _saveRepository.save(state);
+  }
+
+  void _executeCommand(String input) {
+    final command = _mudCommandSystem.parse(input);
+    switch (command.verb) {
+      case '':
+        return;
+      case 'look':
+        _look(command.target);
+      case 'go':
+        _move(command.target ?? '');
+      case 'north' || 'south' || 'east' || 'west':
+        _move(command.verb);
+      case 'ask':
+        _talkToResolvedNpc(command.target);
+      case 'trade':
+        _performResolvedNpcOption(command.target, 'trade');
+      case 'quest':
+        _performResolvedNpcOption(command.target, 'quest');
+      case 'apprentice':
+        _apprenticeToResolvedNpc(command.target);
+      case 'learn':
+        _learnFromResolvedNpc(command.target);
+      case 'enable':
+        _enableSkill(command.target, command.extra);
+      case 'spar':
+        _sparResolvedNpc(command.target);
+      case 'kill':
+        _fightResolvedNpc(command.target);
+      case 'perform':
+        _performSkill(command.target);
+      case 'investigate':
+        _investigate();
+      case 'rest':
+        _rest();
+      case 'inventory':
+        _showInventory();
+      case 'score':
+        _showScore();
+      default:
+        _addLog(GameLogType.system, '未知指令：${command.raw}。');
+    }
+  }
+
+  void _look(String? target) {
+    final definitions = state.definitions;
+    if (definitions == null) {
+      return;
+    }
+    final room = definitions.rooms[state.currentRoomId];
+    if (room == null) {
+      return;
+    }
+    if (target == null || target.isEmpty || target == 'room') {
+      final zone = definitions.zones[room.zoneId];
+      final exits = room.exits.keys.join('、');
+      final npcNames = room.npcs
+          .map((id) => definitions.npcs[id]?.name)
+          .whereType<String>()
+          .join('、');
+      final itemNames = room.items
+          .map((id) => definitions.items[id]?.name)
+          .whereType<String>()
+          .join('、');
+      _addLog(GameLogType.system, '${room.name}：${room.description}');
+      if (zone != null) {
+        _addLog(GameLogType.system, '区域：${zone.name}。');
+      }
+      if (exits.isNotEmpty) {
+        _addLog(GameLogType.system, '出口：$exits。');
+      }
+      if (npcNames.isNotEmpty) {
+        _addLog(GameLogType.system, '人物：$npcNames。');
+      }
+      if (itemNames.isNotEmpty) {
+        _addLog(GameLogType.system, '物品：$itemNames。');
+      }
+      return;
+    }
+
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc != null) {
+      final title = npc.title.isEmpty ? '' : '${npc.title} ';
+      _addLog(GameLogType.system, '$title${npc.name}：${npc.description}');
+      final sectId = npc.sectId ?? npc.combat?.sectId;
+      if (sectId != null) {
+        final sectName = definitions.sects[sectId]?.name ?? sectId;
+        _addLog(GameLogType.system, '所属：$sectName。');
+      }
+      return;
+    }
+
+    final item = _resolveRoomItem(target);
+    if (item != null) {
+      _addLog(GameLogType.system, '${item.name}：${item.description}');
+      return;
+    }
+
+    _addLog(GameLogType.system, '你没有看到“$target”。');
+  }
+
+  void _talkToResolvedNpc(String? target) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想问谁？');
+      return;
+    }
+    _talkToNpc(npc.id);
+  }
+
+  void _performResolvedNpcOption(String? target, String interactionType) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想找谁？');
+      return;
+    }
+    _performNpcOption(npc.id, interactionType);
+  }
+
+  void _apprenticeToResolvedNpc(String? target) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想拜谁为师？');
+      return;
+    }
+    _joinSectFromNpc(npc.id, _sectIdForNpcOption(npc, 'joinSect'));
+  }
+
+  void _learnFromResolvedNpc(String? target) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想向谁请教？');
+      return;
+    }
+    _askNpcForTeaching(npc.id, _sectIdForNpcOption(npc, 'learn'));
+  }
+
+  void _enableSkill(String? slot, String? skillTarget) {
+    if (slot == null || skillTarget == null) {
+      _addLog(GameLogType.system, '请选择要映射的槽位和武功。');
+      return;
+    }
+    final skill = _resolveKnownSkill(skillTarget);
+    _mapSkill(slot, skill?.id ?? skillTarget);
+  }
+
+  void _sparResolvedNpc(String? target) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想和谁切磋？');
+      return;
+    }
+    _fightNpc(npc.id, spar: true);
+  }
+
+  void _fightResolvedNpc(String? target) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你要攻击谁？');
+      return;
+    }
+    _fightNpc(npc.id, spar: false);
+  }
+
+  void _performSkill(String? target) {
+    if (target == null || target.isEmpty) {
+      _addLog(GameLogType.system, '你要施展哪一招？');
+      return;
+    }
+    final skill = _resolveKnownSkill(target);
+    if (skill == null || !_skillSystem.knowsSkill(state, skill.id)) {
+      _addLog(GameLogType.system, '你还不会这门功夫。');
+      return;
+    }
+    if (skill.performIds.isEmpty) {
+      _addLog(GameLogType.combat, '你凝神运转${skill.name}，但还没有领悟可施展的绝招。');
+      return;
+    }
+    _addLog(GameLogType.combat, '你施展${skill.name}：${skill.performIds.first}。');
+  }
+
+  void _showInventory() {
+    if (state.inventory.isEmpty) {
+      _addLog(GameLogType.system, '你身上没有携带物品。');
+      return;
+    }
+    final names = state.inventory
+        .map((entry) {
+          final item = state.definitions?.items[entry.itemId];
+          return '${item?.name ?? entry.itemId} x${entry.count}';
+        })
+        .join('、');
+    _addLog(GameLogType.system, '你携带着：$names。');
+  }
+
+  void _showScore() {
+    final player = state.player;
+    final sectName =
+        player.sectId == null
+            ? '无门无派'
+            : state.definitions?.sects[player.sectId]?.name ?? player.sectId!;
+    _addLog(
+      GameLogType.system,
+      '${player.name}：$sectName，等级${player.level}，气血${player.hp}/${player.maxHp}，内力${player.mp}/${player.maxMp}，体力${player.stamina}/${player.maxStamina}。',
+    );
   }
 
   void _move(String direction) {
@@ -421,6 +632,73 @@ class GameController extends StateNotifier<GameState> {
         ),
       ),
     );
+  }
+
+  NpcDefinition? _resolveNpcInCurrentRoom(String? target) {
+    final definitions = state.definitions;
+    final room = definitions?.rooms[state.currentRoomId];
+    if (definitions == null || room == null) {
+      return null;
+    }
+    final npcs =
+        room.npcs.map((id) => definitions.npcs[id]).whereType<NpcDefinition>();
+    if (target == null || target.isEmpty) {
+      return npcs.length == 1 ? npcs.first : null;
+    }
+    for (final npc in npcs) {
+      if (_matchesNpc(npc, target)) {
+        return npc;
+      }
+    }
+    return null;
+  }
+
+  ItemDefinition? _resolveRoomItem(String target) {
+    final definitions = state.definitions;
+    final room = definitions?.rooms[state.currentRoomId];
+    if (definitions == null || room == null) {
+      return null;
+    }
+    for (final itemId in room.items) {
+      final item = definitions.items[itemId];
+      if (item != null && _matchesItem(item, target)) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  SkillDefinition? _resolveKnownSkill(String target) {
+    final skills =
+        state.definitions?.skills.values ?? const <SkillDefinition>[];
+    for (final skill in skills) {
+      if ((skill.id == target || skill.name == target) &&
+          _skillSystem.knowsSkill(state, skill.id)) {
+        return skill;
+      }
+    }
+    return null;
+  }
+
+  String? _sectIdForNpcOption(NpcDefinition npc, String type) {
+    for (final option in npc.interactions) {
+      if (option.type == type) {
+        return option.sectId ?? npc.sectId ?? npc.combat?.sectId;
+      }
+    }
+    return npc.sectId ?? npc.combat?.sectId;
+  }
+
+  bool _matchesNpc(NpcDefinition npc, String target) {
+    return npc.id == target ||
+        npc.name == target ||
+        npc.aliases.contains(target);
+  }
+
+  bool _matchesItem(ItemDefinition item, String target) {
+    return item.id == target ||
+        item.name == target ||
+        item.aliases.contains(target);
   }
 
   void _addLog(GameLogType type, String message) {

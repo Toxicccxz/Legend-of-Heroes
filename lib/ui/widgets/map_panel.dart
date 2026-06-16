@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/core/game_action.dart';
 import '../../game/core/game_controller.dart';
 import '../../game/core/game_state.dart';
+import '../../game/models/item_definition.dart';
 import '../../game/models/npc_definition.dart';
 import '../../game/models/room_definition.dart';
 import '../../game/systems/map_system.dart';

@@ -34,7 +34,7 @@ void main() {
     expect(find.text('侠客行 · 江湖终端'), findsOneWidget);
     expect(find.text('角色'), findsOneWidget);
     expect(find.text('地图'), findsOneWidget);
-    expect(find.text('可互动'), findsOneWidget);
+    expect(find.text('动作面板'), findsOneWidget);
     expect(find.text('出口'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

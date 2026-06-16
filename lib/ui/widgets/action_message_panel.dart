@@ -21,7 +21,7 @@ class ActionMessagePanel extends ConsumerWidget {
           const SizedBox(height: 6),
           Expanded(child: _MessageLog(state: state)),
           const SizedBox(height: 6),
-          const SizedBox(height: 84, child: _ExitButtons()),
+          const SizedBox(height: 122, child: _MudActionPad()),
         ],
       ),
     );
@@ -199,33 +199,113 @@ extension MessageFilterLabel on MessageFilter {
   }
 }
 
-class _ExitButtons extends StatelessWidget {
-  const _ExitButtons();
+class _MudActionPad extends StatelessWidget {
+  const _MudActionPad();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        const SizedBox(
-          width: 48,
-          child: Text('出口', style: TextStyle(fontWeight: FontWeight.w800)),
-        ),
-        Expanded(
-          child: GridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 4,
-            childAspectRatio: 1.65,
-            mainAxisSpacing: 6,
-            crossAxisSpacing: 6,
+        SizedBox(
+          height: 34,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
             children: const [
-              _DirectionButton(direction: 'north', label: '北'),
-              _DirectionButton(direction: 'south', label: '南'),
-              _DirectionButton(direction: 'east', label: '东'),
-              _DirectionButton(direction: 'west', label: '西'),
+              _QuickCommandButton(
+                command: 'look room',
+                label: '查看',
+                icon: Icons.visibility_outlined,
+              ),
+              _QuickCommandButton(
+                command: 'score',
+                label: '状态',
+                icon: Icons.badge_outlined,
+              ),
+              _QuickCommandButton(
+                command: 'inventory',
+                label: '背包',
+                icon: Icons.inventory_2_outlined,
+              ),
+              _QuickCommandButton(
+                command: 'investigate',
+                label: '调查',
+                icon: Icons.search,
+              ),
+              _QuickCommandButton(
+                command: 'rest',
+                label: '休息',
+                icon: Icons.bed,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Expanded(
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 48,
+                child: Text(
+                  '出口',
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                ),
+              ),
+              Expanded(
+                child: GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 4,
+                  childAspectRatio: 1.65,
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 6,
+                  children: const [
+                    _DirectionButton(direction: 'north', label: '北'),
+                    _DirectionButton(direction: 'south', label: '南'),
+                    _DirectionButton(direction: 'east', label: '东'),
+                    _DirectionButton(direction: 'west', label: '西'),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _QuickCommandButton extends ConsumerWidget {
+  const _QuickCommandButton({
+    required this.command,
+    required this.label,
+    required this.icon,
+  });
+
+  final String command;
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: OutlinedButton.icon(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(0, 30),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
+          side: const BorderSide(color: Colors.black),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        ),
+        onPressed:
+            () => ref
+                .read(gameControllerProvider.notifier)
+                .dispatch(ExecuteCommandAction(command)),
+        icon: Icon(icon, size: 15),
+        label: Text(label, style: const TextStyle(fontSize: 12)),
+      ),
     );
   }
 }
@@ -253,7 +333,7 @@ class _DirectionButton extends ConsumerWidget {
           enabled
               ? () => ref
                   .read(gameControllerProvider.notifier)
-                  .dispatch(MoveAction(direction))
+                  .dispatch(ExecuteCommandAction(direction))
               : null,
       child: Text(
         label,

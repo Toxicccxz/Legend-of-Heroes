@@ -12,6 +12,12 @@ class MoveAction extends GameAction {
   final String direction;
 }
 
+class ExecuteCommandAction extends GameAction {
+  const ExecuteCommandAction(this.input);
+
+  final String input;
+}
+
 class TalkToNpcAction extends GameAction {
   const TalkToNpcAction(this.npcId);
 
