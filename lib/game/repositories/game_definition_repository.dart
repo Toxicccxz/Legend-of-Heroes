@@ -92,6 +92,7 @@ class GameDefinitions {
         targetIds: dialogues.keys,
       );
       _validateNpcInteractionReferences(errors, npc, this);
+      _validateNpcCombatReferences(errors, npc, this);
     }
 
     for (final dialogue in dialogues.values) {
@@ -130,6 +131,51 @@ class GameDefinitions {
     if (errors.isNotEmpty) {
       throw StateError('Invalid game definitions:\n${errors.join('\n')}');
     }
+  }
+}
+
+void _validateNpcCombatReferences(
+  List<String> errors,
+  NpcDefinition npc,
+  GameDefinitions definitions,
+) {
+  final combat = npc.combat;
+  if (combat == null) {
+    return;
+  }
+  _requireOptionalId(
+    errors,
+    source: 'Npc ${npc.id} combat',
+    field: 'sectId',
+    id: combat.sectId,
+    targetIds: definitions.sects.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Npc ${npc.id} combat',
+    field: 'skillLevels',
+    ids: combat.skillLevels.keys,
+    targetIds: definitions.skills.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Npc ${npc.id} combat',
+    field: 'mappedSkillIds',
+    ids: combat.mappedSkillIds.values,
+    targetIds: definitions.skills.keys,
+  );
+  for (final entry in combat.mappedSkillIds.entries) {
+    final skill = definitions.skills[entry.value];
+    if (skill != null && !skill.mappedSlots.contains(entry.key)) {
+      errors.add(
+        'Npc ${npc.id} combat maps ${entry.value} to invalid slot "${entry.key}".',
+      );
+    }
+  }
+  if (!combat.mappedSkillIds.containsKey(combat.attackSkillSlot)) {
+    errors.add(
+      'Npc ${npc.id} combat attackSkillSlot "${combat.attackSkillSlot}" is not mapped.',
+    );
   }
 }
 

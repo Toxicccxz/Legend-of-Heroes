@@ -34,5 +34,113 @@
         "skillIds": ["cloud_sword_ultimate"]
       }
     ]
+  },
+  {
+    "id": "shaolin_sect",
+    "name": "少林派",
+    "description": "禅武合一的名门正派，重根基、重戒律、重体魄。",
+    "features": "拳掌刚猛，内功厚重，防守和续战能力强。",
+    "rules": [
+      "每名弟子须按入门、进阶、长老三个阶段拜师。",
+      "学完当前师父传授的功法后，才可拜更高一层师父。",
+      "不可偷师学艺，不可跨门派拜师。"
+    ],
+    "ranks": ["少林俗家弟子", "少林罗汉堂", "少林达摩院"],
+    "skills": ["shaolin_changquan", "yijin_jing", "damo_zhang"],
+    "masters": [
+      {
+        "npcId": "shaolin_monk",
+        "level": 0,
+        "title": "入门师父",
+        "rank": "少林俗家弟子",
+        "skillIds": ["shaolin_changquan"]
+      },
+      {
+        "npcId": "shaolin_luohan",
+        "level": 1,
+        "title": "进阶师父",
+        "rank": "少林罗汉堂",
+        "skillIds": ["yijin_jing"]
+      },
+      {
+        "npcId": "shaolin_elder",
+        "level": 2,
+        "title": "门派长老",
+        "rank": "少林达摩院",
+        "skillIds": ["damo_zhang"]
+      }
+    ]
+  },
+  {
+    "id": "wudang_sect",
+    "name": "武当派",
+    "description": "以道入武的山门，讲究圆转如意、以静制动。",
+    "features": "剑法绵密，身法灵活，后期擅长后发制人。",
+    "rules": [
+      "每名弟子须按入门、进阶、长老三个阶段拜师。",
+      "学完当前师父传授的功法后，才可拜更高一层师父。",
+      "不可偷师学艺，不可跨门派拜师。"
+    ],
+    "ranks": ["武当外门", "武当内门", "武当真传"],
+    "skills": ["wudang_jian", "taiji_shenfa", "taiji_jianyi"],
+    "masters": [
+      {
+        "npcId": "wudang_daotong",
+        "level": 0,
+        "title": "入门师父",
+        "rank": "武当外门",
+        "skillIds": ["wudang_jian"]
+      },
+      {
+        "npcId": "wudang_senior",
+        "level": 1,
+        "title": "进阶师父",
+        "rank": "武当内门",
+        "skillIds": ["taiji_shenfa"]
+      },
+      {
+        "npcId": "wudang_elder",
+        "level": 2,
+        "title": "门派长老",
+        "rank": "武当真传",
+        "skillIds": ["taiji_jianyi"]
+      }
+    ]
+  },
+  {
+    "id": "huashan_sect",
+    "name": "华山派",
+    "description": "剑气并重的险峰门派，出手凌厉，讲究胆识与悟性。",
+    "features": "剑法爆发高，进阶内功增强攻势，绝学偏向破招。",
+    "rules": [
+      "每名弟子须按入门、进阶、长老三个阶段拜师。",
+      "学完当前师父传授的功法后，才可拜更高一层师父。",
+      "不可偷师学艺，不可跨门派拜师。"
+    ],
+    "ranks": ["华山外门", "华山剑宗", "华山真传"],
+    "skills": ["huashan_sword", "zixia_gong", "dugu_sword"],
+    "masters": [
+      {
+        "npcId": "huashan_swordsman",
+        "level": 0,
+        "title": "入门师父",
+        "rank": "华山外门",
+        "skillIds": ["huashan_sword"]
+      },
+      {
+        "npcId": "huashan_senior",
+        "level": 1,
+        "title": "进阶师父",
+        "rank": "华山剑宗",
+        "skillIds": ["zixia_gong"]
+      },
+      {
+        "npcId": "huashan_elder",
+        "level": 2,
+        "title": "门派长老",
+        "rank": "华山真传",
+        "skillIds": ["dugu_sword"]
+      }
+    ]
   }
 ]

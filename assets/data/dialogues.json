@@ -58,5 +58,50 @@
     "id": "dialogue_qingyun_elder",
     "lines": ["云海剑意不可急求，心中无门，剑上无云。"],
     "events": []
+  },
+  {
+    "id": "dialogue_shaolin_monk",
+    "lines": ["少林先学拳脚，也先学收心。若要入门，须守本门戒律。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_shaolin_luohan",
+    "lines": ["拳架练稳后，再谈内息。急躁者学不得易筋经。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_shaolin_elder",
+    "lines": ["达摩掌不是争强斗狠之术，须能止戈，才可出掌。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_wudang_daotong",
+    "lines": ["武当剑不求一时锋芒，先把圆转之意练进剑路。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_wudang_senior",
+    "lines": ["身随剑转，力从对手来。太极身法要慢练。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_wudang_elder",
+    "lines": ["太极剑意贵在后发，心先不动，剑才不乱。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_huashan_swordsman",
+    "lines": ["华山剑出险峰，入门先练胆，也练眼。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_huashan_senior",
+    "lines": ["紫霞功催动剑势，但根基虚浮，只会伤了自己。"],
+    "events": []
+  },
+  {
+    "id": "dialogue_huashan_elder",
+    "lines": ["九剑重在破招。看不透对手，便先看透自己。"],
+    "events": []
   }
 ]

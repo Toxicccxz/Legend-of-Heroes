@@ -50,7 +50,7 @@ class _MapPanelState extends ConsumerState<MapPanel> {
     _rememberRoomAfterBuild(state.currentRoomId);
 
     return PanelFrame(
-      title: '',
+      title: '地图',
       child: Column(
         children: [
           Expanded(
@@ -82,8 +82,6 @@ class _MapPanelState extends ConsumerState<MapPanel> {
                 );
               },
             ),
-            // onPressed: onPressed,
-            // child: Text(actionLabel, style: const TextStyle(fontSize: 12)),
           ),
           const SizedBox(height: 6),
           _RoomInfo(room: room, zoneName: zone?.name),
@@ -170,7 +168,7 @@ class _RoomInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '区域： ${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
+              '区域：${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.w800),
@@ -178,7 +176,7 @@ class _RoomInfo extends StatelessWidget {
             const SizedBox(height: 4),
             Expanded(
               child: Text(
-                '描述： ${room?.description ?? ''}',
+                '描述：${room?.description ?? ''}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

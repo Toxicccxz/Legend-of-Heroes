@@ -14,14 +14,14 @@ class ActionMessagePanel extends ConsumerWidget {
     final state = ref.watch(gameControllerProvider);
 
     return PanelFrame(
-      title: '',
+      title: '江湖消息',
       child: Column(
         children: [
           _MessageFilterBar(state: state, ref: ref),
           const SizedBox(height: 6),
           Expanded(child: _MessageLog(state: state)),
           const SizedBox(height: 6),
-          const SizedBox(height: 86, child: _ExitButtons()),
+          const SizedBox(height: 84, child: _ExitButtons()),
         ],
       ),
     );
@@ -69,18 +69,29 @@ class _MessageLogState extends State<_MessageLog> {
       width: double.infinity,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
+        color: const Color(0xFF111111),
         border: Border.all(),
         borderRadius: BorderRadius.circular(6),
       ),
       child:
           logs.isEmpty
-              ? const Center(child: Text('暂无消息'))
+              ? const Center(
+                child: Text('暂无消息', style: TextStyle(color: Colors.white70)),
+              )
               : ListView(
                 controller: _scrollController,
                 children:
                     logs.map((log) {
-                      return Text(
-                        '[${_formatTime(log.timestamp)}] ${log.message}',
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 3),
+                        child: Text(
+                          '[${_formatTime(log.timestamp)}] ${log.message}',
+                          style: TextStyle(
+                            color: _colorForLog(log.type),
+                            fontFamily: 'monospace',
+                            height: 1.25,
+                          ),
+                        ),
                       );
                     }).toList(),
               ),
@@ -98,6 +109,15 @@ class _MessageLogState extends State<_MessageLog> {
         state.logs.where((log) => log.type == GameLogType.system).toList(),
       MessageFilter.quest =>
         state.logs.where((log) => log.type == GameLogType.quest).toList(),
+    };
+  }
+
+  Color _colorForLog(GameLogType type) {
+    return switch (type) {
+      GameLogType.dialogue => const Color(0xFFBDE0FE),
+      GameLogType.combat => const Color(0xFFFFC857),
+      GameLogType.system => const Color(0xFFE6E6E6),
+      GameLogType.quest => const Color(0xFFC8F7C5),
     };
   }
 

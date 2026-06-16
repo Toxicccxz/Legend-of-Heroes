@@ -13,6 +13,7 @@ class StartScreen extends ConsumerWidget {
     final definitions = ref.watch(gameDefinitionsProvider);
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF2F0EA),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -64,9 +65,9 @@ class _StartMenu extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Legend of Heroes',
+                '侠客行',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 8),
               const Text(

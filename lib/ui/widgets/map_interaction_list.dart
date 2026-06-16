@@ -186,7 +186,7 @@ class _MapInteractionList extends StatelessWidget {
                 const Text('拜师规则：'),
                 for (final rule in sect.rules) Text('· $rule'),
                 const SizedBox(height: 8),
-                const Text('此为第一次拜师，请三思而后行。'),
+                const Text('这是第一次拜师，请三思而后行。'),
               ],
             ),
           ),

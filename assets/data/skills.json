@@ -4,28 +4,48 @@
     "name": "基本剑法",
     "description": "持剑、出剑、收剑的基础。",
     "category": "基础",
-    "kind": "basic"
+    "kind": "basic",
+    "mappedSlots": ["sword"]
   },
   {
     "id": "dodge",
     "name": "基本轻功",
     "description": "腾挪闪避的基础。",
     "category": "基础",
-    "kind": "basic"
+    "kind": "basic",
+    "mappedSlots": ["dodge"]
   },
   {
     "id": "force",
     "name": "基本内功",
     "description": "吐纳行气的基础。",
     "category": "基础",
-    "kind": "basic"
+    "kind": "basic",
+    "mappedSlots": ["force"]
   },
   {
     "id": "parry",
     "name": "基本招架",
     "description": "格挡拆招的基础。",
     "category": "基础",
-    "kind": "basic"
+    "kind": "basic",
+    "mappedSlots": ["parry"]
+  },
+  {
+    "id": "blade",
+    "name": "基本刀法",
+    "description": "劈、砍、撩、截的基础刀路。",
+    "category": "基础",
+    "kind": "basic",
+    "mappedSlots": ["blade", "parry"]
+  },
+  {
+    "id": "hand",
+    "name": "基本拳脚",
+    "description": "拳掌指爪、腾挪发力的入门根基。",
+    "category": "基础",
+    "kind": "basic",
+    "mappedSlots": ["hand", "parry"]
   },
   {
     "id": "basic_sword",
@@ -58,5 +78,101 @@
     "mappedSlots": ["sword", "parry"],
     "requiredSkillIds": ["basic_sword", "wind_step"],
     "sectId": "qingyun_sect"
+  },
+  {
+    "id": "shaolin_changquan",
+    "name": "罗汉长拳",
+    "description": "少林入门拳法，架势端正，刚猛稳实。",
+    "category": "拳脚",
+    "kind": "special",
+    "baseSkillId": "hand",
+    "mappedSlots": ["hand", "parry"],
+    "sectId": "shaolin_sect"
+  },
+  {
+    "id": "yijin_jing",
+    "name": "易筋经",
+    "description": "少林进阶内功，调息炼体，厚积薄发。",
+    "category": "内功",
+    "kind": "special",
+    "baseSkillId": "force",
+    "mappedSlots": ["force"],
+    "requiredSkillIds": ["shaolin_changquan"],
+    "sectId": "shaolin_sect"
+  },
+  {
+    "id": "damo_zhang",
+    "name": "达摩掌",
+    "description": "少林长老传授的掌法绝学，沉雄如山。",
+    "category": "绝学",
+    "kind": "ultimate",
+    "baseSkillId": "hand",
+    "mappedSlots": ["hand", "parry"],
+    "requiredSkillIds": ["shaolin_changquan", "yijin_jing"],
+    "sectId": "shaolin_sect"
+  },
+  {
+    "id": "wudang_jian",
+    "name": "武当剑法",
+    "description": "武当入门剑法，以圆转绵密见长。",
+    "category": "剑法",
+    "kind": "special",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "sectId": "wudang_sect"
+  },
+  {
+    "id": "taiji_shenfa",
+    "name": "太极身法",
+    "description": "武当进阶身法，借力回旋，避实击虚。",
+    "category": "身法",
+    "kind": "special",
+    "baseSkillId": "dodge",
+    "mappedSlots": ["dodge"],
+    "requiredSkillIds": ["wudang_jian"],
+    "sectId": "wudang_sect"
+  },
+  {
+    "id": "taiji_jianyi",
+    "name": "太极剑意",
+    "description": "武当长老秘传绝学，后发制人，剑意圆融。",
+    "category": "绝学",
+    "kind": "ultimate",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "requiredSkillIds": ["wudang_jian", "taiji_shenfa"],
+    "sectId": "wudang_sect"
+  },
+  {
+    "id": "huashan_sword",
+    "name": "华山剑法",
+    "description": "华山入门剑法，轻捷奇险，讲究抢占先机。",
+    "category": "剑法",
+    "kind": "special",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "sectId": "huashan_sect"
+  },
+  {
+    "id": "zixia_gong",
+    "name": "紫霞功",
+    "description": "华山进阶内功，气息绵长，剑势愈发凌厉。",
+    "category": "内功",
+    "kind": "special",
+    "baseSkillId": "force",
+    "mappedSlots": ["force"],
+    "requiredSkillIds": ["huashan_sword"],
+    "sectId": "huashan_sect"
+  },
+  {
+    "id": "dugu_sword",
+    "name": "独孤九剑",
+    "description": "华山长老秘传剑道绝学，重在破招与见机。",
+    "category": "绝学",
+    "kind": "ultimate",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "requiredSkillIds": ["huashan_sword", "zixia_gong"],
+    "sectId": "huashan_sect"
   }
 ]

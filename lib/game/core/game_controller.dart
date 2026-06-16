@@ -5,6 +5,7 @@ import '../models/event_definition.dart';
 import '../models/item_definition.dart';
 import '../repositories/game_definition_repository.dart';
 import '../repositories/save_repository.dart';
+import '../systems/combat_system.dart';
 import '../systems/dialogue_system.dart';
 import '../systems/equipment_system.dart';
 import '../systems/event_system.dart';
@@ -70,6 +71,7 @@ class GameController extends StateNotifier<GameState> {
   final SaveRepository _saveRepository;
   final MapSystem _mapSystem = const MapSystem();
   final QuestSystem _questSystem = const QuestSystem();
+  final CombatSystem _combatSystem = const CombatSystem();
   final InventorySystem _inventorySystem = const InventorySystem();
   final EquipmentSystem _equipmentSystem = const EquipmentSystem();
   final DialogueSystem _dialogueSystem = const DialogueSystem();
@@ -172,7 +174,7 @@ class GameController extends StateNotifier<GameState> {
       case 'talk':
         _talkToNpc(npcId);
       case 'spar':
-        _sparWithNpc(npcId);
+        _fightNpc(npcId, spar: true);
       case 'cancel':
         return;
       default:
@@ -210,15 +212,18 @@ class GameController extends StateNotifier<GameState> {
       case 'learn':
         _askNpcForTeaching(npc.id, option.sectId);
       case 'battle':
-        _addLog(GameLogType.combat, '${npc.name}摆开架势，真正的战斗尚未开放。');
+        _fightNpc(npc.id, spar: false);
       default:
         _addLog(GameLogType.system, '你选择了${option.label}。');
     }
   }
 
-  void _sparWithNpc(String npcId) {
-    final npcName = state.definitions?.npcs[npcId]?.name ?? npcId;
-    _addLog(GameLogType.combat, '你向$npcName提出切磋，点到即止。');
+  void _fightNpc(String npcId, {required bool spar}) {
+    final result = _combatSystem.fightNpc(state, npcId, spar: spar);
+    state = result.state;
+    for (final log in result.logs) {
+      _addLog(GameLogType.combat, log);
+    }
   }
 
   void _joinSectFromNpc(String npcId, String? sectId) {

@@ -24,17 +24,18 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Legend of Heroes'), findsOneWidget);
+    expect(find.text('侠客行'), findsOneWidget);
     expect(find.text('继续游戏'), findsOneWidget);
     expect(find.text('新的冒险'), findsOneWidget);
 
     await tester.tap(find.text('新的冒险'));
     await tester.pumpAndSettle();
 
-    expect(find.text('姓名： 冒险者'), findsOneWidget);
+    expect(find.text('侠客行 · 江湖终端'), findsOneWidget);
+    expect(find.text('角色'), findsOneWidget);
+    expect(find.text('地图'), findsOneWidget);
     expect(find.text('可互动'), findsOneWidget);
     expect(find.text('出口'), findsOneWidget);
-    expect(find.textContaining('废弃村口'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 }

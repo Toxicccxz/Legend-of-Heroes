@@ -75,6 +75,27 @@ void main() {
       isTrue,
     );
   });
+
+  test('joining one sect blocks apprenticeship in another sect', () {
+    final controller = GameController(
+      definitions: _definitions(),
+      saveRepository: InMemorySaveRepository(),
+    );
+
+    controller.dispatch(
+      const InteractWithNpcAction('sword_instructor', 'joinSect'),
+    );
+    controller.dispatch(
+      const InteractWithNpcAction('rival_master', 'joinSect'),
+    );
+
+    expect(controller.state.player.sectId, 'qingyun_sect');
+    expect(controller.state.player.masterNpcId, 'sword_instructor');
+    expect(
+      controller.state.logs.any((log) => log.message.contains('不可跨门派拜师')),
+      isTrue,
+    );
+  });
 }
 
 GameDefinitions _definitions() {
@@ -141,6 +162,19 @@ GameDefinitions _definitions() {
           ),
         ],
       ),
+      'rival_master': NpcDefinition(
+        id: 'rival_master',
+        name: 'Rival Master',
+        description: '',
+        dialogueId: 'dialogue_rival_master',
+        interactions: [
+          NpcInteractionOption(
+            type: 'joinSect',
+            label: '拜师',
+            sectId: 'rival_sect',
+          ),
+        ],
+      ),
     },
     items: {},
     quests: {},
@@ -157,6 +191,11 @@ GameDefinitions _definitions() {
       ),
       'dialogue_elder_master': DialogueDefinition(
         id: 'dialogue_elder_master',
+        lines: [],
+        events: [],
+      ),
+      'dialogue_rival_master': DialogueDefinition(
+        id: 'dialogue_rival_master',
         lines: [],
         events: [],
       ),
@@ -193,6 +232,36 @@ GameDefinitions _definitions() {
           ),
         ],
       ),
+      'rival_sect': SectDefinition(
+        id: 'rival_sect',
+        name: 'Rival',
+        description: '',
+        ranks: ['rival_disciple', 'rival_inner', 'rival_true'],
+        skills: ['rival_skill', 'rival_step', 'rival_ultimate'],
+        masters: [
+          SectMasterDefinition(
+            npcId: 'rival_master',
+            level: 0,
+            title: 'Entry',
+            rank: 'rival_disciple',
+            skillIds: ['rival_skill'],
+          ),
+          SectMasterDefinition(
+            npcId: 'rival_master',
+            level: 1,
+            title: 'Advanced',
+            rank: 'rival_inner',
+            skillIds: ['rival_step'],
+          ),
+          SectMasterDefinition(
+            npcId: 'rival_master',
+            level: 2,
+            title: 'Elder',
+            rank: 'rival_true',
+            skillIds: ['rival_ultimate'],
+          ),
+        ],
+      ),
     },
     skills: {
       'basic_sword': SkillDefinition(
@@ -210,6 +279,24 @@ GameDefinitions _definitions() {
       'ultimate_sword': SkillDefinition(
         id: 'ultimate_sword',
         name: 'Ultimate Sword',
+        description: '',
+        category: 'martial',
+      ),
+      'rival_skill': SkillDefinition(
+        id: 'rival_skill',
+        name: 'Rival Skill',
+        description: '',
+        category: 'martial',
+      ),
+      'rival_step': SkillDefinition(
+        id: 'rival_step',
+        name: 'Rival Step',
+        description: '',
+        category: 'martial',
+      ),
+      'rival_ultimate': SkillDefinition(
+        id: 'rival_ultimate',
+        name: 'Rival Ultimate',
         description: '',
         category: 'martial',
       ),

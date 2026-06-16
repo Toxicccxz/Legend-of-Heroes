@@ -402,7 +402,13 @@
     "npcs": [
       "sword_instructor",
       "qingyun_senior",
-      "qingyun_elder"
+      "qingyun_elder",
+      "shaolin_luohan",
+      "shaolin_elder",
+      "wudang_senior",
+      "wudang_elder",
+      "huashan_senior",
+      "huashan_elder"
     ],
     "onEnterEvents": [],
     "investigateEvents": [],
@@ -422,7 +428,11 @@
     "exits": {
       "south": "training_yard"
     },
-    "npcs": [],
+    "npcs": [
+      "shaolin_monk",
+      "wudang_daotong",
+      "huashan_swordsman"
+    ],
     "onEnterEvents": [],
     "investigateEvents": [
       "event_investigate_sword_platform"

@@ -14,27 +14,38 @@ import 'status_tabs/sect_tab.dart';
 import 'status_tabs/skill_tab.dart';
 
 class CharacterStatusPanel extends ConsumerWidget {
-  const CharacterStatusPanel({super.key});
+  const CharacterStatusPanel({super.key, this.expanded = false});
+
+  final bool expanded;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameControllerProvider);
 
     return SizedBox(
-      height: 245,
+      height: expanded ? double.infinity : 245,
       child: PanelFrame(
-        title: '',
-        child: Row(
-          children: [
-            SizedBox(width: 122, child: _PlayerStats(state: state)),
-            const VerticalDivider(
-              width: 20,
-              thickness: 1.4,
-              color: Colors.black,
-            ),
-            Expanded(child: _StatusTabArea(state: state, ref: ref)),
-          ],
-        ),
+        title: '角色',
+        child:
+            expanded
+                ? Column(
+                  children: [
+                    _PlayerStats(state: state),
+                    const Divider(height: 20, thickness: 1.4),
+                    Expanded(child: _StatusTabArea(state: state, ref: ref)),
+                  ],
+                )
+                : Row(
+                  children: [
+                    SizedBox(width: 122, child: _PlayerStats(state: state)),
+                    const VerticalDivider(
+                      width: 20,
+                      thickness: 1.4,
+                      color: Colors.black,
+                    ),
+                    Expanded(child: _StatusTabArea(state: state, ref: ref)),
+                  ],
+                ),
       ),
     );
   }
