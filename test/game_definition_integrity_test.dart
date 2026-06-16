@@ -3,7 +3,11 @@ import 'package:legend_of_heroes/game/models/dialogue_definition.dart';
 import 'package:legend_of_heroes/game/models/event_definition.dart';
 import 'package:legend_of_heroes/game/models/item_definition.dart';
 import 'package:legend_of_heroes/game/models/npc_definition.dart';
+import 'package:legend_of_heroes/game/models/quest_definition.dart';
 import 'package:legend_of_heroes/game/models/room_definition.dart';
+import 'package:legend_of_heroes/game/models/sect_definition.dart';
+import 'package:legend_of_heroes/game/models/skill_definition.dart';
+import 'package:legend_of_heroes/game/models/zone_definition.dart';
 import 'package:legend_of_heroes/game/repositories/game_definition_repository.dart';
 
 void main() {
@@ -116,6 +120,156 @@ void main() {
         ),
       ),
     );
+  });
+
+  test('validateIntegrity accepts MUD-style content references', () {
+    const definitions = GameDefinitions(
+      rooms: {
+        'training_yard': RoomDefinition(
+          id: 'training_yard',
+          name: 'Training Yard',
+          description: '',
+          zoneId: 'zone',
+          aliases: ['yard'],
+          tags: [],
+          exits: {},
+          npcs: ['master'],
+          items: ['manual'],
+          commands: [
+            RoomCommandDefinition(
+              verb: 'read',
+              label: '读碑',
+              eventIds: ['event'],
+            ),
+          ],
+          onEnterEvents: [],
+          investigateEvents: [],
+          mapX: 0,
+          mapY: 0,
+        ),
+      },
+      zones: {
+        'zone': ZoneDefinition(
+          id: 'zone',
+          name: 'Zone',
+          description: '',
+          visibleRadius: 3,
+        ),
+      },
+      npcs: {
+        'master': NpcDefinition(
+          id: 'master',
+          name: 'Master',
+          description: '',
+          dialogueId: 'dialogue',
+          sectId: 'sect',
+          inventory: [NpcInventoryEntry(itemId: 'manual')],
+        ),
+      },
+      items: {
+        'manual': ItemDefinition(
+          id: 'manual',
+          name: 'Manual',
+          description: '',
+          type: ItemType.book,
+          effects: {},
+          skillId: 'skill',
+        ),
+      },
+      quests: {
+        'quest': QuestDefinition(
+          id: 'quest',
+          title: 'Quest',
+          category: 'mud',
+          description: '',
+          objectives: [],
+          initialProgress: {},
+          giverNpcId: 'master',
+          stages: [
+            QuestStageDefinition(
+              id: 'stage',
+              description: '',
+              roomId: 'training_yard',
+              npcId: 'master',
+              eventIds: ['event'],
+            ),
+          ],
+          rewards: QuestRewardDefinition(
+            itemIds: ['manual'],
+            skillIds: ['skill'],
+          ),
+        ),
+      },
+      dialogues: {
+        'dialogue': DialogueDefinition(id: 'dialogue', lines: [], events: []),
+      },
+      events: {
+        'event': EventDefinition(
+          id: 'event',
+          type: 'action',
+          message: '',
+          logType: 'system',
+          effects: {},
+        ),
+      },
+      sects: {
+        'sect': SectDefinition(
+          id: 'sect',
+          name: 'Sect',
+          description: '',
+          ranks: ['outer', 'inner', 'elder'],
+          skills: ['skill', 'skill_two', 'skill_three'],
+          headquartersRoomId: 'training_yard',
+          masters: [
+            SectMasterDefinition(
+              npcId: 'master',
+              level: 0,
+              title: '',
+              rank: 'outer',
+              skillIds: ['skill'],
+            ),
+            SectMasterDefinition(
+              npcId: 'master',
+              level: 1,
+              title: '',
+              rank: 'inner',
+              skillIds: ['skill_two'],
+            ),
+            SectMasterDefinition(
+              npcId: 'master',
+              level: 2,
+              title: '',
+              rank: 'elder',
+              skillIds: ['skill_three'],
+            ),
+          ],
+        ),
+      },
+      skills: {
+        'skill': SkillDefinition(
+          id: 'skill',
+          name: 'Skill',
+          description: '',
+          category: 'skill',
+          sectId: 'sect',
+          familyId: 'sect',
+        ),
+        'skill_two': SkillDefinition(
+          id: 'skill_two',
+          name: 'Skill Two',
+          description: '',
+          category: 'skill',
+        ),
+        'skill_three': SkillDefinition(
+          id: 'skill_three',
+          name: 'Skill Three',
+          description: '',
+          category: 'skill',
+        ),
+      },
+    );
+
+    expect(definitions.validateIntegrity, returnsNormally);
   });
 }
 

@@ -38,6 +38,10 @@ void main() {
     expect(definitions.zones, isEmpty);
     expect(room.zoneId, 'default');
     expect(room.restEvents, isEmpty);
+    expect(room.items, isEmpty);
+    expect(room.commands, isEmpty);
     expect(item.useEvents, isEmpty);
+    expect(item.aliases, isEmpty);
+    expect(item.weight, 1);
   });
 }

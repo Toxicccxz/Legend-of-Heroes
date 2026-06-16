@@ -63,6 +63,22 @@ class GameDefinitions {
       _requireAllIds(
         errors,
         source: 'Room ${room.id}',
+        field: 'items',
+        ids: room.items,
+        targetIds: items.keys,
+      );
+      for (final command in room.commands) {
+        _requireAllIds(
+          errors,
+          source: 'Room ${room.id} command ${command.verb}',
+          field: 'eventIds',
+          ids: command.eventIds,
+          targetIds: events.keys,
+        );
+      }
+      _requireAllIds(
+        errors,
+        source: 'Room ${room.id}',
         field: 'onEnterEvents',
         ids: room.onEnterEvents,
         targetIds: events.keys,
@@ -106,7 +122,7 @@ class GameDefinitions {
     }
 
     for (final item in items.values) {
-      _validateItemDefinition(errors, item);
+      _validateItemDefinition(errors, item, this);
       _requireAllIds(
         errors,
         source: 'Item ${item.id}',
@@ -122,6 +138,20 @@ class GameDefinitions {
 
     for (final skill in skills.values) {
       _validateSkillDefinition(errors, skill, this);
+    }
+
+    for (final quest in quests.values) {
+      _validateQuestDefinition(errors, quest, this);
+    }
+
+    for (final zone in zones.values) {
+      _requireOptionalId(
+        errors,
+        source: 'Zone ${zone.id}',
+        field: 'parentZoneId',
+        id: zone.parentZoneId,
+        targetIds: zones.keys,
+      );
     }
 
     for (final event in events.values) {
@@ -142,6 +172,22 @@ void _validateNpcCombatReferences(
   final combat = npc.combat;
   if (combat == null) {
     return;
+  }
+  _requireOptionalId(
+    errors,
+    source: 'Npc ${npc.id}',
+    field: 'sectId',
+    id: npc.sectId,
+    targetIds: definitions.sects.keys,
+  );
+  for (final entry in npc.inventory) {
+    _requireId(
+      errors,
+      source: 'Npc ${npc.id} inventory',
+      field: 'itemId',
+      id: entry.itemId,
+      targetIds: definitions.items.keys,
+    );
   }
   _requireOptionalId(
     errors,
@@ -201,6 +247,13 @@ void _validateSkillDefinition(
   _requireOptionalId(
     errors,
     source: 'Skill ${skill.id}',
+    field: 'familyId',
+    id: skill.familyId,
+    targetIds: definitions.sects.keys,
+  );
+  _requireOptionalId(
+    errors,
+    source: 'Skill ${skill.id}',
     field: 'sectId',
     id: skill.sectId,
     targetIds: definitions.sects.keys,
@@ -218,6 +271,20 @@ void _validateSectDefinition(
     field: 'skills',
     ids: sect.skills,
     targetIds: definitions.skills.keys,
+  );
+  _requireOptionalId(
+    errors,
+    source: 'Sect ${sect.id}',
+    field: 'headquartersRoomId',
+    id: sect.headquartersRoomId,
+    targetIds: definitions.rooms.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Sect ${sect.id}',
+    field: 'forbiddenSectIds',
+    ids: sect.forbiddenSectIds,
+    targetIds: definitions.sects.keys,
   );
   if (sect.masters.length != 3) {
     errors.add('Sect ${sect.id} must define exactly three masters.');
@@ -288,15 +355,26 @@ void _validateNpcInteractionReferences(
   }
 }
 
-void _validateItemDefinition(List<String> errors, ItemDefinition item) {
+void _validateItemDefinition(
+  List<String> errors,
+  ItemDefinition item,
+  GameDefinitions definitions,
+) {
   final slot = item.slot;
-  if (item.type == ItemType.equipment) {
+  if (item.type == ItemType.equipment || item.type == ItemType.weapon) {
     if (slot == null) {
       errors.add('Item ${item.id} is equipment but has no slot.');
     } else if (!EquipmentSlotIds.all.contains(slot)) {
       errors.add('Item ${item.id} uses unknown equipment slot "$slot".');
     }
   }
+  _requireOptionalId(
+    errors,
+    source: 'Item ${item.id}',
+    field: 'skillId',
+    id: item.skillId,
+    targetIds: definitions.skills.keys,
+  );
 
   for (final effectKey in item.effects.keys) {
     if (!ItemEffectKeys.all.contains(effectKey)) {
@@ -313,6 +391,65 @@ void _validateItemDefinition(List<String> errors, ItemDefinition item) {
         'Item ${item.id} effect "$effectKey" is $value, above cap $cap.',
       );
     }
+  }
+}
+
+void _validateQuestDefinition(
+  List<String> errors,
+  QuestDefinition quest,
+  GameDefinitions definitions,
+) {
+  _requireOptionalId(
+    errors,
+    source: 'Quest ${quest.id}',
+    field: 'giverNpcId',
+    id: quest.giverNpcId,
+    targetIds: definitions.npcs.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Quest ${quest.id}',
+    field: 'requiredQuestIds',
+    ids: quest.requiredQuestIds,
+    targetIds: definitions.quests.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Quest ${quest.id}',
+    field: 'rewards.itemIds',
+    ids: quest.rewards.itemIds,
+    targetIds: definitions.items.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Quest ${quest.id}',
+    field: 'rewards.skillIds',
+    ids: quest.rewards.skillIds,
+    targetIds: definitions.skills.keys,
+  );
+  for (final stage in quest.stages) {
+    final source = 'Quest ${quest.id} stage ${stage.id}';
+    _requireOptionalId(
+      errors,
+      source: source,
+      field: 'roomId',
+      id: stage.roomId,
+      targetIds: definitions.rooms.keys,
+    );
+    _requireOptionalId(
+      errors,
+      source: source,
+      field: 'npcId',
+      id: stage.npcId,
+      targetIds: definitions.npcs.keys,
+    );
+    _requireAllIds(
+      errors,
+      source: source,
+      field: 'eventIds',
+      ids: stage.eventIds,
+      targetIds: definitions.events.keys,
+    );
   }
 }
 

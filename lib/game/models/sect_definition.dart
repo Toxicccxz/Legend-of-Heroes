@@ -5,9 +5,13 @@ class SectDefinition {
     required this.description,
     required this.ranks,
     required this.skills,
+    this.aliases = const [],
+    this.headquartersRoomId,
+    this.alignment = 'neutral',
     this.features = '',
     this.rules = const [],
     this.masters = const [],
+    this.forbiddenSectIds = const [],
   });
 
   final String id;
@@ -15,9 +19,13 @@ class SectDefinition {
   final String description;
   final List<String> ranks;
   final List<String> skills;
+  final List<String> aliases;
+  final String? headquartersRoomId;
+  final String alignment;
   final String features;
   final List<String> rules;
   final List<SectMasterDefinition> masters;
+  final List<String> forbiddenSectIds;
 
   factory SectDefinition.fromJson(Map<String, dynamic> json) {
     return SectDefinition(
@@ -26,6 +34,9 @@ class SectDefinition {
       description: json['description'] as String? ?? '',
       ranks: List<String>.from(json['ranks'] as List<dynamic>? ?? const []),
       skills: List<String>.from(json['skills'] as List<dynamic>? ?? const []),
+      aliases: List<String>.from(json['aliases'] as List<dynamic>? ?? const []),
+      headquartersRoomId: json['headquartersRoomId'] as String?,
+      alignment: json['alignment'] as String? ?? 'neutral',
       features: json['features'] as String? ?? '',
       rules: List<String>.from(json['rules'] as List<dynamic>? ?? const []),
       masters:
@@ -36,6 +47,9 @@ class SectDefinition {
                 ),
               )
               .toList(),
+      forbiddenSectIds: List<String>.from(
+        json['forbiddenSectIds'] as List<dynamic>? ?? const [],
+      ),
     );
   }
 }

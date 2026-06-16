@@ -1,4 +1,4 @@
-enum ItemType { consumable, quest, equipment }
+enum ItemType { consumable, quest, equipment, weapon, book, material, currency }
 
 class EquipmentSlotIds {
   const EquipmentSlotIds._();
@@ -77,8 +77,13 @@ class ItemDefinition {
     required this.description,
     required this.type,
     required this.effects,
+    this.aliases = const [],
     this.useEvents = const [],
     this.slot,
+    this.weaponType,
+    this.weight = 1,
+    this.value = 0,
+    this.skillId,
   });
 
   final String id;
@@ -86,8 +91,13 @@ class ItemDefinition {
   final String description;
   final ItemType type;
   final Map<String, int> effects;
+  final List<String> aliases;
   final List<String> useEvents;
   final String? slot;
+  final String? weaponType;
+  final int weight;
+  final int value;
+  final String? skillId;
 
   factory ItemDefinition.fromJson(Map<String, dynamic> json) {
     return ItemDefinition(
@@ -96,10 +106,15 @@ class ItemDefinition {
       description: json['description'] as String? ?? '',
       type: ItemType.values.byName(json['type'] as String? ?? 'quest'),
       effects: Map<String, int>.from(json['effects'] as Map? ?? const {}),
+      aliases: List<String>.from(json['aliases'] as List<dynamic>? ?? const []),
       useEvents: List<String>.from(
         json['useEvents'] as List<dynamic>? ?? const [],
       ),
       slot: json['slot'] as String?,
+      weaponType: json['weaponType'] as String?,
+      weight: json['weight'] as int? ?? 1,
+      value: json['value'] as int? ?? 0,
+      skillId: json['skillId'] as String?,
     );
   }
 }
