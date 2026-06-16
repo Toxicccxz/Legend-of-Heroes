@@ -12,6 +12,7 @@ import '../systems/inventory_system.dart';
 import '../systems/map_system.dart';
 import '../systems/quest_system.dart';
 import '../systems/sect_system.dart';
+import '../systems/skill_system.dart';
 import 'game_action.dart';
 import 'game_state.dart';
 
@@ -74,6 +75,7 @@ class GameController extends StateNotifier<GameState> {
   final DialogueSystem _dialogueSystem = const DialogueSystem();
   final EventSystem _eventSystem = const EventSystem();
   final SectSystem _sectSystem = const SectSystem();
+  final SkillSystem _skillSystem = const SkillSystem();
 
   Future<void> startNewGame() async {
     final definitions = _definitions;
@@ -120,6 +122,8 @@ class GameController extends StateNotifier<GameState> {
         _equipItem(action.itemId);
       case UnequipItemAction():
         _unequipItem(action.slot);
+      case MapSkillAction():
+        _mapSkill(action.slot, action.skillId);
       case AcceptQuestAction():
         state = _questSystem.startQuest(state, action.questId);
         _addLog(GameLogType.quest, '已接取任务。');
@@ -297,6 +301,17 @@ class GameController extends StateNotifier<GameState> {
     if (item != null) {
       _addLog(GameLogType.system, '已卸下${item.name}。');
     }
+  }
+
+  void _mapSkill(String slot, String skillId) {
+    final result = _skillSystem.mapSkill(state, slot: slot, skillId: skillId);
+    if (!result.success) {
+      _addLog(GameLogType.system, result.message);
+      return;
+    }
+    state = result.state;
+    final skillName = state.definitions?.skills[skillId]?.name ?? skillId;
+    _addLog(GameLogType.system, '已将$skillName映射到$slot。');
   }
 
   void _investigate() {

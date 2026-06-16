@@ -2,9 +2,12 @@ import '../core/game_state.dart';
 import '../models/npc_definition.dart';
 import '../models/sect_definition.dart';
 import '../models/skill_definition.dart';
+import 'skill_system.dart';
 
 class SectSystem {
   const SectSystem();
+
+  static const _skillSystem = SkillSystem();
 
   SectDefinition? getCurrentSect(GameState state) {
     final sectId = state.player.sectId;
@@ -117,7 +120,7 @@ class SectSystem {
     if (newSkillIds.isEmpty) {
       return SectLearnResult.failure(state, '本阶段功法已经学完。');
     }
-    final nextState = state.copyWith(
+    var nextState = state.copyWith(
       player: state.player.copyWith(
         learnedSectSkillIds: [
           ...state.player.learnedSectSkillIds,
@@ -125,6 +128,9 @@ class SectSystem {
         ],
       ),
     );
+    for (final skillId in newSkillIds) {
+      nextState = _skillSystem.learnSkill(nextState, skillId);
+    }
     return SectLearnResult.success(nextState, newSkillIds);
   }
 

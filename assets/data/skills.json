@@ -1,20 +1,62 @@
 [
   {
+    "id": "sword",
+    "name": "基本剑法",
+    "description": "持剑、出剑、收剑的基础。",
+    "category": "基础",
+    "kind": "basic"
+  },
+  {
+    "id": "dodge",
+    "name": "基本轻功",
+    "description": "腾挪闪避的基础。",
+    "category": "基础",
+    "kind": "basic"
+  },
+  {
+    "id": "force",
+    "name": "基本内功",
+    "description": "吐纳行气的基础。",
+    "category": "基础",
+    "kind": "basic"
+  },
+  {
+    "id": "parry",
+    "name": "基本招架",
+    "description": "格挡拆招的基础。",
+    "category": "基础",
+    "kind": "basic"
+  },
+  {
     "id": "basic_sword",
     "name": "基础剑诀",
     "description": "青云门入门剑法，重在稳准。",
-    "category": "剑法"
+    "category": "剑法",
+    "kind": "special",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "sectId": "qingyun_sect"
   },
   {
     "id": "wind_step",
     "name": "清风步",
     "description": "轻盈灵动的进阶身法。",
-    "category": "身法"
+    "category": "身法",
+    "kind": "special",
+    "baseSkillId": "dodge",
+    "mappedSlots": ["dodge"],
+    "requiredSkillIds": ["basic_sword"],
+    "sectId": "qingyun_sect"
   },
   {
     "id": "cloud_sword_ultimate",
     "name": "云海剑意",
     "description": "青云门长老才会传授的门派绝学。",
-    "category": "绝学"
+    "category": "绝学",
+    "kind": "ultimate",
+    "baseSkillId": "sword",
+    "mappedSlots": ["sword", "parry"],
+    "requiredSkillIds": ["basic_sword", "wind_step"],
+    "sectId": "qingyun_sect"
   }
 ]

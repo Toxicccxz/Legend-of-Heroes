@@ -43,6 +43,13 @@ class UnequipItemAction extends GameAction {
   final String slot;
 }
 
+class MapSkillAction extends GameAction {
+  const MapSkillAction(this.slot, this.skillId);
+
+  final String slot;
+  final String skillId;
+}
+
 class AcceptQuestAction extends GameAction {
   const AcceptQuestAction(this.questId);
 

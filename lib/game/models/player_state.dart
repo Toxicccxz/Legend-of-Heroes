@@ -14,6 +14,8 @@ class PlayerState {
     this.sectRank,
     this.masterNpcId,
     this.learnedSectSkillIds = const [],
+    this.skillLevels = const {},
+    this.mappedSkillIds = const {},
   });
 
   final String name;
@@ -30,6 +32,8 @@ class PlayerState {
   final String? sectRank;
   final String? masterNpcId;
   final List<String> learnedSectSkillIds;
+  final Map<String, int> skillLevels;
+  final Map<String, String> mappedSkillIds;
 
   PlayerState copyWith({
     String? name,
@@ -46,6 +50,8 @@ class PlayerState {
     String? sectRank,
     String? masterNpcId,
     List<String>? learnedSectSkillIds,
+    Map<String, int>? skillLevels,
+    Map<String, String>? mappedSkillIds,
   }) {
     return PlayerState(
       name: name ?? this.name,
@@ -62,6 +68,8 @@ class PlayerState {
       sectRank: sectRank ?? this.sectRank,
       masterNpcId: masterNpcId ?? this.masterNpcId,
       learnedSectSkillIds: learnedSectSkillIds ?? this.learnedSectSkillIds,
+      skillLevels: skillLevels ?? this.skillLevels,
+      mappedSkillIds: mappedSkillIds ?? this.mappedSkillIds,
     );
   }
 }

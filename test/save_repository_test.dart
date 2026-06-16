@@ -36,6 +36,8 @@ void main() {
         sectRank: '青云门弟子',
         masterNpcId: 'sword_instructor',
         learnedSectSkillIds: ['basic_sword'],
+        skillLevels: {'sword': 1, 'basic_sword': 1},
+        mappedSkillIds: {'sword': 'basic_sword'},
       ),
       logs: [],
     );
@@ -50,6 +52,8 @@ void main() {
     expect(loaded?.player.sectRank, '青云门弟子');
     expect(loaded?.player.masterNpcId, 'sword_instructor');
     expect(loaded?.player.learnedSectSkillIds, ['basic_sword']);
+    expect(loaded?.player.skillLevels, {'sword': 1, 'basic_sword': 1});
+    expect(loaded?.player.mappedSkillIds, {'sword': 'basic_sword'});
     expect(loaded?.definitions, isNull);
   });
 }

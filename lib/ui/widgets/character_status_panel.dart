@@ -139,7 +139,7 @@ class _StatusTabArea extends StatelessWidget {
     return switch (state.selectedStatusTab) {
       StatusTab.inventory => InventoryTab(state: state, ref: ref),
       StatusTab.quest => QuestTab(state: state),
-      StatusTab.skill => SkillTab(state: state),
+      StatusTab.skill => SkillTab(state: state, ref: ref),
       StatusTab.equipment => EquipmentTab(state: state, ref: ref),
       StatusTab.sect => SectTab(state: state),
     };

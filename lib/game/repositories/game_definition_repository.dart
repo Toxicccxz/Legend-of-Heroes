@@ -119,6 +119,10 @@ class GameDefinitions {
       _validateSectDefinition(errors, sect, this);
     }
 
+    for (final skill in skills.values) {
+      _validateSkillDefinition(errors, skill, this);
+    }
+
     for (final event in events.values) {
       _validateEventEffectReferences(errors, event, this);
     }
@@ -127,6 +131,34 @@ class GameDefinitions {
       throw StateError('Invalid game definitions:\n${errors.join('\n')}');
     }
   }
+}
+
+void _validateSkillDefinition(
+  List<String> errors,
+  SkillDefinition skill,
+  GameDefinitions definitions,
+) {
+  _requireOptionalId(
+    errors,
+    source: 'Skill ${skill.id}',
+    field: 'baseSkillId',
+    id: skill.baseSkillId,
+    targetIds: definitions.skills.keys,
+  );
+  _requireAllIds(
+    errors,
+    source: 'Skill ${skill.id}',
+    field: 'requiredSkillIds',
+    ids: skill.requiredSkillIds,
+    targetIds: definitions.skills.keys,
+  );
+  _requireOptionalId(
+    errors,
+    source: 'Skill ${skill.id}',
+    field: 'sectId',
+    id: skill.sectId,
+    targetIds: definitions.sects.keys,
+  );
 }
 
 void _validateSectDefinition(
