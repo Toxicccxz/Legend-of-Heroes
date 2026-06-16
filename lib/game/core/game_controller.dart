@@ -4,6 +4,7 @@ import '../data/sample_game_data_loader.dart';
 import '../models/event_definition.dart';
 import '../models/item_definition.dart';
 import '../models/npc_definition.dart';
+import '../models/room_definition.dart';
 import '../models/skill_definition.dart';
 import '../repositories/game_definition_repository.dart';
 import '../repositories/save_repository.dart';
@@ -16,6 +17,7 @@ import '../systems/map_system.dart';
 import '../systems/mud_command_system.dart';
 import '../systems/quest_system.dart';
 import '../systems/sect_system.dart';
+import '../systems/shop_system.dart';
 import '../systems/skill_system.dart';
 import 'game_action.dart';
 import 'game_state.dart';
@@ -82,6 +84,7 @@ class GameController extends StateNotifier<GameState> {
   final EventSystem _eventSystem = const EventSystem();
   final SectSystem _sectSystem = const SectSystem();
   final SkillSystem _skillSystem = const SkillSystem();
+  final ShopSystem _shopSystem = const ShopSystem();
 
   Future<void> startNewGame() async {
     final definitions = _definitions;
@@ -118,12 +121,20 @@ class GameController extends StateNotifier<GameState> {
     switch (action) {
       case ExecuteCommandAction():
         _executeCommand(action.input);
+      case ExecuteRoomCommandAction():
+        _executeRoomCommand(action.verb, targetId: action.targetId);
       case MoveAction():
         _move(action.direction);
       case TalkToNpcAction():
         _talkToNpc(action.npcId);
       case InteractWithNpcAction():
         _interactWithNpc(action.npcId, action.interactionType);
+      case AskNpcInquiryAction():
+        _askNpcInquiry(action.npcId, action.inquiryId);
+      case GiveItemToNpcAction():
+        _giveItemToNpc(action.npcId, action.itemId);
+      case BuyShopItemAction():
+        _buyShopItem(action.npcId, action.itemId);
       case UseItemAction():
         _useItem(action.itemId);
       case EquipItemAction():
@@ -162,9 +173,15 @@ class GameController extends StateNotifier<GameState> {
       case 'north' || 'south' || 'east' || 'west':
         _move(command.verb);
       case 'ask':
-        _talkToResolvedNpc(command.target);
+        if (command.extra == null || command.extra!.isEmpty) {
+          _talkToResolvedNpc(command.target);
+        } else {
+          _askResolvedNpcInquiry(command.target, command.extra!);
+        }
       case 'trade':
         _performResolvedNpcOption(command.target, 'trade');
+      case 'give':
+        _giveResolvedItemToNpc(command.target, command.extra);
       case 'quest':
         _performResolvedNpcOption(command.target, 'quest');
       case 'apprentice':
@@ -188,8 +205,58 @@ class GameController extends StateNotifier<GameState> {
       case 'score':
         _showScore();
       default:
-        _addLog(GameLogType.system, '未知指令：${command.raw}。');
+        if (!_executeRoomCommand(command.verb, targetId: command.target)) {
+          _addLog(GameLogType.system, '未知指令：${command.raw}。');
+        }
     }
+  }
+
+  bool _executeRoomCommand(String verb, {String? targetId}) {
+    final room = state.definitions?.rooms[state.currentRoomId];
+    if (room == null) {
+      return false;
+    }
+    for (final command in room.commands) {
+      if (_matchesRoomCommand(command, verb, targetId)) {
+        _performRoomCommand(command);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _matchesRoomCommand(
+    RoomCommandDefinition command,
+    String verb,
+    String? targetId,
+  ) {
+    if (command.verb != verb) {
+      return false;
+    }
+    return targetId == null || targetId.isEmpty || command.targetId == targetId;
+  }
+
+  void _performRoomCommand(RoomCommandDefinition command) {
+    if (!_meetsRequiredFlags(command.requiresFlags)) {
+      _addLog(GameLogType.system, '现在还不能这么做。');
+      return;
+    }
+    if (command.description.isNotEmpty) {
+      _addLog(GameLogType.system, command.description);
+    }
+    if (command.eventIds.isEmpty) {
+      return;
+    }
+    _applyEvents(_eventSystem.processActionEvents(state, command.eventIds));
+  }
+
+  bool _meetsRequiredFlags(Map<String, dynamic> requiredFlags) {
+    for (final entry in requiredFlags.entries) {
+      if (state.flags[entry.key] != entry.value) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void _look(String? target) {
@@ -258,6 +325,20 @@ class GameController extends StateNotifier<GameState> {
     _talkToNpc(npc.id);
   }
 
+  void _askResolvedNpcInquiry(String? target, String inquiryTarget) {
+    final npc = _resolveNpcInCurrentRoom(target);
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想问谁？');
+      return;
+    }
+    final inquiry = _resolveNpcInquiry(npc, inquiryTarget);
+    if (inquiry == null) {
+      _addLog(GameLogType.dialogue, '${npc.name}摇了摇头，似乎不想谈这个。');
+      return;
+    }
+    _askNpcInquiry(npc.id, inquiry.id);
+  }
+
   void _performResolvedNpcOption(String? target, String interactionType) {
     final npc = _resolveNpcInCurrentRoom(target);
     if (npc == null) {
@@ -265,6 +346,35 @@ class GameController extends StateNotifier<GameState> {
       return;
     }
     _performNpcOption(npc.id, interactionType);
+  }
+
+  void _giveResolvedItemToNpc(String? itemTarget, String? npcTarget) {
+    if (itemTarget == null || itemTarget.isEmpty) {
+      _addLog(GameLogType.system, '你想交出什么？');
+      return;
+    }
+    final npc = _resolveNpcInCurrentRoom(_cleanGiveNpcTarget(npcTarget));
+    if (npc == null) {
+      _addLog(GameLogType.system, '你想交给谁？');
+      return;
+    }
+    final item = _resolveInventoryItem(itemTarget);
+    if (item == null) {
+      _addLog(GameLogType.system, '你身上没有这样东西。');
+      return;
+    }
+    _giveItemToNpc(npc.id, item.id);
+  }
+
+  String? _cleanGiveNpcTarget(String? target) {
+    if (target == null || target.isEmpty) {
+      return target;
+    }
+    final parts = target.split(RegExp(r'\s+'));
+    if (parts.length >= 2 && parts.first.toLowerCase() == 'to') {
+      return parts.skip(1).join(' ');
+    }
+    return target;
   }
 
   void _apprenticeToResolvedNpc(String? target) {
@@ -380,6 +490,55 @@ class GameController extends StateNotifier<GameState> {
     }
   }
 
+  void _askNpcInquiry(String npcId, String inquiryId) {
+    final npc = state.definitions?.npcs[npcId];
+    if (npc == null) {
+      return;
+    }
+    final inquiry = _resolveNpcInquiry(npc, inquiryId);
+    if (inquiry == null) {
+      _addLog(GameLogType.dialogue, '${npc.name}摇了摇头，似乎不想谈这个。');
+      return;
+    }
+    _addLog(GameLogType.dialogue, '你向${npc.name}询问${inquiry.label}。');
+    if (inquiry.response.isNotEmpty) {
+      _addLog(GameLogType.dialogue, '${npc.name}：${inquiry.response}');
+    }
+    if (inquiry.eventIds.isNotEmpty) {
+      _applyEvents(_eventSystem.processActionEvents(state, inquiry.eventIds));
+    }
+  }
+
+  void _giveItemToNpc(String npcId, String itemId) {
+    final npc = state.definitions?.npcs[npcId];
+    final item = state.definitions?.items[itemId];
+    if (npc == null || item == null) {
+      return;
+    }
+    final acceptedItem = _acceptedItemFor(npc, itemId);
+    if (acceptedItem == null) {
+      _addLog(GameLogType.dialogue, '${npc.name}摆了摆手，并不需要${item.name}。');
+      return;
+    }
+    if (!_meetsRequiredFlags(acceptedItem.requiresFlags)) {
+      _addLog(GameLogType.system, '现在还不能交出${item.name}。');
+      return;
+    }
+    if (_inventorySystem.getItemCount(state, itemId) < acceptedItem.count) {
+      _addLog(GameLogType.system, '你身上的${item.name}数量不够。');
+      return;
+    }
+
+    state = _inventorySystem.removeItem(state, itemId, acceptedItem.count);
+    final countText = acceptedItem.count > 1 ? ' x${acceptedItem.count}' : '';
+    _addLog(GameLogType.dialogue, '你将${item.name}$countText交给${npc.name}。');
+    if (acceptedItem.eventIds.isNotEmpty) {
+      _applyEvents(
+        _eventSystem.processActionEvents(state, acceptedItem.eventIds),
+      );
+    }
+  }
+
   void _interactWithNpc(String npcId, String interactionType) {
     switch (interactionType) {
       case 'talk':
@@ -415,7 +574,11 @@ class GameController extends StateNotifier<GameState> {
     }
     switch (option.type) {
       case 'trade':
-        _addLog(GameLogType.system, '${npc.name}打开随身货箱，交易功能尚未开放。');
+        if (npc.shopId == null) {
+          _addLog(GameLogType.system, '${npc.name}打开随身货箱，里面暂时没有可买的东西。');
+        } else {
+          _addLog(GameLogType.system, '${npc.name}打开随身货箱。');
+        }
       case 'quest':
         _addLog(GameLogType.quest, '你向${npc.name}询问可托付之事。');
       case 'joinSect':
@@ -427,6 +590,23 @@ class GameController extends StateNotifier<GameState> {
       default:
         _addLog(GameLogType.system, '你选择了${option.label}。');
     }
+  }
+
+  void _buyShopItem(String npcId, String itemId) {
+    final npc = state.definitions?.npcs[npcId];
+    final shopId = npc?.shopId;
+    final shop = shopId == null ? null : state.definitions?.shops[shopId];
+    if (npc == null || shop == null) {
+      _addLog(GameLogType.system, '这里没有可交易的货品。');
+      return;
+    }
+
+    final result = _shopSystem.buyItem(state, shop: shop, itemId: itemId);
+    state = result.state;
+    _addLog(
+      result.success ? GameLogType.system : GameLogType.dialogue,
+      result.message,
+    );
   }
 
   void _fightNpc(String npcId, {required bool spar}) {
@@ -581,6 +761,7 @@ class GameController extends StateNotifier<GameState> {
       _applySectEffects(event.effects);
       _applyCombatEffects(event.effects);
       _applyPlayerRestoreEffects(event.effects);
+      _applyMovementEffects(event.effects);
     }
   }
 
@@ -634,6 +815,22 @@ class GameController extends StateNotifier<GameState> {
     );
   }
 
+  void _applyMovementEffects(Map<String, dynamic> effects) {
+    final roomId =
+        effects['moveToRoomId'] as String? ?? effects['roomId'] as String?;
+    if (roomId == null || roomId == state.currentRoomId) {
+      return;
+    }
+    final room = state.definitions?.rooms[roomId];
+    if (room == null) {
+      return;
+    }
+    final visited = Set<String>.from(state.visitedRoomIds)..add(roomId);
+    state = state.copyWith(currentRoomId: roomId, visitedRoomIds: visited);
+    _addLog(GameLogType.system, '你来到${room.name}。');
+    _applyEnterRoomEvents();
+  }
+
   NpcDefinition? _resolveNpcInCurrentRoom(String? target) {
     final definitions = state.definitions;
     final room = definitions?.rooms[state.currentRoomId];
@@ -675,6 +872,43 @@ class GameController extends StateNotifier<GameState> {
       if ((skill.id == target || skill.name == target) &&
           _skillSystem.knowsSkill(state, skill.id)) {
         return skill;
+      }
+    }
+    return null;
+  }
+
+  ItemDefinition? _resolveInventoryItem(String target) {
+    final definitions = state.definitions;
+    if (definitions == null) {
+      return null;
+    }
+    for (final entry in state.inventory) {
+      final item = definitions.items[entry.itemId];
+      if (item != null && _matchesItem(item, target)) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  NpcAcceptedItemDefinition? _acceptedItemFor(
+    NpcDefinition npc,
+    String itemId,
+  ) {
+    for (final acceptedItem in npc.acceptedItems) {
+      if (acceptedItem.itemId == itemId) {
+        return acceptedItem;
+      }
+    }
+    return null;
+  }
+
+  NpcInquiryDefinition? _resolveNpcInquiry(NpcDefinition npc, String target) {
+    for (final inquiry in npc.inquiries) {
+      if (inquiry.id == target ||
+          inquiry.label == target ||
+          inquiry.aliases.contains(target)) {
+        return inquiry;
       }
     }
     return null;

@@ -9,6 +9,7 @@ import '../../game/core/game_state.dart';
 import '../../game/models/item_definition.dart';
 import '../../game/models/npc_definition.dart';
 import '../../game/models/room_definition.dart';
+import '../../game/models/shop_definition.dart';
 import '../../game/systems/map_system.dart';
 import 'panel_frame.dart';
 

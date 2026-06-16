@@ -9,6 +9,7 @@ import '../models/npc_definition.dart';
 import '../models/quest_definition.dart';
 import '../models/room_definition.dart';
 import '../models/sect_definition.dart';
+import '../models/shop_definition.dart';
 import '../models/skill_definition.dart';
 import '../models/zone_definition.dart';
 
@@ -23,6 +24,7 @@ class GameDefinitions {
     required this.events,
     required this.sects,
     required this.skills,
+    this.shops = const {},
   });
 
   final Map<String, RoomDefinition> rooms;
@@ -34,6 +36,7 @@ class GameDefinitions {
   final Map<String, EventDefinition> events;
   final Map<String, SectDefinition> sects;
   final Map<String, SkillDefinition> skills;
+  final Map<String, ShopDefinition> shops;
 
   void validateIntegrity() {
     final errors = <String>[];
@@ -107,6 +110,15 @@ class GameDefinitions {
         id: npc.dialogueId,
         targetIds: dialogues.keys,
       );
+      _requireOptionalId(
+        errors,
+        source: 'Npc ${npc.id}',
+        field: 'shopId',
+        id: npc.shopId,
+        targetIds: shops.keys,
+      );
+      _validateNpcInquiryReferences(errors, npc, this);
+      _validateNpcAcceptedItemReferences(errors, npc, this);
       _validateNpcInteractionReferences(errors, npc, this);
       _validateNpcCombatReferences(errors, npc, this);
     }
@@ -138,6 +150,10 @@ class GameDefinitions {
 
     for (final skill in skills.values) {
       _validateSkillDefinition(errors, skill, this);
+    }
+
+    for (final shop in shops.values) {
+      _validateShopDefinition(errors, shop, this);
     }
 
     for (final quest in quests.values) {
@@ -317,6 +333,77 @@ void _validateSectDefinition(
   }
 }
 
+void _validateNpcInquiryReferences(
+  List<String> errors,
+  NpcDefinition npc,
+  GameDefinitions definitions,
+) {
+  final ids = <String>{};
+  for (final inquiry in npc.inquiries) {
+    if (!ids.add(inquiry.id)) {
+      errors.add('Npc ${npc.id} has duplicate inquiry "${inquiry.id}".');
+    }
+    _requireAllIds(
+      errors,
+      source: 'Npc ${npc.id} inquiry ${inquiry.id}',
+      field: 'eventIds',
+      ids: inquiry.eventIds,
+      targetIds: definitions.events.keys,
+    );
+  }
+}
+
+void _validateNpcAcceptedItemReferences(
+  List<String> errors,
+  NpcDefinition npc,
+  GameDefinitions definitions,
+) {
+  for (final acceptedItem in npc.acceptedItems) {
+    final source = 'Npc ${npc.id} accepted item ${acceptedItem.itemId}';
+    _requireId(
+      errors,
+      source: source,
+      field: 'itemId',
+      id: acceptedItem.itemId,
+      targetIds: definitions.items.keys,
+    );
+    _requireAllIds(
+      errors,
+      source: source,
+      field: 'eventIds',
+      ids: acceptedItem.eventIds,
+      targetIds: definitions.events.keys,
+    );
+  }
+}
+
+void _validateShopDefinition(
+  List<String> errors,
+  ShopDefinition shop,
+  GameDefinitions definitions,
+) {
+  for (final good in shop.goods) {
+    _requireId(
+      errors,
+      source: 'Shop ${shop.id}',
+      field: 'goods.itemId',
+      id: good.itemId,
+      targetIds: definitions.items.keys,
+    );
+    if (good.price < 0) {
+      errors.add(
+        'Shop ${shop.id} good ${good.itemId} price cannot be negative.',
+      );
+    }
+    final stock = good.stock;
+    if (stock != null && stock < 0) {
+      errors.add(
+        'Shop ${shop.id} good ${good.itemId} stock cannot be negative.',
+      );
+    }
+  }
+}
+
 void _validateNpcInteractionReferences(
   List<String> errors,
   NpcDefinition npc,
@@ -487,6 +574,7 @@ class AssetGameDefinitionRepository implements GameDefinitionRepository {
         'assets/data/skills.json',
         SkillDefinition.fromJson,
       ),
+      shops: await _loadMap('assets/data/shops.json', ShopDefinition.fromJson),
     );
     definitions.validateIntegrity();
     return definitions;
@@ -607,6 +695,12 @@ void _validateEventEffectReferences(
     errors,
     event: event,
     key: 'roomId',
+    targetIds: definitions.rooms.keys,
+  );
+  _requireOptionalEffectId(
+    errors,
+    event: event,
+    key: 'moveToRoomId',
     targetIds: definitions.rooms.keys,
   );
   _requireOptionalEffectId(

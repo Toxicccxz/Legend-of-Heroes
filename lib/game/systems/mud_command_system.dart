@@ -27,6 +27,7 @@ class MudCommandSystem {
       'w' || 'west' || '西' => 'west',
       'ask' || 'talk' || '交谈' || '问' => 'ask',
       'trade' || '交易' => 'trade',
+      'give' || '交给' || '给予' => 'give',
       'quest' || '任务' => 'quest',
       'apprentice' || '拜师' || '拜' => 'apprentice',
       'learn' || 'study' || '请教' || '学习' => 'learn',

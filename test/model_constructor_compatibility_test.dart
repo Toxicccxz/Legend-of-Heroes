@@ -36,6 +36,7 @@ void main() {
     );
 
     expect(definitions.zones, isEmpty);
+    expect(definitions.shops, isEmpty);
     expect(room.zoneId, 'default');
     expect(room.restEvents, isEmpty);
     expect(room.items, isEmpty);

@@ -164,10 +164,18 @@
       "休息点"
     ],
     "exits": {
-      "east": "village_square",
-      "west": "cellar_door"
+      "east": "village_square"
     },
     "npcs": [],
+    "commands": [
+      {
+        "verb": "open",
+        "label": "推开地窖门",
+        "description": "你拨开门缝上的蛛网，推开了那扇半掩的木门。",
+        "targetId": "cellar",
+        "eventIds": ["event_open_cellar_door"]
+      }
+    ],
     "onEnterEvents": [],
     "investigateEvents": [
       "event_investigate_abandoned_house"

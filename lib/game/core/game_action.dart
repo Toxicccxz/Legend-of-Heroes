@@ -18,6 +18,13 @@ class ExecuteCommandAction extends GameAction {
   final String input;
 }
 
+class ExecuteRoomCommandAction extends GameAction {
+  const ExecuteRoomCommandAction(this.verb, {this.targetId});
+
+  final String verb;
+  final String? targetId;
+}
+
 class TalkToNpcAction extends GameAction {
   const TalkToNpcAction(this.npcId);
 
@@ -29,6 +36,27 @@ class InteractWithNpcAction extends GameAction {
 
   final String npcId;
   final String interactionType;
+}
+
+class AskNpcInquiryAction extends GameAction {
+  const AskNpcInquiryAction(this.npcId, this.inquiryId);
+
+  final String npcId;
+  final String inquiryId;
+}
+
+class GiveItemToNpcAction extends GameAction {
+  const GiveItemToNpcAction(this.npcId, this.itemId);
+
+  final String npcId;
+  final String itemId;
+}
+
+class BuyShopItemAction extends GameAction {
+  const BuyShopItemAction(this.npcId, this.itemId);
+
+  final String npcId;
+  final String itemId;
 }
 
 class UseItemAction extends GameAction {

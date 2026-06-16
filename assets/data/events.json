@@ -49,6 +49,18 @@
     }
   },
   {
+    "id": "event_give_guard_herb",
+    "type": "giveItem",
+    "message": "守卫接过止血草，神色终于缓和下来。",
+    "logType": "quest",
+    "effects": {
+      "questId": "side_guard_herb",
+      "progressKey": "collected",
+      "progressValue": 3,
+      "completeQuestId": "side_guard_herb"
+    }
+  },
+  {
     "id": "event_rest",
     "type": "rest",
     "message": "你短暂休息，恢复了一些 HP、MP 和体力。",
@@ -220,6 +232,15 @@
       "restoreHp": 18,
       "restoreMp": 14,
       "restoreStamina": 30
+    }
+  },
+  {
+    "id": "event_open_cellar_door",
+    "type": "roomCommand",
+    "message": "潮湿的冷气从地下涌出，你沿着木阶走了下去。",
+    "logType": "system",
+    "effects": {
+      "moveToRoomId": "cellar_door"
     }
   }
 ]

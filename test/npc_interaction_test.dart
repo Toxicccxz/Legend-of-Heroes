@@ -96,6 +96,20 @@ void main() {
       isTrue,
     );
   });
+
+  test('asking an NPC inquiry writes the topic response', () {
+    final controller = GameController(
+      definitions: _definitions(),
+      saveRepository: InMemorySaveRepository(),
+    );
+
+    controller.dispatch(const AskNpcInquiryAction('sword_instructor', 'name'));
+
+    expect(
+      controller.state.logs.map((log) => log.message),
+      contains('Entry Master：I teach entry sword forms.'),
+    );
+  });
 }
 
 GameDefinitions _definitions() {
@@ -108,6 +122,13 @@ GameDefinitions _definitions() {
         name: 'Entry Master',
         description: '',
         dialogueId: 'dialogue_sword_instructor',
+        inquiries: [
+          NpcInquiryDefinition(
+            id: 'name',
+            label: 'Name',
+            response: 'I teach entry sword forms.',
+          ),
+        ],
         interactions: [
           NpcInteractionOption(
             type: 'joinSect',

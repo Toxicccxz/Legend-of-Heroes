@@ -6,6 +6,7 @@ import 'package:legend_of_heroes/game/models/npc_definition.dart';
 import 'package:legend_of_heroes/game/models/quest_definition.dart';
 import 'package:legend_of_heroes/game/models/room_definition.dart';
 import 'package:legend_of_heroes/game/models/sect_definition.dart';
+import 'package:legend_of_heroes/game/models/shop_definition.dart';
 import 'package:legend_of_heroes/game/models/skill_definition.dart';
 import 'package:legend_of_heroes/game/models/zone_definition.dart';
 import 'package:legend_of_heroes/game/repositories/game_definition_repository.dart';
@@ -193,6 +194,15 @@ void main() {
           description: '',
           dialogueId: 'dialogue',
           sectId: 'sect',
+          shopId: 'shop',
+          inquiries: [
+            NpcInquiryDefinition(
+              id: 'name',
+              label: '姓名',
+              response: 'I am the training master.',
+              eventIds: ['event'],
+            ),
+          ],
           inventory: [NpcInventoryEntry(itemId: 'manual')],
         ),
       },
@@ -204,6 +214,13 @@ void main() {
           type: ItemType.book,
           effects: {},
           skillId: 'skill',
+        ),
+      },
+      shops: {
+        'shop': ShopDefinition(
+          id: 'shop',
+          name: 'Training Shop',
+          goods: [ShopGoodDefinition(itemId: 'manual', price: 10)],
         ),
       },
       quests: {

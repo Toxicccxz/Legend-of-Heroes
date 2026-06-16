@@ -4,6 +4,21 @@
     "name": "流浪商人",
     "description": "背着旧货箱的商人，眼神谨慎。",
     "dialogueId": "dialogue_wandering_merchant",
+    "shopId": "wandering_merchant_shop",
+    "inquiries": [
+      {
+        "id": "name",
+        "label": "姓名",
+        "aliases": ["name", "名字"],
+        "response": "我不过是个走南闯北的货郎，江湖人都叫我流浪商人。"
+      },
+      {
+        "id": "here",
+        "label": "这里",
+        "aliases": ["here", "此地"],
+        "response": "这村子荒了有些年头，最近却总有人往林子和老井那边去。"
+      }
+    ],
     "interactions": [
       {
         "type": "trade",
@@ -17,6 +32,29 @@
     "name": "守卫",
     "description": "疲惫但仍尽责的村口守卫。",
     "dialogueId": "dialogue_guard",
+    "inquiries": [
+      {
+        "id": "name",
+        "label": "姓名",
+        "aliases": ["name", "名字"],
+        "response": "我只是守这村口的人，名字不值一提。"
+      },
+      {
+        "id": "herb",
+        "label": "止血草",
+        "aliases": ["草药", "止血草", "herb"],
+        "response": "止血草叶色发暗，常长在潮湿背阴处。若能寻来三株，巡林人也许还能撑过去。",
+        "eventIds": ["event_talk_guard_herb"]
+      }
+    ],
+    "acceptedItems": [
+      {
+        "itemId": "healing_herb",
+        "label": "交出止血草",
+        "count": 1,
+        "eventIds": ["event_give_guard_herb"]
+      }
+    ],
     "interactions": [
       {
         "type": "quest",
@@ -29,7 +67,21 @@
     "id": "little_girl",
     "name": "小女孩",
     "description": "躲在屋檐下的小女孩，像是知道一些线索。",
-    "dialogueId": "dialogue_little_girl"
+    "dialogueId": "dialogue_little_girl",
+    "inquiries": [
+      {
+        "id": "well",
+        "label": "老井",
+        "aliases": ["井", "老井", "well"],
+        "response": "我看见有人提着灯往老井去了，灯光很快就不见了。"
+      },
+      {
+        "id": "stranger",
+        "label": "陌生人",
+        "aliases": ["人", "陌生人"],
+        "response": "那人穿着灰衣，走路很轻，不像村里人。"
+      }
+    ]
   },
   {
     "id": "qingyun_guide",

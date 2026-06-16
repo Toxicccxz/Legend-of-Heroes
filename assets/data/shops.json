@@ -1,0 +1,17 @@
+[
+  {
+    "id": "wandering_merchant_shop",
+    "name": "流浪商人的旧货箱",
+    "description": "箱子里摆着几样赶路常用的小东西。",
+    "goods": [
+      {
+        "itemId": "small_potion",
+        "price": 30
+      },
+      {
+        "itemId": "bread",
+        "price": 8
+      }
+    ]
+  }
+]
