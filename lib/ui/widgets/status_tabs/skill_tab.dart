@@ -43,9 +43,27 @@ class SkillTab extends StatelessWidget {
           ),
         const Divider(),
         const Text('技能图鉴', style: TextStyle(fontWeight: FontWeight.w800)),
-        for (final skill in skills)
-          Text('${skill.name} · ${_kindLabel(skill.kind)} · ${skill.category}'),
+        for (final skill in skills) _SkillCatalogRow(skill: skill),
       ],
+    );
+  }
+}
+
+class _SkillCatalogRow extends StatelessWidget {
+  const _SkillCatalogRow({required this.skill});
+
+  final SkillDefinition skill;
+
+  @override
+  Widget build(BuildContext context) {
+    final performs =
+        skill.performIds.isEmpty ? '无绝招' : '绝招：${skill.performIds.join('、')}';
+    final family = skill.familyId == null ? '通用' : skill.familyId!;
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        '${skill.name} · ${_kindLabel(skill.kind)} · ${skill.category} · ${skill.slot.name} · 威${skill.power}/难${skill.difficulty} · $family · $performs',
+      ),
     );
   }
 

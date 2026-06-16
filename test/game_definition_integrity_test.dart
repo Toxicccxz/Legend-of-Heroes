@@ -19,6 +19,36 @@ void main() {
     expect(definitions.rooms, isNotEmpty);
   });
 
+  test('sect skills expose MUD combat metadata', () async {
+    final definitions = await AssetGameDefinitionRepository().load();
+    final sectSkillIds = definitions.sects.values.expand((sect) => sect.skills);
+
+    for (final skillId in sectSkillIds) {
+      final skill = definitions.skills[skillId];
+      expect(skill, isNotNull, reason: '$skillId should exist.');
+      expect(
+        skill!.familyId,
+        isNotNull,
+        reason: '$skillId should have family.',
+      );
+      expect(
+        skill.power,
+        greaterThan(0),
+        reason: '$skillId should have power.',
+      );
+      expect(
+        skill.difficulty,
+        greaterThan(0),
+        reason: '$skillId should have difficulty.',
+      );
+      expect(
+        skill.performIds,
+        isNotEmpty,
+        reason: '$skillId should define at least one perform.',
+      );
+    }
+  });
+
   test('validateIntegrity reports missing content references', () {
     final definitions = GameDefinitions(
       rooms: {

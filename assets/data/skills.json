@@ -5,7 +5,10 @@
     "description": "持剑、出剑、收剑的基础。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["sword"]
+    "slot": "sword",
+    "mappedSlots": ["sword"],
+    "power": 8,
+    "difficulty": 5
   },
   {
     "id": "dodge",
@@ -13,7 +16,10 @@
     "description": "腾挪闪避的基础。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["dodge"]
+    "slot": "dodge",
+    "mappedSlots": ["dodge"],
+    "power": 6,
+    "difficulty": 5
   },
   {
     "id": "force",
@@ -21,7 +27,10 @@
     "description": "吐纳行气的基础。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["force"]
+    "slot": "force",
+    "mappedSlots": ["force"],
+    "power": 7,
+    "difficulty": 6
   },
   {
     "id": "parry",
@@ -29,7 +38,10 @@
     "description": "格挡拆招的基础。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["parry"]
+    "slot": "parry",
+    "mappedSlots": ["parry"],
+    "power": 6,
+    "difficulty": 5
   },
   {
     "id": "blade",
@@ -37,7 +49,10 @@
     "description": "劈、砍、撩、截的基础刀路。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["blade", "parry"]
+    "slot": "blade",
+    "mappedSlots": ["blade", "parry"],
+    "power": 9,
+    "difficulty": 6
   },
   {
     "id": "hand",
@@ -45,7 +60,10 @@
     "description": "拳掌指爪、腾挪发力的入门根基。",
     "category": "基础",
     "kind": "basic",
-    "mappedSlots": ["hand", "parry"]
+    "slot": "hand",
+    "mappedSlots": ["hand", "parry"],
+    "power": 7,
+    "difficulty": 5
   },
   {
     "id": "basic_sword",
@@ -53,9 +71,14 @@
     "description": "青云门入门剑法，重在稳准。",
     "category": "剑法",
     "kind": "special",
+    "slot": "sword",
+    "familyId": "qingyun_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
-    "sectId": "qingyun_sect"
+    "sectId": "qingyun_sect",
+    "power": 14,
+    "difficulty": 9,
+    "performIds": ["steady-cut"]
   },
   {
     "id": "wind_step",
@@ -63,10 +86,15 @@
     "description": "轻盈灵动的进阶身法。",
     "category": "身法",
     "kind": "special",
+    "slot": "dodge",
+    "familyId": "qingyun_sect",
     "baseSkillId": "dodge",
     "mappedSlots": ["dodge"],
     "requiredSkillIds": ["basic_sword"],
-    "sectId": "qingyun_sect"
+    "sectId": "qingyun_sect",
+    "power": 12,
+    "difficulty": 10,
+    "performIds": ["wind-shift"]
   },
   {
     "id": "cloud_sword_ultimate",
@@ -74,10 +102,15 @@
     "description": "青云门长老才会传授的门派绝学。",
     "category": "绝学",
     "kind": "ultimate",
+    "slot": "sword",
+    "familyId": "qingyun_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
     "requiredSkillIds": ["basic_sword", "wind_step"],
-    "sectId": "qingyun_sect"
+    "sectId": "qingyun_sect",
+    "power": 24,
+    "difficulty": 18,
+    "performIds": ["cloud-break", "sea-return"]
   },
   {
     "id": "shaolin_changquan",
@@ -85,9 +118,14 @@
     "description": "少林入门拳法，架势端正，刚猛稳实。",
     "category": "拳脚",
     "kind": "special",
+    "slot": "hand",
+    "familyId": "shaolin_sect",
     "baseSkillId": "hand",
     "mappedSlots": ["hand", "parry"],
-    "sectId": "shaolin_sect"
+    "sectId": "shaolin_sect",
+    "power": 15,
+    "difficulty": 9,
+    "performIds": ["luohan-punch"]
   },
   {
     "id": "yijin_jing",
@@ -95,10 +133,15 @@
     "description": "少林进阶内功，调息炼体，厚积薄发。",
     "category": "内功",
     "kind": "special",
+    "slot": "force",
+    "familyId": "shaolin_sect",
     "baseSkillId": "force",
     "mappedSlots": ["force"],
     "requiredSkillIds": ["shaolin_changquan"],
-    "sectId": "shaolin_sect"
+    "sectId": "shaolin_sect",
+    "power": 18,
+    "difficulty": 15,
+    "performIds": ["bone-renew"]
   },
   {
     "id": "damo_zhang",
@@ -106,10 +149,15 @@
     "description": "少林长老传授的掌法绝学，沉雄如山。",
     "category": "绝学",
     "kind": "ultimate",
+    "slot": "hand",
+    "familyId": "shaolin_sect",
     "baseSkillId": "hand",
     "mappedSlots": ["hand", "parry"],
     "requiredSkillIds": ["shaolin_changquan", "yijin_jing"],
-    "sectId": "shaolin_sect"
+    "sectId": "shaolin_sect",
+    "power": 26,
+    "difficulty": 19,
+    "performIds": ["damo-press", "mountain-palm"]
   },
   {
     "id": "wudang_jian",
@@ -117,9 +165,14 @@
     "description": "武当入门剑法，以圆转绵密见长。",
     "category": "剑法",
     "kind": "special",
+    "slot": "sword",
+    "familyId": "wudang_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
-    "sectId": "wudang_sect"
+    "sectId": "wudang_sect",
+    "power": 13,
+    "difficulty": 10,
+    "performIds": ["circle-guard"]
   },
   {
     "id": "taiji_shenfa",
@@ -127,10 +180,15 @@
     "description": "武当进阶身法，借力回旋，避实击虚。",
     "category": "身法",
     "kind": "special",
+    "slot": "dodge",
+    "familyId": "wudang_sect",
     "baseSkillId": "dodge",
     "mappedSlots": ["dodge"],
     "requiredSkillIds": ["wudang_jian"],
-    "sectId": "wudang_sect"
+    "sectId": "wudang_sect",
+    "power": 15,
+    "difficulty": 13,
+    "performIds": ["borrow-force"]
   },
   {
     "id": "taiji_jianyi",
@@ -138,10 +196,15 @@
     "description": "武当长老秘传绝学，后发制人，剑意圆融。",
     "category": "绝学",
     "kind": "ultimate",
+    "slot": "sword",
+    "familyId": "wudang_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
     "requiredSkillIds": ["wudang_jian", "taiji_shenfa"],
-    "sectId": "wudang_sect"
+    "sectId": "wudang_sect",
+    "power": 23,
+    "difficulty": 20,
+    "performIds": ["taiji-circle", "still-sword"]
   },
   {
     "id": "huashan_sword",
@@ -149,9 +212,14 @@
     "description": "华山入门剑法，轻捷奇险，讲究抢占先机。",
     "category": "剑法",
     "kind": "special",
+    "slot": "sword",
+    "familyId": "huashan_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
-    "sectId": "huashan_sect"
+    "sectId": "huashan_sect",
+    "power": 16,
+    "difficulty": 11,
+    "performIds": ["peak-thrust"]
   },
   {
     "id": "zixia_gong",
@@ -159,10 +227,15 @@
     "description": "华山进阶内功，气息绵长，剑势愈发凌厉。",
     "category": "内功",
     "kind": "special",
+    "slot": "force",
+    "familyId": "huashan_sect",
     "baseSkillId": "force",
     "mappedSlots": ["force"],
     "requiredSkillIds": ["huashan_sword"],
-    "sectId": "huashan_sect"
+    "sectId": "huashan_sect",
+    "power": 17,
+    "difficulty": 14,
+    "performIds": ["violet-breath"]
   },
   {
     "id": "dugu_sword",
@@ -170,9 +243,14 @@
     "description": "华山长老秘传剑道绝学，重在破招与见机。",
     "category": "绝学",
     "kind": "ultimate",
+    "slot": "sword",
+    "familyId": "huashan_sect",
     "baseSkillId": "sword",
     "mappedSlots": ["sword", "parry"],
     "requiredSkillIds": ["huashan_sword", "zixia_gong"],
-    "sectId": "huashan_sect"
+    "sectId": "huashan_sect",
+    "power": 28,
+    "difficulty": 22,
+    "performIds": ["break-sword", "nine-forms"]
   }
 ]

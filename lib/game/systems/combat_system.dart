@@ -19,6 +19,7 @@ class CombatSystem {
     final playerAttack =
         _mappedLevel(state, playerAttackSlot) * 6 +
         _skillLevel(state, playerBaseSkillId) * 2 +
+        _mappedPower(state, playerAttackSlot) +
         _skillLevel(state, 'force') +
         state.player.level * 3;
     final playerDefense =
@@ -28,6 +29,7 @@ class CombatSystem {
     final npcAttack =
         _npcMappedLevel(npcCombat, npcAttackSlot) * 6 +
         _npcSkillLevel(npcCombat, npcBaseSkillId) * 2 +
+        _npcMappedPower(state, npcCombat, npcAttackSlot) +
         _npcSkillLevel(npcCombat, 'force') +
         npcCombat.attack * 3;
     final npcDefense =
@@ -132,6 +134,14 @@ class CombatSystem {
     return state.definitions?.skills[skillId]?.name ?? skillId;
   }
 
+  int _mappedPower(GameState state, String slot) {
+    final skillId = state.player.mappedSkillIds[slot];
+    if (skillId == null) {
+      return 0;
+    }
+    return state.definitions?.skills[skillId]?.power ?? 0;
+  }
+
   int _npcMappedLevel(NpcCombatDefinition combat, String slot) {
     final skillId = combat.mappedSkillIds[slot];
     if (skillId == null) {
@@ -166,6 +176,18 @@ class CombatSystem {
       return null;
     }
     return state.definitions?.skills[skillId]?.name ?? skillId;
+  }
+
+  int _npcMappedPower(
+    GameState state,
+    NpcCombatDefinition combat,
+    String slot,
+  ) {
+    final skillId = combat.mappedSkillIds[slot];
+    if (skillId == null) {
+      return 0;
+    }
+    return state.definitions?.skills[skillId]?.power ?? 0;
   }
 
   int _atLeastOne(int value) {
