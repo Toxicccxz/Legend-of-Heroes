@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,14 +17,22 @@ class ActionMessagePanel extends ConsumerWidget {
 
     return PanelFrame(
       title: '江湖消息',
-      child: Column(
-        children: [
-          _MessageFilterBar(state: state, ref: ref),
-          const SizedBox(height: 6),
-          Expanded(child: _MessageLog(state: state)),
-          const SizedBox(height: 6),
-          const SizedBox(height: 122, child: _MudActionPad()),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final actionPadHeight = math.min(
+            214.0,
+            math.max(132.0, constraints.maxHeight * 0.48),
+          );
+          return Column(
+            children: [
+              _MessageFilterBar(state: state, ref: ref),
+              const SizedBox(height: 6),
+              Expanded(child: _MessageLog(state: state)),
+              const SizedBox(height: 6),
+              SizedBox(height: actionPadHeight, child: const _MudActionPad()),
+            ],
+          );
+        },
       ),
     );
   }
@@ -199,11 +209,16 @@ extension MessageFilterLabel on MessageFilter {
   }
 }
 
-class _MudActionPad extends StatelessWidget {
+class _MudActionPad extends ConsumerWidget {
   const _MudActionPad();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(gameControllerProvider);
+    final exits =
+        state.definitions?.rooms[state.currentRoomId]?.exits.keys.toSet() ??
+        const <String>{};
+
     return Column(
       children: [
         SizedBox(
@@ -250,26 +265,110 @@ class _MudActionPad extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
               ),
-              Expanded(
-                child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 4,
-                  childAspectRatio: 1.65,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
-                  children: const [
-                    _DirectionButton(direction: 'north', label: '北'),
-                    _DirectionButton(direction: 'south', label: '南'),
-                    _DirectionButton(direction: 'east', label: '东'),
-                    _DirectionButton(direction: 'west', label: '西'),
-                  ],
-                ),
-              ),
+              Expanded(child: _ExitDirectionPad(enabledDirections: exits)),
             ],
           ),
         ),
       ],
     );
+  }
+}
+
+class _ExitDirectionPad extends StatelessWidget {
+  const _ExitDirectionPad({required this.enabledDirections});
+
+  final Set<String> enabledDirections;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              Expanded(child: _directionButton('northwest')),
+              const SizedBox(width: 6),
+              Expanded(child: _directionButton('north')),
+              const SizedBox(width: 6),
+              Expanded(child: _directionButton('northeast')),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Expanded(
+          child: Row(
+            children: [
+              Expanded(child: _directionButton('west')),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(child: _directionButton('up')),
+                    const SizedBox(height: 6),
+                    Expanded(child: _directionButton('down')),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 6),
+              Expanded(child: _directionButton('east')),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Expanded(
+          child: Row(
+            children: [
+              Expanded(child: _directionButton('southwest')),
+              const SizedBox(width: 6),
+              Expanded(child: _directionButton('south')),
+              const SizedBox(width: 6),
+              Expanded(child: _directionButton('southeast')),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _directionButton(String direction) {
+    return _DirectionButton(
+      direction: direction,
+      enabled: enabledDirections.contains(direction),
+      icon: _directionIcon(direction),
+      label: _directionLabel(direction),
+    );
+  }
+
+  IconData _directionIcon(String direction) {
+    return switch (direction) {
+      'north' => Icons.arrow_upward,
+      'south' => Icons.arrow_downward,
+      'east' => Icons.arrow_forward,
+      'west' => Icons.arrow_back,
+      'northeast' => Icons.north_east,
+      'northwest' => Icons.north_west,
+      'southeast' => Icons.south_east,
+      'southwest' => Icons.south_west,
+      'up' => Icons.keyboard_double_arrow_up,
+      'down' => Icons.keyboard_double_arrow_down,
+      _ => Icons.circle_outlined,
+    };
+  }
+
+  String _directionLabel(String direction) {
+    return switch (direction) {
+      'north' => '北',
+      'south' => '南',
+      'east' => '东',
+      'west' => '西',
+      'northeast' => '东北',
+      'northwest' => '西北',
+      'southeast' => '东南',
+      'southwest' => '西南',
+      'up' => '上',
+      'down' => '下',
+      _ => direction,
+    };
   }
 }
 
@@ -311,22 +410,27 @@ class _QuickCommandButton extends ConsumerWidget {
 }
 
 class _DirectionButton extends ConsumerWidget {
-  const _DirectionButton({required this.direction, required this.label});
+  const _DirectionButton({
+    required this.direction,
+    required this.enabled,
+    required this.icon,
+    required this.label,
+  });
 
   final String direction;
+  final bool enabled;
+  final IconData icon;
   final String label;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameControllerProvider);
-    final exits =
-        state.definitions?.rooms[state.currentRoomId]?.exits ?? const {};
-    final enabled = exits.containsKey(direction);
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.black,
+        foregroundColor: enabled ? Colors.black : Colors.grey.shade500,
         backgroundColor: enabled ? Colors.white : Colors.grey.shade100,
-        side: BorderSide(color: enabled ? Colors.black : Colors.grey),
+        disabledForegroundColor: Colors.grey.shade500,
+        padding: const EdgeInsets.all(4),
+        side: BorderSide(color: enabled ? Colors.black : Colors.grey.shade400),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
       onPressed:
@@ -335,9 +439,25 @@ class _DirectionButton extends ConsumerWidget {
                   .read(gameControllerProvider.notifier)
                   .dispatch(ExecuteCommandAction(direction))
               : null,
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+      child: Tooltip(
+        message: label,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 26),
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

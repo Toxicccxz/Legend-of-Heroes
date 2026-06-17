@@ -37,6 +37,10 @@ void main() {
           if (target == null || target['zoneId'] != room['zoneId']) {
             continue;
           }
+          if (room.containsKey('sourcePath') ||
+              target.containsKey('sourcePath')) {
+            continue;
+          }
 
           final dx = (target['mapX'] as int) - (room['mapX'] as int);
           final dy = (target['mapY'] as int) - (room['mapY'] as int);
@@ -63,6 +67,10 @@ Future<List<Map<String, dynamic>>> _loadRooms() async {
     'south' => (0, 1),
     'east' => (1, 0),
     'west' => (-1, 0),
+    'northeast' => (1, -1),
+    'northwest' => (-1, -1),
+    'southeast' => (1, 1),
+    'southwest' => (-1, 1),
     _ => throw ArgumentError.value(direction, 'direction'),
   };
 }

@@ -24,20 +24,23 @@ Future<void> main(List<String> args) async {
 
   final sourceRoot = Directory(args.first);
   final outputDir = Directory(_option(args, '--out') ?? 'build/xkx100_maps');
+  final area = _option(args, '--area');
   final mergeAssets = args.contains('--merge-assets');
   if (!sourceRoot.existsSync()) {
     stderr.writeln('xkx100 source root not found: ${sourceRoot.path}');
     exitCode = 2;
     return;
   }
-  final dDir = Directory('${sourceRoot.path}/d');
-  if (!dDir.existsSync()) {
-    stderr.writeln('Missing xkx100 map directory: ${dDir.path}');
+  final source = _resolveSource(sourceRoot, area: area);
+  if (source == null) {
+    stderr.writeln(
+      'Missing xkx100 map directory. Pass xkx100 root, its d/ directory, or a d/<area> directory.',
+    );
     exitCode = 2;
     return;
   }
 
-  final rawRooms = _scanRooms(dDir);
+  final rawRooms = _scanRooms(source.dRoot, source.scanDir);
   final roomIdsByPath = {for (final room in rawRooms) room.sourcePath: room.id};
   final rooms =
       rawRooms
@@ -65,7 +68,7 @@ Future<void> main(List<String> args) async {
   ).writeAsStringSync(const JsonEncoder.withIndent('  ').convert(targetZones));
 
   stdout.writeln(
-    'Imported ${rooms.length} rooms and ${zones.length} zones from ${dDir.path}.',
+    'Imported ${rooms.length} rooms and ${zones.length} zones from ${source.scanDir.path}.',
   );
   stdout.writeln('Output: ${outputDir.path}');
   if (mergeAssets) {
@@ -75,9 +78,41 @@ Future<void> main(List<String> args) async {
   }
 }
 
-List<_RawRoom> _scanRooms(Directory dDir) {
+_ImportSource? _resolveSource(Directory input, {String? area}) {
+  final inputName = _pathName(input.path);
+  if (inputName == 'd') {
+    final scanDir = area == null ? input : Directory('${input.path}/$area');
+    return scanDir.existsSync()
+        ? _ImportSource(dRoot: input, scanDir: scanDir)
+        : null;
+  }
+
+  final parent = input.parent;
+  if (_pathName(parent.path) == 'd') {
+    return _ImportSource(dRoot: parent, scanDir: input);
+  }
+
+  final dRoot = Directory('${input.path}/d');
+  if (!dRoot.existsSync()) {
+    return null;
+  }
+  final scanDir = area == null ? dRoot : Directory('${dRoot.path}/$area');
+  return scanDir.existsSync()
+      ? _ImportSource(dRoot: dRoot, scanDir: scanDir)
+      : null;
+}
+
+String _pathName(String path) {
+  return path
+      .replaceAll('\\', '/')
+      .split('/')
+      .where((part) => part.isNotEmpty)
+      .last;
+}
+
+List<_RawRoom> _scanRooms(Directory dRoot, Directory scanDir) {
   final rooms = <_RawRoom>[];
-  final files = dDir
+  final files = scanDir
       .listSync(recursive: true)
       .whereType<File>()
       .where((file) => file.path.endsWith('.c'));
@@ -86,12 +121,14 @@ List<_RawRoom> _scanRooms(Directory dDir) {
     if (!content.contains('set("short"') || !content.contains('set("exits"')) {
       continue;
     }
-    final sourcePath = _sourcePathFor(dDir, file);
+    final sourcePath = _sourcePathFor(dRoot, file);
     final zoneId = _zoneIdFor(sourcePath);
     final short = _singleLineSet(content, 'short') ?? _basename(sourcePath);
     final long = _longSet(content) ?? short;
     final exits = _exitMap(content, sourcePath);
     final objects = _objects(content, sourcePath);
+    final coorX = _intSet(content, 'coor/x');
+    final coorY = _intSet(content, 'coor/y');
     rooms.add(
       _RawRoom(
         sourcePath: sourcePath,
@@ -100,7 +137,9 @@ List<_RawRoom> _scanRooms(Directory dDir) {
         name: short,
         description: long,
         exits: exits,
-        objectPaths: objects,
+        objectRefs: objects,
+        coorX: coorX,
+        coorY: coorY,
       ),
     );
   }
@@ -134,6 +173,14 @@ String? _singleLineSet(String content, String key) {
   return match?.group(1)?.trim();
 }
 
+int? _intSet(String content, String key) {
+  final escapedKey = RegExp.escape(key);
+  final match = RegExp(
+    'set\\("$escapedKey"\\s*,\\s*(-?\\d+)\\s*\\)',
+  ).firstMatch(content);
+  return match == null ? null : int.tryParse(match.group(1)!);
+}
+
 String? _longSet(String content) {
   final simple = _singleLineSet(content, 'long');
   if (simple != null) {
@@ -163,20 +210,37 @@ Map<String, String> _exitMap(String content, String sourcePath) {
   return exits;
 }
 
-List<String> _objects(String content, String sourcePath) {
+List<_ObjectRef> _objects(String content, String sourcePath) {
   final body = _mappingBody(content, 'objects');
   if (body == null) {
     return const [];
   }
-  final objects = <String>[];
-  final entryPattern = RegExp(r'(?:__DIR__\s*)?"([^"]+)"\s*:');
+  final objects = <_ObjectRef>[];
+  final entryPattern = RegExp(r'(?:__DIR__\s*)?"([^"]+)"\s*:\s*(\d+)');
   for (final match in entryPattern.allMatches(body)) {
     final target = _normalizeTarget(sourcePath, match.group(1)!);
     if (target != null) {
-      objects.add(target);
+      objects.add(
+        _ObjectRef(
+          sourcePath: target,
+          count: int.parse(match.group(2)!),
+          kind: _objectKind(target),
+        ),
+      );
     }
   }
   return objects;
+}
+
+String _objectKind(String sourcePath) {
+  final parts = sourcePath.split('/');
+  if (parts.contains('npc')) {
+    return 'npc';
+  }
+  if (parts.contains('obj') || sourcePath.startsWith('questobj/')) {
+    return 'item';
+  }
+  return 'object';
 }
 
 String? _mappingBody(String content, String key) {
@@ -255,13 +319,33 @@ void _assignCoordinates(List<Map<String, dynamic>> rooms) {
   final roomsById = {for (final room in rooms) room['id'] as String: room};
   final byZone = <String, List<Map<String, dynamic>>>{};
   for (final room in rooms) {
+    final rawX = room['sourceCoorX'];
+    final rawY = room['sourceCoorY'];
+    if (rawX is int && rawY is int) {
+      room['mapX'] = _mapCoordinate(rawX);
+      room['mapY'] = -_mapCoordinate(rawY);
+    }
     byZone.putIfAbsent(room['zoneId'] as String, () => []).add(room);
   }
   for (final zoneRooms in byZone.values) {
+    final usedCoordinates = <String>{};
+    for (final room in zoneRooms) {
+      if (room.containsKey('mapX') && room.containsKey('mapY')) {
+        _reserveUniqueCoordinate(room, usedCoordinates);
+      }
+    }
+
     final queue = <Map<String, dynamic>>[];
-    zoneRooms.first['mapX'] = 0;
-    zoneRooms.first['mapY'] = 0;
-    queue.add(zoneRooms.first);
+    final firstRoom = zoneRooms.firstWhere(
+      (room) => room.containsKey('mapX'),
+      orElse: () {
+        zoneRooms.first['mapX'] = 0;
+        zoneRooms.first['mapY'] = 0;
+        _reserveUniqueCoordinate(zoneRooms.first, usedCoordinates);
+        return zoneRooms.first;
+      },
+    );
+    queue.add(firstRoom);
     while (queue.isNotEmpty) {
       final room = queue.removeAt(0);
       final exits = (room['exits'] as Map<String, String>);
@@ -276,16 +360,43 @@ void _assignCoordinates(List<Map<String, dynamic>> rooms) {
         }
         target['mapX'] = (room['mapX'] as int) + delta.$1;
         target['mapY'] = (room['mapY'] as int) + delta.$2;
+        _reserveUniqueCoordinate(target, usedCoordinates);
         queue.add(target);
       }
     }
     var fallback = 0;
     for (final room in zoneRooms) {
-      room['mapX'] ??= fallback % 20;
-      room['mapY'] ??= fallback ~/ 20;
+      if (!room.containsKey('mapX') || !room.containsKey('mapY')) {
+        room['mapX'] = fallback % 20;
+        room['mapY'] = fallback ~/ 20;
+        _reserveUniqueCoordinate(room, usedCoordinates);
+      }
       fallback += 1;
     }
   }
+}
+
+void _reserveUniqueCoordinate(
+  Map<String, dynamic> room,
+  Set<String> usedCoordinates,
+) {
+  var x = room['mapX'] as int;
+  var y = room['mapY'] as int;
+  var key = '$x,$y';
+  var offset = 0;
+  while (usedCoordinates.contains(key)) {
+    offset += 1;
+    x = (room['mapX'] as int) + offset;
+    y = room['mapY'] as int;
+    key = '$x,$y';
+  }
+  room['mapX'] = x;
+  room['mapY'] = y;
+  usedCoordinates.add(key);
+}
+
+int _mapCoordinate(int sourceCoordinate) {
+  return sourceCoordinate ~/ 10;
 }
 
 List<Map<String, dynamic>> _mergeById(
@@ -320,12 +431,15 @@ String? _option(List<String> args, String name) {
 
 void _printUsage() {
   stdout.writeln(
-    'Usage: dart run tool/import_xkx100_maps.dart <xkx100-root> [--out <dir>] [--merge-assets]',
+    'Usage: dart run tool/import_xkx100_maps.dart <xkx100-root|d-dir|area-dir> [--area <name>] [--out <dir>] [--merge-assets]',
   );
   stdout.writeln('');
   stdout.writeln('Example:');
   stdout.writeln(
     '  dart run tool/import_xkx100_maps.dart ../xkx100 --out build/xkx100_maps',
+  );
+  stdout.writeln(
+    '  dart run tool/import_xkx100_maps.dart 侠客行mud代码 --area village --out build/xkx100_village',
   );
 }
 
@@ -337,7 +451,9 @@ class _RawRoom {
     required this.name,
     required this.description,
     required this.exits,
-    required this.objectPaths,
+    required this.objectRefs,
+    required this.coorX,
+    required this.coorY,
   });
 
   final String sourcePath;
@@ -346,11 +462,14 @@ class _RawRoom {
   final String name;
   final String description;
   final Map<String, String> exits;
-  final List<String> objectPaths;
+  final List<_ObjectRef> objectRefs;
+  final int? coorX;
+  final int? coorY;
 
   Map<String, dynamic> toJson(Map<String, String> roomIdsByPath) {
     return {
       'id': id,
+      'sourcePath': sourcePath,
       'name': name,
       'description': description,
       'zoneId': zoneId,
@@ -368,6 +487,38 @@ class _RawRoom {
       'onEnterEvents': <String>[],
       'investigateEvents': <String>[],
       'restEvents': <String>[],
+      if (coorX != null) 'sourceCoorX': coorX,
+      if (coorY != null) 'sourceCoorY': coorY,
+      if (objectRefs.isNotEmpty)
+        'sourceObjects': [for (final object in objectRefs) object.toJson()],
+    };
+  }
+}
+
+class _ImportSource {
+  const _ImportSource({required this.dRoot, required this.scanDir});
+
+  final Directory dRoot;
+  final Directory scanDir;
+}
+
+class _ObjectRef {
+  const _ObjectRef({
+    required this.sourcePath,
+    required this.count,
+    required this.kind,
+  });
+
+  final String sourcePath;
+  final int count;
+  final String kind;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sourcePath': sourcePath,
+      'id': 'xkx_${sourcePath.replaceAll('/', '_').replaceAll('-', '_')}',
+      'kind': kind,
+      'count': count,
     };
   }
 }

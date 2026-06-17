@@ -58,23 +58,45 @@ class _MapPanelState extends ConsumerState<MapPanel> {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final compact = constraints.maxWidth < 300;
+                final hasInteractions = _hasInteractions(room);
+                final narrow = constraints.maxWidth < 520;
+                final mapCanvas = _MapCanvas(
+                  rooms: mapRooms,
+                  currentRooms: visibleRooms,
+                  previousRooms: previousVisibleRooms,
+                  currentRoom: room,
+                  previousRoom: previousRoom,
+                  currentRoomId: state.currentRoomId,
+                );
+
+                if (!hasInteractions) {
+                  return mapCanvas;
+                }
+
+                if (narrow) {
+                  final interactionHeight = math.min(
+                    136.0,
+                    math.max(104.0, constraints.maxHeight * 0.36),
+                  );
+                  return Column(
+                    children: [
+                      Expanded(child: mapCanvas),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: interactionHeight,
+                        child: _MapInteractionList(state: state, ref: ref),
+                      ),
+                    ],
+                  );
+                }
+
                 final interactionWidth = math.min(
-                  compact ? 130.0 : 156.0,
-                  constraints.maxWidth * (compact ? 0.46 : 0.42),
+                  190.0,
+                  math.max(150.0, constraints.maxWidth * 0.34),
                 );
                 return Row(
                   children: [
-                    Expanded(
-                      child: _MapCanvas(
-                        rooms: mapRooms,
-                        currentRooms: visibleRooms,
-                        previousRooms: previousVisibleRooms,
-                        currentRoom: room,
-                        previousRoom: previousRoom,
-                        currentRoomId: state.currentRoomId,
-                      ),
-                    ),
+                    Expanded(child: mapCanvas),
                     const SizedBox(width: 8),
                     SizedBox(
                       width: interactionWidth,
@@ -90,6 +112,17 @@ class _MapPanelState extends ConsumerState<MapPanel> {
         ],
       ),
     );
+  }
+
+  bool _hasInteractions(RoomDefinition? room) {
+    if (room == null) {
+      return false;
+    }
+    return room.commands.isNotEmpty ||
+        room.investigateEvents.isNotEmpty ||
+        room.restEvents.isNotEmpty ||
+        room.npcs.isNotEmpty ||
+        room.items.isNotEmpty;
   }
 
   RoomDefinition? _previousRoomFor(

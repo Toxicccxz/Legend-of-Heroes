@@ -105,8 +105,16 @@ class GameController extends StateNotifier<GameState> {
     if (savedState == null) {
       return false;
     }
+    final savedRoomId =
+        savedState.currentRoomId == legacyInitialRoomId
+            ? initialRoomId
+            : savedState.currentRoomId;
+    final visitedRoomIds = Set<String>.from(savedState.visitedRoomIds)
+      ..add(savedRoomId);
     state = savedState.copyWith(
       definitions: definitions,
+      currentRoomId: savedRoomId,
+      visitedRoomIds: visitedRoomIds,
       isLoading: false,
       errorMessage: null,
     );
@@ -170,7 +178,18 @@ class GameController extends StateNotifier<GameState> {
         _look(command.target);
       case 'go':
         _move(command.target ?? '');
-      case 'north' || 'south' || 'east' || 'west':
+      case 'north' ||
+          'south' ||
+          'east' ||
+          'west' ||
+          'northeast' ||
+          'northwest' ||
+          'southeast' ||
+          'southwest' ||
+          'up' ||
+          'down' ||
+          'out' ||
+          'enter':
         _move(command.verb);
       case 'ask':
         if (command.extra == null || command.extra!.isEmpty) {

@@ -20,32 +20,39 @@ class _MapCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRect(
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          TweenAnimationBuilder<double>(
-            key: ValueKey(
-              '${previousRoom?.id ?? currentRoomId}->$currentRoomId',
-            ),
-            tween: Tween(begin: 0, end: 1),
-            duration: const Duration(milliseconds: 280),
-            curve: Curves.easeOutCubic,
-            builder: (context, progress, child) {
-              return CustomPaint(
-                painter: _RoomMapPainter(
-                  rooms: rooms,
-                  currentRooms: currentRooms,
-                  previousRooms: previousRooms,
-                  currentRoom: currentRoom,
-                  previousRoom: previousRoom,
-                  currentRoomId: currentRoomId,
-                  moveProgress: progress,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final showLegend =
+              constraints.maxWidth >= 260 && constraints.maxHeight >= 120;
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              TweenAnimationBuilder<double>(
+                key: ValueKey(
+                  '${previousRoom?.id ?? currentRoomId}->$currentRoomId',
                 ),
-              );
-            },
-          ),
-          const Positioned(right: 4, top: 4, child: _MapLegend()),
-        ],
+                tween: Tween(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                builder: (context, progress, child) {
+                  return CustomPaint(
+                    painter: _RoomMapPainter(
+                      rooms: rooms,
+                      currentRooms: currentRooms,
+                      previousRooms: previousRooms,
+                      currentRoom: currentRoom,
+                      previousRoom: previousRoom,
+                      currentRoomId: currentRoomId,
+                      moveProgress: progress,
+                    ),
+                  );
+                },
+              ),
+              if (showLegend)
+                const Positioned(right: 4, top: 4, child: _MapLegend()),
+            ],
+          );
+        },
       ),
     );
   }
@@ -289,6 +296,10 @@ class _RoomMapPainter extends CustomPainter {
       'south' => const Offset(0, 1),
       'east' => const Offset(1, 0),
       'west' => const Offset(-1, 0),
+      'northeast' => const Offset(1, -1),
+      'northwest' => const Offset(-1, -1),
+      'southeast' => const Offset(1, 1),
+      'southwest' => const Offset(-1, 1),
       _ => Offset.zero,
     };
   }

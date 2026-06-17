@@ -6,6 +6,9 @@ import 'game_action.dart';
 
 enum GameLogType { dialogue, combat, system, quest }
 
+const initialRoomId = 'xkx_village_square';
+const legacyInitialRoomId = 'village_entrance';
+
 class GameLogEntry {
   const GameLogEntry({
     required this.timestamp,
@@ -98,7 +101,7 @@ class GameState {
     return GameState(
       definitions: null,
       player: _defaultPlayer,
-      currentRoomId: 'village_entrance',
+      currentRoomId: initialRoomId,
       questProgress: const {},
       inventory: const [],
       equippedItems: const {},
@@ -112,6 +115,7 @@ class GameState {
   }
 
   static GameState initial(GameDefinitions definitions) {
+    final startRoomId = _initialRoomIdFor(definitions);
     final questProgress = {
       for (final quest in definitions.quests.values)
         quest.id: QuestProgress(
@@ -125,7 +129,7 @@ class GameState {
     return GameState(
       definitions: definitions,
       player: _defaultPlayer,
-      currentRoomId: 'village_entrance',
+      currentRoomId: startRoomId,
       questProgress: questProgress,
       inventory: const [
         InventoryEntry(itemId: 'small_potion', count: 1),
@@ -141,31 +145,21 @@ class GameState {
         InventoryEntry(itemId: 'wooden_token', count: 1),
       ],
       equippedItems: const {},
-      visitedRoomIds: const {'village_entrance'},
+      visitedRoomIds: {startRoomId},
       flags: const {},
       logs: [
         GameLogEntry(
           timestamp: DateTime(2026, 6, 9, 10, 21),
-          type: GameLogType.dialogue,
-          message: '流浪商人：最近村里不太平……',
+          type: GameLogType.system,
+          message: '你来到华山脚下的小村，打谷场上风声穿过槐树。',
         ),
         GameLogEntry(
           timestamp: DateTime(2026, 6, 9, 10, 21),
-          type: GameLogType.dialogue,
-          message: '你对守卫发起了交谈。',
-        ),
-        GameLogEntry(
-          timestamp: DateTime(2026, 6, 9, 10, 22),
-          type: GameLogType.combat,
-          message: '野狼发动攻击，造成 8 点伤害。',
-        ),
-        GameLogEntry(
-          timestamp: DateTime(2026, 6, 9, 10, 22),
           type: GameLogType.system,
-          message: '你使用了小红药水，恢复 20 HP。',
+          message: '四周是原版《侠客行》村庄区域，你可以从这里探索铁匠铺、杂货店和村口小路。',
         ),
       ],
-      trackedQuestId: 'side_guard_herb',
+      trackedQuestId: null,
       selectedStatusTab: StatusTab.quest,
       selectedMessageFilter: MessageFilter.all,
     );
@@ -183,4 +177,16 @@ class GameState {
     gold: 256,
     exp: 0,
   );
+
+  static String _initialRoomIdFor(GameDefinitions definitions) {
+    if (definitions.rooms.containsKey(initialRoomId)) {
+      return initialRoomId;
+    }
+    if (definitions.rooms.containsKey(legacyInitialRoomId)) {
+      return legacyInitialRoomId;
+    }
+    return definitions.rooms.isEmpty
+        ? initialRoomId
+        : definitions.rooms.keys.first;
+  }
 }

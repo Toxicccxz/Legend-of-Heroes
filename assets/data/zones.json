@@ -1,50 +1,74 @@
-[
-  {
-    "id": "abandoned_village",
-    "name": "废弃村",
-    "description": "村口、广场、老井、废屋与药草坡组成的新手探索区域。",
-    "visibleRadius": 3
-  },
-  {
-    "id": "mist_forest",
-    "name": "雾林",
-    "description": "村西的浓雾森林，分布着猎人营地、狼穴与古旧石祠。",
-    "visibleRadius": 3
-  },
-  {
-    "id": "qingyun_outskirts",
-    "name": "青云山麓",
-    "description": "青云门山脚到演武场之间的外门接引区域。",
-    "visibleRadius": 3,
-    "path": "/d/qingyun",
-    "levelRange": [1, 30],
-    "respawnSeconds": 300
-  },
-  {
-    "id": "shaolin_outskirts",
-    "name": "少林山门",
-    "description": "嵩山古刹外围，山门、罗汉堂与达摩院自外而内层层递进。",
-    "visibleRadius": 3,
-    "path": "/d/shaolin",
-    "levelRange": [1, 35],
-    "respawnSeconds": 300
-  },
-  {
-    "id": "wudang_outskirts",
-    "name": "武当山道",
-    "description": "云雾缭绕的道门山径，剑坪与真武殿掩映在松风之间。",
-    "visibleRadius": 3,
-    "path": "/d/wudang",
-    "levelRange": [1, 35],
-    "respawnSeconds": 300
-  },
-  {
-    "id": "huashan_outskirts",
-    "name": "华山险道",
-    "description": "峭壁、剑台与试剑崖构成的险峰门派区域。",
-    "visibleRadius": 3,
-    "path": "/d/huashan",
-    "levelRange": [1, 35],
-    "respawnSeconds": 300
-  }
+﻿[
+    {
+        "id":  "abandoned_village",
+        "name":  "废弃村",
+        "description":  "村口、广场、老井、废屋与药草坡组成的新手探索区域。",
+        "visibleRadius":  3
+    },
+    {
+        "id":  "mist_forest",
+        "name":  "雾林",
+        "description":  "村西的浓雾森林，分布着猎人营地、狼穴与古旧石祠。",
+        "visibleRadius":  3
+    },
+    {
+        "id":  "qingyun_outskirts",
+        "name":  "青云山麓",
+        "description":  "青云门山脚到演武场之间的外门接引区域。",
+        "visibleRadius":  3,
+        "path":  "/d/qingyun",
+        "levelRange":  [
+                           1,
+                           30
+                       ],
+        "respawnSeconds":  300
+    },
+    {
+        "id":  "shaolin_outskirts",
+        "name":  "少林山门",
+        "description":  "嵩山古刹外围，山门、罗汉堂与达摩院自外而内层层递进。",
+        "visibleRadius":  3,
+        "path":  "/d/shaolin",
+        "levelRange":  [
+                           1,
+                           35
+                       ],
+        "respawnSeconds":  300
+    },
+    {
+        "id":  "wudang_outskirts",
+        "name":  "武当山道",
+        "description":  "云雾缭绕的道门山径，剑坪与真武殿掩映在松风之间。",
+        "visibleRadius":  3,
+        "path":  "/d/wudang",
+        "levelRange":  [
+                           1,
+                           35
+                       ],
+        "respawnSeconds":  300
+    },
+    {
+        "id":  "huashan_outskirts",
+        "name":  "华山险道",
+        "description":  "峭壁、剑台与试剑崖构成的险峰门派区域。",
+        "visibleRadius":  3,
+        "path":  "/d/huashan",
+        "levelRange":  [
+                           1,
+                           35
+                       ],
+        "respawnSeconds":  300
+    },
+    {
+        "id":  "xkx_village",
+        "name":  "village",
+        "description":  "Imported from xkx100 /d/village.",
+        "visibleRadius":  4,
+        "path":  "/d/village",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "respawnSeconds":  300
+    }
 ]

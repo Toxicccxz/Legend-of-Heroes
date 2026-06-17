@@ -1,676 +1,2319 @@
-[
-  {
-    "id": "village_entrance",
-    "name": "废弃村口",
-    "description": "前方是一条通往村庄的小路，四周安静，能听到风声。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "安全区域",
-      "新手引导"
-    ],
-    "exits": {
-      "north": "village_square",
-      "east": "old_well",
-      "west": "forest_path"
+﻿[
+    {
+        "id":  "village_entrance",
+        "name":  "废弃村口",
+        "description":  "前方是一条通往村庄的小路，四周安静，能听到风声。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "安全区域",
+                     "新手引导"
+                 ],
+        "exits":  {
+                      "north":  "village_square",
+                      "east":  "old_well",
+                      "west":  "forest_path"
+                  },
+        "npcs":  [
+                     "wandering_merchant",
+                     "guard",
+                     "little_girl"
+                 ],
+        "onEnterEvents":  [
+                              "event_first_enter_village"
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_village_entrance"
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  2,
+        "mapY":  2
     },
-    "npcs": [
-      "wandering_merchant",
-      "guard",
-      "little_girl"
-    ],
-    "onEnterEvents": [
-      "event_first_enter_village"
-    ],
-    "investigateEvents": [
-      "event_investigate_village_entrance"
-    ],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 2,
-    "mapY": 2
-  },
-  {
-    "id": "village_square",
-    "name": "村庄广场",
-    "description": "破旧的广场中央堆着枯枝，几条小路从这里延伸出去。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "安全区域"
-    ],
-    "exits": {
-      "south": "village_entrance",
-      "north": "guard_post",
-      "east": "qingyun_contact_point",
-      "west": "abandoned_house"
+    {
+        "id":  "village_square",
+        "name":  "村庄广场",
+        "description":  "破旧的广场中央堆着枯枝，几条小路从这里延伸出去。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "安全区域"
+                 ],
+        "exits":  {
+                      "south":  "village_entrance",
+                      "north":  "guard_post",
+                      "east":  "qingyun_contact_point",
+                      "west":  "abandoned_house"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  2,
+        "mapY":  1
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 2,
-    "mapY": 1
-  },
-  {
-    "id": "old_well",
-    "name": "老井",
-    "description": "井口被藤蔓缠住，井边泥土上留着细小的脚印。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "可调查"
-    ],
-    "exits": {
-      "west": "village_entrance",
-      "north": "qingyun_contact_point",
-      "east": "herbal_patch"
+    {
+        "id":  "old_well",
+        "name":  "老井",
+        "description":  "井口被藤蔓缠住，井边泥土上留着细小的脚印。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "west":  "village_entrance",
+                      "north":  "qingyun_contact_point",
+                      "east":  "herbal_patch"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_old_well"
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  3,
+        "mapY":  2
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_old_well"
-    ],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 3,
-    "mapY": 2
-  },
-  {
-    "id": "forest_path",
-    "name": "林间小路",
-    "description": "林子里雾气很重，远处偶尔传来低沉的兽吼。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "野外",
-      "危险边缘"
-    ],
-    "exits": {
-      "east": "village_entrance",
-      "west": "mist_forest_gate",
-      "north": "huashan_gate"
+    {
+        "id":  "forest_path",
+        "name":  "林间小路",
+        "description":  "林子里雾气很重，远处偶尔传来低沉的兽吼。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "野外",
+                     "危险边缘"
+                 ],
+        "exits":  {
+                      "east":  "village_entrance",
+                      "west":  "mist_forest_gate",
+                      "north":  "huashan_gate"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  1,
+        "mapY":  2
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 1,
-    "mapY": 2
-  },
-  {
-    "id": "guard_post",
-    "name": "守卫哨所",
-    "description": "一处临时哨所挡在村庄北侧，几面旧旗在风中摇晃。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "安全区域"
-    ],
-    "exits": {
-      "south": "village_square",
-      "north": "wudang_gate"
+    {
+        "id":  "guard_post",
+        "name":  "守卫哨所",
+        "description":  "一处临时哨所挡在村庄北侧，几面旧旗在风中摇晃。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "安全区域"
+                 ],
+        "exits":  {
+                      "south":  "village_square",
+                      "north":  "wudang_gate"
+                  },
+        "npcs":  [
+                     "guard"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  2,
+        "mapY":  0
     },
-    "npcs": [
-      "guard"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 2,
-    "mapY": 0
-  },
-  {
-    "id": "qingyun_contact_point",
-    "name": "青云门接引点",
-    "description": "一块青石碑立在路旁，碑前站着青云门接引人。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "门派",
-      "新手引导"
-    ],
-    "exits": {
-      "west": "village_square",
-      "south": "old_well",
-      "north": "mountain_foot",
-      "east": "shaolin_gate"
+    {
+        "id":  "qingyun_contact_point",
+        "name":  "青云门接引点",
+        "description":  "一块青石碑立在路旁，碑前站着青云门接引人。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "门派",
+                     "新手引导"
+                 ],
+        "exits":  {
+                      "west":  "village_square",
+                      "south":  "old_well",
+                      "north":  "mountain_foot",
+                      "east":  "shaolin_gate"
+                  },
+        "npcs":  [
+                     "qingyun_guide"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  3,
+        "mapY":  1
     },
-    "npcs": [
-      "qingyun_guide"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 3,
-    "mapY": 1
-  },
-  {
-    "id": "abandoned_house",
-    "name": "废屋",
-    "description": "半塌的木屋里堆满灰尘，角落还摆着一张能勉强躺下的旧床。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "可调查",
-      "休息点"
-    ],
-    "exits": {
-      "east": "village_square"
+    {
+        "id":  "abandoned_house",
+        "name":  "废屋",
+        "description":  "半塌的木屋里堆满灰尘，角落还摆着一张能勉强躺下的旧床。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "可调查",
+                     "休息点"
+                 ],
+        "exits":  {
+                      "east":  "village_square"
+                  },
+        "npcs":  [
+
+                 ],
+        "commands":  [
+                         {
+                             "verb":  "open",
+                             "label":  "推开地窖门",
+                             "description":  "你拨开门缝上的蛛网，推开了那扇半掩的木门。",
+                             "targetId":  "cellar",
+                             "eventIds":  [
+                                              "event_open_cellar_door"
+                                          ]
+                         }
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_abandoned_house"
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  1,
+        "mapY":  1
     },
-    "npcs": [],
-    "commands": [
-      {
-        "verb": "open",
-        "label": "推开地窖门",
-        "description": "你拨开门缝上的蛛网，推开了那扇半掩的木门。",
-        "targetId": "cellar",
-        "eventIds": ["event_open_cellar_door"]
-      }
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_abandoned_house"
-    ],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 1,
-    "mapY": 1
-  },
-  {
-    "id": "cellar_door",
-    "name": "地窖门口",
-    "description": "木门半掩着，潮湿的气味从地下涌出，像是有人刚刚来过。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "可调查"
-    ],
-    "exits": {
-      "east": "abandoned_house"
+    {
+        "id":  "cellar_door",
+        "name":  "地窖门口",
+        "description":  "木门半掩着，潮湿的气味从地下涌出，像是有人刚刚来过。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "east":  "abandoned_house"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_cellar_door"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  0,
+        "mapY":  1
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_cellar_door"
-    ],
-    "restEvents": [],
-    "mapX": 0,
-    "mapY": 1
-  },
-  {
-    "id": "herbal_patch",
-    "name": "药草坡",
-    "description": "老井北侧的缓坡长着几簇止血草，草药客正在辨认叶脉。",
-    "zoneId": "abandoned_village",
-    "tags": [
-      "村庄",
-      "草药"
-    ],
-    "exits": {
-      "west": "old_well"
+    {
+        "id":  "herbal_patch",
+        "name":  "药草坡",
+        "description":  "老井北侧的缓坡长着几簇止血草，草药客正在辨认叶脉。",
+        "zoneId":  "abandoned_village",
+        "tags":  [
+                     "村庄",
+                     "草药"
+                 ],
+        "exits":  {
+                      "west":  "old_well"
+                  },
+        "npcs":  [
+                     "herb_gatherer"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_herbal_patch"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  4,
+        "mapY":  2
     },
-    "npcs": [
-      "herb_gatherer"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_herbal_patch"
-    ],
-    "restEvents": [],
-    "mapX": 4,
-    "mapY": 2
-  },
-  {
-    "id": "mist_forest_gate",
-    "name": "雾林入口",
-    "description": "树影像帘幕一样垂下，雾气把村外的小路吞进林中。",
-    "zoneId": "mist_forest",
-    "tags": [
-      "森林",
-      "危险"
-    ],
-    "exits": {
-      "east": "forest_path",
-      "west": "hunter_camp",
-      "north": "herb_grove"
+    {
+        "id":  "mist_forest_gate",
+        "name":  "雾林入口",
+        "description":  "树影像帘幕一样垂下，雾气把村外的小路吞进林中。",
+        "zoneId":  "mist_forest",
+        "tags":  [
+                     "森林",
+                     "危险"
+                 ],
+        "exits":  {
+                      "east":  "forest_path",
+                      "west":  "hunter_camp",
+                      "north":  "herb_grove"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+                              "event_enter_mist_forest"
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  3,
+        "mapY":  2
     },
-    "npcs": [],
-    "onEnterEvents": [
-      "event_enter_mist_forest"
-    ],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 3,
-    "mapY": 2
-  },
-  {
-    "id": "hunter_camp",
-    "name": "猎人营地",
-    "description": "几顶旧帐篷围着快要熄灭的火堆，老猎户正擦拭弓弦。",
-    "zoneId": "mist_forest",
-    "tags": [
-      "森林",
-      "休息点"
-    ],
-    "exits": {
-      "east": "mist_forest_gate",
-      "west": "wolf_den",
-      "north": "stone_shrine"
+    {
+        "id":  "hunter_camp",
+        "name":  "猎人营地",
+        "description":  "几顶旧帐篷围着快要熄灭的火堆，老猎户正擦拭弓弦。",
+        "zoneId":  "mist_forest",
+        "tags":  [
+                     "森林",
+                     "休息点"
+                 ],
+        "exits":  {
+                      "east":  "mist_forest_gate",
+                      "west":  "wolf_den",
+                      "north":  "stone_shrine"
+                  },
+        "npcs":  [
+                     "old_hunter"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest"
+                       ],
+        "mapX":  2,
+        "mapY":  2
     },
-    "npcs": [
-      "old_hunter"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest"
-    ],
-    "mapX": 2,
-    "mapY": 2
-  },
-  {
-    "id": "herb_grove",
-    "name": "雾中药圃",
-    "description": "厚雾中透出淡淡药香，几株发光的灵草夹在荆棘之间。",
-    "zoneId": "mist_forest",
-    "tags": [
-      "森林",
-      "草药",
-      "可调查"
-    ],
-    "exits": {
-      "south": "mist_forest_gate",
-      "west": "stone_shrine"
+    {
+        "id":  "herb_grove",
+        "name":  "雾中药圃",
+        "description":  "厚雾中透出淡淡药香，几株发光的灵草夹在荆棘之间。",
+        "zoneId":  "mist_forest",
+        "tags":  [
+                     "森林",
+                     "草药",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "south":  "mist_forest_gate",
+                      "west":  "stone_shrine"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_herb_grove"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  3,
+        "mapY":  1
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_herb_grove"
-    ],
-    "restEvents": [],
-    "mapX": 3,
-    "mapY": 1
-  },
-  {
-    "id": "wolf_den",
-    "name": "狼穴外缘",
-    "description": "岩缝里散落着兽骨，低沉的喘息声从更深处传来。",
-    "zoneId": "mist_forest",
-    "tags": [
-      "森林",
-      "危险",
-      "可调查"
-    ],
-    "exits": {
-      "east": "hunter_camp"
+    {
+        "id":  "wolf_den",
+        "name":  "狼穴外缘",
+        "description":  "岩缝里散落着兽骨，低沉的喘息声从更深处传来。",
+        "zoneId":  "mist_forest",
+        "tags":  [
+                     "森林",
+                     "危险",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "east":  "hunter_camp"
+                  },
+        "npcs":  [
+                     "wounded_ranger"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_wolf_den"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  2
     },
-    "npcs": [
-      "wounded_ranger"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_wolf_den"
-    ],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 2
-  },
-  {
-    "id": "stone_shrine",
-    "name": "石祠",
-    "description": "青苔覆盖的石祠立在林间，石面刻着几道古旧剑痕。",
-    "zoneId": "mist_forest",
-    "tags": [
-      "森林",
-      "遗迹",
-      "可调查"
-    ],
-    "exits": {
-      "south": "hunter_camp",
-      "east": "herb_grove"
+    {
+        "id":  "stone_shrine",
+        "name":  "石祠",
+        "description":  "青苔覆盖的石祠立在林间，石面刻着几道古旧剑痕。",
+        "zoneId":  "mist_forest",
+        "tags":  [
+                     "森林",
+                     "遗迹",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "south":  "hunter_camp",
+                      "east":  "herb_grove"
+                  },
+        "npcs":  [
+                     "shrine_keeper"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_stone_shrine"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  2,
+        "mapY":  1
     },
-    "npcs": [
-      "shrine_keeper"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_stone_shrine"
-    ],
-    "restEvents": [],
-    "mapX": 2,
-    "mapY": 1
-  },
-  {
-    "id": "mountain_foot",
-    "name": "青云山脚",
-    "description": "山门石阶从这里向上延伸，云气顺着台阶缓缓流动。",
-    "zoneId": "qingyun_outskirts",
-    "tags": [
-      "山地",
-      "门派"
-    ],
-    "exits": {
-      "south": "qingyun_contact_point",
-      "north": "bamboo_steps"
+    {
+        "id":  "mountain_foot",
+        "name":  "青云山脚",
+        "description":  "山门石阶从这里向上延伸，云气顺着台阶缓缓流动。",
+        "zoneId":  "qingyun_outskirts",
+        "tags":  [
+                     "山地",
+                     "门派"
+                 ],
+        "exits":  {
+                      "south":  "qingyun_contact_point",
+                      "north":  "bamboo_steps"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+                              "event_enter_qingyun_outskirts"
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  2,
+        "mapY":  3
     },
-    "npcs": [],
-    "onEnterEvents": [
-      "event_enter_qingyun_outskirts"
-    ],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 2,
-    "mapY": 3
-  },
-  {
-    "id": "bamboo_steps",
-    "name": "竹林石阶",
-    "description": "竹影摇动，石阶两侧挂着写有门规的木牌。",
-    "zoneId": "qingyun_outskirts",
-    "tags": [
-      "山地",
-      "竹林"
-    ],
-    "exits": {
-      "south": "mountain_foot",
-      "north": "training_yard",
-      "east": "guest_lodge"
+    {
+        "id":  "bamboo_steps",
+        "name":  "竹林石阶",
+        "description":  "竹影摇动，石阶两侧挂着写有门规的木牌。",
+        "zoneId":  "qingyun_outskirts",
+        "tags":  [
+                     "山地",
+                     "竹林"
+                 ],
+        "exits":  {
+                      "south":  "mountain_foot",
+                      "north":  "training_yard",
+                      "east":  "guest_lodge"
+                  },
+        "npcs":  [
+                     "bamboo_sweeper"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_bamboo_steps"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  2,
+        "mapY":  2
     },
-    "npcs": [
-      "bamboo_sweeper"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_bamboo_steps"
-    ],
-    "restEvents": [],
-    "mapX": 2,
-    "mapY": 2
-  },
-  {
-    "id": "training_yard",
-    "name": "演武场",
-    "description": "宽阔的石坪上摆着木桩和剑架，传剑执事正在巡视新弟子。",
-    "zoneId": "qingyun_outskirts",
-    "tags": [
-      "门派",
-      "训练"
-    ],
-    "exits": {
-      "south": "bamboo_steps",
-      "north": "sword_platform"
+    {
+        "id":  "training_yard",
+        "name":  "演武场",
+        "description":  "宽阔的石坪上摆着木桩和剑架，传剑执事正在巡视新弟子。",
+        "zoneId":  "qingyun_outskirts",
+        "tags":  [
+                     "门派",
+                     "训练"
+                 ],
+        "exits":  {
+                      "south":  "bamboo_steps",
+                      "north":  "sword_platform"
+                  },
+        "npcs":  [
+                     "sword_instructor",
+                     "qingyun_senior",
+                     "qingyun_elder"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  2,
+        "mapY":  1
     },
-    "npcs": [
-      "sword_instructor",
-      "qingyun_senior",
-      "qingyun_elder"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 2,
-    "mapY": 1
-  },
-  {
-    "id": "sword_platform",
-    "name": "观剑台",
-    "description": "高台临风，可以俯瞰山脚与雾林，石栏上残留着剑气划痕。",
-    "zoneId": "qingyun_outskirts",
-    "tags": [
-      "门派",
-      "可调查"
-    ],
-    "exits": {
-      "south": "training_yard"
+    {
+        "id":  "sword_platform",
+        "name":  "观剑台",
+        "description":  "高台临风，可以俯瞰山脚与雾林，石栏上残留着剑气划痕。",
+        "zoneId":  "qingyun_outskirts",
+        "tags":  [
+                     "门派",
+                     "可调查"
+                 ],
+        "exits":  {
+                      "south":  "training_yard"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+                                  "event_investigate_sword_platform"
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  2,
+        "mapY":  0
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [
-      "event_investigate_sword_platform"
-    ],
-    "restEvents": [],
-    "mapX": 2,
-    "mapY": 0
-  },
-  {
-    "id": "guest_lodge",
-    "name": "客舍",
-    "description": "接引弟子临时留宿的客舍，炉火温暖，床铺整齐。",
-    "zoneId": "qingyun_outskirts",
-    "tags": [
-      "门派",
-      "休息点"
-    ],
-    "exits": {
-      "west": "bamboo_steps"
+    {
+        "id":  "guest_lodge",
+        "name":  "客舍",
+        "description":  "接引弟子临时留宿的客舍，炉火温暖，床铺整齐。",
+        "zoneId":  "qingyun_outskirts",
+        "tags":  [
+                     "门派",
+                     "休息点"
+                 ],
+        "exits":  {
+                      "west":  "bamboo_steps"
+                  },
+        "npcs":  [
+
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+                           "event_rest_guest_lodge"
+                       ],
+        "mapX":  3,
+        "mapY":  2
     },
-    "npcs": [],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [
-      "event_rest_guest_lodge"
-    ],
-    "mapX": 3,
-    "mapY": 2
-  },
-  {
-    "id": "shaolin_gate",
-    "name": "少林山门",
-    "description": "石阶尽头立着古朴山门，少林知客僧在门前合十迎客。",
-    "zoneId": "shaolin_outskirts",
-    "tags": [
-      "门派",
-      "山门",
-      "少林"
-    ],
-    "exits": {
-      "west": "qingyun_contact_point",
-      "north": "shaolin_luohan_hall"
+    {
+        "id":  "shaolin_gate",
+        "name":  "少林山门",
+        "description":  "石阶尽头立着古朴山门，少林知客僧在门前合十迎客。",
+        "zoneId":  "shaolin_outskirts",
+        "tags":  [
+                     "门派",
+                     "山门",
+                     "少林"
+                 ],
+        "exits":  {
+                      "west":  "qingyun_contact_point",
+                      "north":  "shaolin_luohan_hall"
+                  },
+        "npcs":  [
+                     "shaolin_monk"
+                 ],
+        "onEnterEvents":  [
+                              "event_enter_shaolin_outskirts"
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  2
     },
-    "npcs": [
-      "shaolin_monk"
-    ],
-    "onEnterEvents": [
-      "event_enter_shaolin_outskirts"
-    ],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 2
-  },
-  {
-    "id": "shaolin_luohan_hall",
-    "name": "罗汉堂",
-    "description": "堂中木人排列如阵，罗汉堂首座正校看弟子拳架。",
-    "zoneId": "shaolin_outskirts",
-    "tags": [
-      "门派",
-      "训练",
-      "少林"
-    ],
-    "exits": {
-      "south": "shaolin_gate",
-      "north": "shaolin_damo_yard"
+    {
+        "id":  "shaolin_luohan_hall",
+        "name":  "罗汉堂",
+        "description":  "堂中木人排列如阵，罗汉堂首座正校看弟子拳架。",
+        "zoneId":  "shaolin_outskirts",
+        "tags":  [
+                     "门派",
+                     "训练",
+                     "少林"
+                 ],
+        "exits":  {
+                      "south":  "shaolin_gate",
+                      "north":  "shaolin_damo_yard"
+                  },
+        "npcs":  [
+                     "shaolin_luohan"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  1
     },
-    "npcs": [
-      "shaolin_luohan"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 1
-  },
-  {
-    "id": "shaolin_damo_yard",
-    "name": "达摩院",
-    "description": "院内古松低垂，达摩院长老静坐蒲团，掌心气息沉稳。",
-    "zoneId": "shaolin_outskirts",
-    "tags": [
-      "门派",
-      "长老",
-      "少林"
-    ],
-    "exits": {
-      "south": "shaolin_luohan_hall"
+    {
+        "id":  "shaolin_damo_yard",
+        "name":  "达摩院",
+        "description":  "院内古松低垂，达摩院长老静坐蒲团，掌心气息沉稳。",
+        "zoneId":  "shaolin_outskirts",
+        "tags":  [
+                     "门派",
+                     "长老",
+                     "少林"
+                 ],
+        "exits":  {
+                      "south":  "shaolin_luohan_hall"
+                  },
+        "npcs":  [
+                     "shaolin_elder"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  0
     },
-    "npcs": [
-      "shaolin_elder"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 0
-  },
-  {
-    "id": "wudang_gate",
-    "name": "武当山门",
-    "description": "松风穿过山门，武当道童背着木剑立在石阶旁。",
-    "zoneId": "wudang_outskirts",
-    "tags": [
-      "门派",
-      "山门",
-      "武当"
-    ],
-    "exits": {
-      "south": "guard_post",
-      "north": "wudang_sword_yard"
+    {
+        "id":  "wudang_gate",
+        "name":  "武当山门",
+        "description":  "松风穿过山门，武当道童背着木剑立在石阶旁。",
+        "zoneId":  "wudang_outskirts",
+        "tags":  [
+                     "门派",
+                     "山门",
+                     "武当"
+                 ],
+        "exits":  {
+                      "south":  "guard_post",
+                      "north":  "wudang_sword_yard"
+                  },
+        "npcs":  [
+                     "wudang_daotong"
+                 ],
+        "onEnterEvents":  [
+                              "event_enter_wudang_outskirts"
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  2
     },
-    "npcs": [
-      "wudang_daotong"
-    ],
-    "onEnterEvents": [
-      "event_enter_wudang_outskirts"
-    ],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 2
-  },
-  {
-    "id": "wudang_sword_yard",
-    "name": "武当剑坪",
-    "description": "青石坪上画着太极圆，武当师兄缓缓演示剑随身转。",
-    "zoneId": "wudang_outskirts",
-    "tags": [
-      "门派",
-      "训练",
-      "武当"
-    ],
-    "exits": {
-      "south": "wudang_gate",
-      "north": "wudang_zhenwu_hall"
+    {
+        "id":  "wudang_sword_yard",
+        "name":  "武当剑坪",
+        "description":  "青石坪上画着太极圆，武当师兄缓缓演示剑随身转。",
+        "zoneId":  "wudang_outskirts",
+        "tags":  [
+                     "门派",
+                     "训练",
+                     "武当"
+                 ],
+        "exits":  {
+                      "south":  "wudang_gate",
+                      "north":  "wudang_zhenwu_hall"
+                  },
+        "npcs":  [
+                     "wudang_senior"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  1
     },
-    "npcs": [
-      "wudang_senior"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 1
-  },
-  {
-    "id": "wudang_zhenwu_hall",
-    "name": "真武殿",
-    "description": "殿中香烟袅袅，武当长老垂目而坐，木剑横放膝前。",
-    "zoneId": "wudang_outskirts",
-    "tags": [
-      "门派",
-      "长老",
-      "武当"
-    ],
-    "exits": {
-      "south": "wudang_sword_yard"
+    {
+        "id":  "wudang_zhenwu_hall",
+        "name":  "真武殿",
+        "description":  "殿中香烟袅袅，武当长老垂目而坐，木剑横放膝前。",
+        "zoneId":  "wudang_outskirts",
+        "tags":  [
+                     "门派",
+                     "长老",
+                     "武当"
+                 ],
+        "exits":  {
+                      "south":  "wudang_sword_yard"
+                  },
+        "npcs":  [
+                     "wudang_elder"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  0
     },
-    "npcs": [
-      "wudang_elder"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 0
-  },
-  {
-    "id": "huashan_gate",
-    "name": "华山山道",
-    "description": "石阶贴着峭壁盘旋，华山剑客迎风而立，剑穗猎猎作响。",
-    "zoneId": "huashan_outskirts",
-    "tags": [
-      "门派",
-      "山门",
-      "华山"
-    ],
-    "exits": {
-      "south": "forest_path",
-      "north": "huashan_sword_platform"
+    {
+        "id":  "huashan_gate",
+        "name":  "华山山道",
+        "description":  "石阶贴着峭壁盘旋，华山剑客迎风而立，剑穗猎猎作响。",
+        "zoneId":  "huashan_outskirts",
+        "tags":  [
+                     "门派",
+                     "山门",
+                     "华山"
+                 ],
+        "exits":  {
+                      "south":  "forest_path",
+                      "north":  "huashan_sword_platform"
+                  },
+        "npcs":  [
+                     "huashan_swordsman"
+                 ],
+        "onEnterEvents":  [
+                              "event_enter_huashan_outskirts"
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  2
     },
-    "npcs": [
-      "huashan_swordsman"
-    ],
-    "onEnterEvents": [
-      "event_enter_huashan_outskirts"
-    ],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 2
-  },
-  {
-    "id": "huashan_sword_platform",
-    "name": "华山剑台",
-    "description": "剑台临空，华山师兄收剑于肘后，紫气在袖间隐约流转。",
-    "zoneId": "huashan_outskirts",
-    "tags": [
-      "门派",
-      "训练",
-      "华山"
-    ],
-    "exits": {
-      "south": "huashan_gate",
-      "north": "huashan_cliff"
+    {
+        "id":  "huashan_sword_platform",
+        "name":  "华山剑台",
+        "description":  "剑台临空，华山师兄收剑于肘后，紫气在袖间隐约流转。",
+        "zoneId":  "huashan_outskirts",
+        "tags":  [
+                     "门派",
+                     "训练",
+                     "华山"
+                 ],
+        "exits":  {
+                      "south":  "huashan_gate",
+                      "north":  "huashan_cliff"
+                  },
+        "npcs":  [
+                     "huashan_senior"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  1
     },
-    "npcs": [
-      "huashan_senior"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 1
-  },
-  {
-    "id": "huashan_cliff",
-    "name": "试剑崖",
-    "description": "崖边云气翻涌，华山长老衣袖微动，似乎已经看穿来者招式。",
-    "zoneId": "huashan_outskirts",
-    "tags": [
-      "门派",
-      "长老",
-      "华山"
-    ],
-    "exits": {
-      "south": "huashan_sword_platform"
+    {
+        "id":  "huashan_cliff",
+        "name":  "试剑崖",
+        "description":  "崖边云气翻涌，华山长老衣袖微动，似乎已经看穿来者招式。",
+        "zoneId":  "huashan_outskirts",
+        "tags":  [
+                     "门派",
+                     "长老",
+                     "华山"
+                 ],
+        "exits":  {
+                      "south":  "huashan_sword_platform"
+                  },
+        "npcs":  [
+                     "huashan_elder"
+                 ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "mapX":  1,
+        "mapY":  0
     },
-    "npcs": [
-      "huashan_elder"
-    ],
-    "onEnterEvents": [],
-    "investigateEvents": [],
-    "restEvents": [],
-    "mapX": 1,
-    "mapY": 0
-  }
+    {
+        "id":  "xkx_village_alley1",
+        "sourcePath":  "village/alley1",
+        "name":  "小巷",
+        "description":  "这是一条黑暗、肮脏的小巷，空气中仿佛飘扬着一股罪恶的气息，西 北边通向小巷深处，正人君子是不会往那边走去的。往东走就会回到村中 大路了。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/alley1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "east":  "xkx_village_sroad3",
+                      "northwest":  "xkx_village_alley2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -980,
+        "sourceCoorY":  250,
+        "mapX":  -98,
+        "mapY":  -25
+    },
+    {
+        "id":  "xkx_village_alley2",
+        "sourcePath":  "village/alley2",
+        "name":  "小巷尽头",
+        "description":  "这里是小巷的尽头，一只破木箱上摆着几样粗制的赌具，地上乱扔着 些鸡骨头，空气中有一股鸡香、酒香和汗臭混杂在一起的味道。看来这里 是村内地痞、流氓聚集的地方。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/alley2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "southeast":  "xkx_village_alley1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -990,
+        "sourceCoorY":  260,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/punk",
+                                  "id":  "xkx_village_npc_punk",
+                                  "kind":  "npc",
+                                  "count":  1
+                              },
+                              {
+                                  "sourcePath":  "village/npc/dipi",
+                                  "id":  "xkx_village_npc_dipi",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -99,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_bighouse1",
+        "sourcePath":  "village/bighouse1",
+        "name":  "前厅",
+        "description":  "这是一间很普通的青砖瓦房，但在这个小村子里已是首屈一指的“豪 宅”了。这里是前厅，厅里的摆设很简单，乡下土财主都很财迷，就算有 几个钱儿，也是舍不得花。东边是个小门通向内室。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/bighouse1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_sroad4",
+                      "east":  "xkx_village_bighouse2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  260,
+        "mapX":  -96,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_bighouse2",
+        "sourcePath":  "village/bighouse2",
+        "name":  "内室",
+        "description":  "这里是一间寝室，屋子中间有一张大床，床上的被褥居然是绸缎的， 看来这个土财主对自己并不是十分刻薄。屋里摆着几只木箱子，墙角里有 一只大柜子(cabinet)。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/bighouse2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_bighouse1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -950,
+        "sourceCoorY":  260,
+        "mapX":  -95,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_eexit",
+        "sourcePath":  "village/eexit",
+        "name":  "东村口",
+        "description":  "这里是华山脚下，虽然远离县城，却没有什麽山贼草寇在附近出没。 往东就是上山的路了。西边是一个小村庄，村子里人家并不多，村民们过 着日出而作，日落而息的宁静生活。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/eexit"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_eroad1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -930,
+        "sourceCoorY":  270,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/boy",
+                                  "id":  "xkx_village_npc_boy",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -93,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_ehouse1",
+        "sourcePath":  "village/ehouse1",
+        "name":  "草棚",
+        "description":  "这是一个简单的草棚，地上摆著一堆堆的货物，上山的游客可以在这 买些上山用品。草棚的墙上贴着个牌子，是个价目表(sign)。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/ehouse1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_eroad1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -940,
+        "sourceCoorY":  260,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/seller",
+                                  "id":  "xkx_village_npc_seller",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -94,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_ehouse2",
+        "sourcePath":  "village/ehouse2",
+        "name":  "民宅",
+        "description":  "这是一间很结实的房子，虽然也是间土坯房，但看的出建造的比村里 其他的土坯房要好很多。墙上挂着、地下摆着一些农具。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/ehouse2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "south":  "xkx_village_eroad2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -950,
+        "sourceCoorY":  280,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/dibao",
+                                  "id":  "xkx_village_npc_dibao",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -95,
+        "mapY":  -28
+    },
+    {
+        "id":  "xkx_village_eroad1",
+        "sourcePath":  "village/eroad1",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。一条碎石路，往西通向村子的中心， 往东就是出村的路了。南面是一间很简陋的草棚。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/eroad1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "south":  "xkx_village_ehouse1",
+                      "east":  "xkx_village_eexit",
+                      "west":  "xkx_village_eroad2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -940,
+        "sourceCoorY":  270,
+        "mapX":  -94,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_eroad2",
+        "sourcePath":  "village/eroad2",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。这是一条东西向的碎石路，北面是间 结实的民宅。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/eroad2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "east":  "xkx_village_eroad1",
+                      "west":  "xkx_village_eroad3",
+                      "north":  "xkx_village_ehouse2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -950,
+        "sourceCoorY":  270,
+        "mapX":  -95,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_eroad3",
+        "sourcePath":  "village/eroad3",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。这是一条东西向的碎石路，往西就是 村子中心的打谷场了，南面是一间铁匠铺子，北面是家杂货店。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/eroad3"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_shop",
+                      "south":  "xkx_village_smithy1",
+                      "east":  "xkx_village_eroad2",
+                      "west":  "xkx_village_square"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  270,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/girl",
+                                  "id":  "xkx_village_npc_girl",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -96,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_hsroad1",
+        "sourcePath":  "village/hsroad1",
+        "name":  "青石大道",
+        "description":  "你走在一条青石大道上，人来人往非常繁忙，不时地有人骑着马匆匆而过。 大道两旁有一些小货摊，似乎是一处集市。南边通向扬州城。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/hsroad1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_hsroad2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  190,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/girl",
+                                  "id":  "xkx_village_npc_girl",
+                                  "kind":  "npc",
+                                  "count":  4
+                              }
+                          ],
+        "mapX":  -96,
+        "mapY":  -19
+    },
+    {
+        "id":  "xkx_village_hsroad2",
+        "sourcePath":  "village/hsroad2",
+        "name":  "青石大道",
+        "description":  "你走在一条青石大道上，南边隐约可见到扬州城的城墙。北面两条土路分 岔通向山里。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/hsroad2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "south":  "xkx_village_hsroad1",
+                      "northwest":  "xkx_village_hsroad3"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  200,
+        "mapX":  -96,
+        "mapY":  -20
+    },
+    {
+        "id":  "xkx_village_hsroad3",
+        "sourcePath":  "village/hsroad3",
+        "name":  "黄土路",
+        "description":  "一条坑坑洼洼的土路，弯弯曲曲的通向山里。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/hsroad3"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "southeast":  "xkx_village_hsroad2",
+                      "north":  "xkx_village_sexit"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  210,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "taishan/npc/tangzi",
+                                  "id":  "xkx_taishan_npc_tangzi",
+                                  "kind":  "npc",
+                                  "count":  4
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -21
+    },
+    {
+        "id":  "xkx_village_nwhouse",
+        "sourcePath":  "village/nwhouse",
+        "name":  "民房",
+        "description":  "这是一个小房间，屋子里飘着一股大葱加香粉的味道。靠墙摆着张大 床，床头有个小梳妆台。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/nwhouse"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "northeast":  "xkx_village_nwroad2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -990,
+        "sourceCoorY":  270,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/cuihua",
+                                  "id":  "xkx_village_npc_cuihua",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -99,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_nwroad1",
+        "sourcePath":  "village/nwroad1",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。东北边有间小庙，庙匾上的字早已模 糊不清，看不出是什麽庙了。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/nwroad1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_wexit",
+                      "southeast":  "xkx_village_nwroad2",
+                      "northeast":  "xkx_village_temple1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -990,
+        "sourceCoorY":  290,
+        "mapX":  -99,
+        "mapY":  -29
+    },
+    {
+        "id":  "xkx_village_nwroad2",
+        "sourcePath":  "village/nwroad2",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。东南边就是村子中心的打谷场了，西 南是间民房。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/nwroad2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "northwest":  "xkx_village_nwroad1",
+                      "southeast":  "xkx_village_square",
+                      "southwest":  "xkx_village_nwhouse"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -980,
+        "sourceCoorY":  280,
+        "mapX":  -98,
+        "mapY":  -28
+    },
+    {
+        "id":  "xkx_village_sexit",
+        "sourcePath":  "village/sexit",
+        "name":  "南村口",
+        "description":  "这里是华山脚下，虽然远离县城，却没有什麽山贼草寇在附近出没。 西面是一个小村庄，看来村子里人家不多，村民们过着日出而作，日落而 息的宁静生活。穿过这个小村子，就是上华山的山路了。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/sexit"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_sroad1",
+                      "south":  "xkx_village_hsroad3"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  220,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/dog",
+                                  "id":  "xkx_village_npc_dog",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -22
+    },
+    {
+        "id":  "xkx_village_shack",
+        "sourcePath":  "village/shack",
+        "name":  "民宅",
+        "description":  "这是一间十分简陋，四壁漏风的小房子，屋子里连一张象样的床都没 有，只有一面门板上面铺着些干草。这屋子的主人一定是贫困潦倒，穷的 叮当响。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/shack"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "south":  "xkx_village_wexit"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -1000,
+        "sourceCoorY":  300,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/poorman",
+                                  "id":  "xkx_village_npc_poorman",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -100,
+        "mapY":  -30
+    },
+    {
+        "id":  "xkx_village_shop",
+        "sourcePath":  "village/shop",
+        "name":  "杂货店",
+        "description":  "这是一间小小的杂货店，经营些油、盐、酱、醋及日用百货，村子里 的人多数是很穷，除了生活必需品，这里很少贩卖其它物品。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/shop"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "south":  "xkx_village_eroad3"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  280,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/xiejian",
+                                  "id":  "xkx_village_npc_xiejian",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -96,
+        "mapY":  -28
+    },
+    {
+        "id":  "xkx_village_shouse",
+        "sourcePath":  "village/shouse",
+        "name":  "小土房",
+        "description":  "这是一间用土坯搭成的房屋，屋里只有几件残破的家俱。在靠门口的 墙角有一只空空的笼子，大概曾经用来养过鸡、鸭之类的家禽。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/shouse"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_sroad2"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  240,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/oldwoman",
+                                  "id":  "xkx_village_npc_oldwoman",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -96,
+        "mapY":  -24
+    },
+    {
+        "id":  "xkx_village_smithy1",
+        "sourcePath":  "village/smithy1",
+        "name":  "铁匠铺",
+        "description":  "这是一间甚是简陋的铁匠铺，入门正中是个大铁砧，满地煤渣碎铁， 墙上挂着几张犁头，屋子的角落里堆着几把破锄头、镰刀，靠墙放着几把 新出炉的铁锤。东面有一个小门，门上挂著个破布帘。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/smithy1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "east":  "xkx_village_smithy2",
+                      "north":  "xkx_village_eroad3"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -960,
+        "sourceCoorY":  260,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/smith",
+                                  "id":  "xkx_village_npc_smith",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -93,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_smithy2",
+        "sourcePath":  "village/smithy2",
+        "name":  "小房间",
+        "description":  "这是铁匠的住宅，屋子里十分简单，靠墙有一张木床，墙角摆着个小 桌子，桌上胡乱的摆着几个酒杯、茶碗，桌上靠墙放着一把长剑(sword)。 西边有个小门，门上挂著个破布帘，出去就是铁匠的铺子了。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/smithy2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_smithy1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -950,
+        "sourceCoorY":  260,
+        "mapX":  -92,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_square",
+        "sourcePath":  "village/square",
+        "name":  "打谷场",
+        "description":  "这里是村子的中心，一个平坦的广场，每年秋收打谷就在这。广场东 角有棵大槐树，平日茶余饭後，村里的男女老少都爱聚在这里谈天说地。 角上有几个大谷堆(gudui)。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/square"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "northwest":  "xkx_village_nwroad2",
+                      "south":  "xkx_village_sroad4",
+                      "east":  "xkx_village_eroad3"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  270,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/kid",
+                                  "id":  "xkx_village_npc_kid",
+                                  "kind":  "npc",
+                                  "count":  2
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -27
+    },
+    {
+        "id":  "xkx_village_sroad1",
+        "sourcePath":  "village/sroad1",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。一条碎石路，往北通向村子的中心， 往南就是出村的路了。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/sroad1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_sroad2",
+                      "south":  "xkx_village_sexit"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  230,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/girl",
+                                  "id":  "xkx_village_npc_girl",
+                                  "kind":  "npc",
+                                  "count":  1
+                              },
+                              {
+                                  "sourcePath":  "village/npc/boy",
+                                  "id":  "xkx_village_npc_boy",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -23
+    },
+    {
+        "id":  "xkx_village_sroad2",
+        "sourcePath":  "village/sroad2",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。这是一条南北向的碎石路，东面是一 间小土房。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/sroad2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_sroad3",
+                      "south":  "xkx_village_sroad1",
+                      "east":  "xkx_village_shouse"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  240,
+        "mapX":  -97,
+        "mapY":  -24
+    },
+    {
+        "id":  "xkx_village_sroad3",
+        "sourcePath":  "village/sroad3",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。这是一条南北向的碎石路，西边有一 条黑黑暗暗的小巷子。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/sroad3"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_sroad4",
+                      "south":  "xkx_village_sroad2",
+                      "west":  "xkx_village_alley1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  250,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/boy",
+                                  "id":  "xkx_village_npc_boy",
+                                  "kind":  "npc",
+                                  "count":  3
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -25
+    },
+    {
+        "id":  "xkx_village_sroad4",
+        "sourcePath":  "village/sroad4",
+        "name":  "碎石路",
+        "description":  "这是一个宁静的小村子，稀稀落落的分布着几十间土坯泥房，看来村 中人家不多，而且大都生活很艰辛。这是一条南北向的碎石路，往北就是 村子中心的打谷场了，东面是村里唯一的青砖瓦房。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/sroad4"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "north":  "xkx_village_square",
+                      "south":  "xkx_village_sroad3",
+                      "east":  "xkx_village_bighouse1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  260,
+        "mapX":  -97,
+        "mapY":  -26
+    },
+    {
+        "id":  "xkx_village_temple1",
+        "sourcePath":  "village/temple1",
+        "name":  "玄坛庙",
+        "description":  "这是一间十分破旧的小庙，庙里供的神像是赵玄坛，神像已经很残破 了，神案上也积了很多尘土，看来已有很久没人来上香进供了。大概村民 贫困的太久，已不再寄望於财神爷降福给他们了。神像後面的墙上有个半 人多高的洞(hole)。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/temple1"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "southwest":  "xkx_village_nwroad1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -980,
+        "sourceCoorY":  300,
+        "mapX":  -98,
+        "mapY":  -30
+    },
+    {
+        "id":  "xkx_village_temple2",
+        "sourcePath":  "village/temple2",
+        "name":  "小棚子",
+        "description":  "这是一个临时搭起来的小棚子。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/temple2"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "west":  "xkx_village_temple1"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -970,
+        "sourceCoorY":  300,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/wang",
+                                  "id":  "xkx_village_npc_wang",
+                                  "kind":  "npc",
+                                  "count":  1
+                              }
+                          ],
+        "mapX":  -97,
+        "mapY":  -30
+    },
+    {
+        "id":  "xkx_village_wexit",
+        "sourcePath":  "village/wexit",
+        "name":  "西村口",
+        "description":  "这里是华山脚下，虽然远离县城，却没有什麽山贼草寇在附近出没。 东面是一个小村庄，看来村子里人家不多，村民们过着日出而作，日落而 息的宁静生活。穿过这个小村子，就是上华山的山路了。北边有间破房子。",
+        "zoneId":  "xkx_village",
+        "aliases":  [
+                        "village/wexit"
+                    ],
+        "sceneType":  "outdoor",
+        "levelRange":  [
+                           1,
+                           99
+                       ],
+        "tags":  [
+                     "xkx100",
+                     "village"
+                 ],
+        "exits":  {
+                      "east":  "xkx_village_nwroad1",
+                      "north":  "xkx_village_shack"
+                  },
+        "npcs":  [
+
+                 ],
+        "items":  [
+
+                  ],
+        "commands":  [
+
+                     ],
+        "onEnterEvents":  [
+
+                          ],
+        "investigateEvents":  [
+
+                              ],
+        "restEvents":  [
+
+                       ],
+        "sourceCoorX":  -1000,
+        "sourceCoorY":  290,
+        "sourceObjects":  [
+                              {
+                                  "sourcePath":  "village/npc/kid",
+                                  "id":  "xkx_village_npc_kid",
+                                  "kind":  "npc",
+                                  "count":  2
+                              }
+                          ],
+        "mapX":  -100,
+        "mapY":  -29
+    }
 ]
