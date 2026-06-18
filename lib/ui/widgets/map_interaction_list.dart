@@ -17,6 +17,7 @@ class _MapInteractionList extends StatelessWidget {
         const <NpcDefinition>[];
     final hasInvestigate = room?.investigateEvents.isNotEmpty ?? false;
     final hasRest = room?.restEvents.isNotEmpty ?? false;
+    final hasRoomActions = hasInvestigate || hasRest;
     final items =
         room?.items
             .map((id) => state.definitions?.items[id])
@@ -49,32 +50,29 @@ class _MapInteractionList extends StatelessWidget {
                     ? ListView(
                       padding: EdgeInsets.zero,
                       children: [
-                        _SectionLabel(label: '房间'),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: [
-                            _CommandChip(
-                              icon: Icons.visibility_outlined,
-                              label: '查看',
-                              onPressed: () => _dispatchCommand('look room'),
-                            ),
-                            if (hasInvestigate)
-                              _CommandChip(
-                                icon: Icons.search,
-                                label: '调查',
-                                onPressed:
-                                    () => _dispatchCommand('investigate'),
-                              ),
-                            if (hasRest)
-                              _CommandChip(
-                                icon: Icons.bed,
-                                label: '休息',
-                                onPressed: () => _dispatchCommand('rest'),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
+                        if (hasRoomActions) ...[
+                          _SectionLabel(label: '房间'),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: [
+                              if (hasInvestigate)
+                                _CommandChip(
+                                  icon: Icons.search,
+                                  label: '调查',
+                                  onPressed:
+                                      () => _dispatchCommand('investigate'),
+                                ),
+                              if (hasRest)
+                                _CommandChip(
+                                  icon: Icons.bed,
+                                  label: '休息',
+                                  onPressed: () => _dispatchCommand('rest'),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                         for (final npc in npcs)
                           _NpcActionCard(
                             state: state,
@@ -136,7 +134,7 @@ class _MapInteractionList extends StatelessWidget {
                         ],
                       ],
                     )
-                    : const Center(child: Text('无')),
+                    : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -156,18 +154,14 @@ class _MapInteractionList extends StatelessWidget {
   Future<void> _showNpcDialog(BuildContext context, NpcDefinition npc) {
     final options = [
       const _NpcDialogOption(type: 'talk', label: '交谈', icon: Icons.chat),
-      const _NpcDialogOption(
-        type: 'spar',
-        label: '切磋',
-        icon: Icons.sports_martial_arts,
-      ),
       for (final option in npc.interactions)
-        _NpcDialogOption(
-          type: option.type,
-          label: option.label,
-          icon: _iconForOption(option.type),
-          sectId: option.sectId,
-        ),
+        if (option.type != 'spar')
+          _NpcDialogOption(
+            type: option.type,
+            label: option.label,
+            icon: _iconForOption(option.type),
+            sectId: option.sectId,
+          ),
     ];
 
     return showDialog<void>(
@@ -377,7 +371,6 @@ class _MapInteractionList extends StatelessWidget {
   String _commandForNpcOption(NpcDefinition npc, String type) {
     return switch (type) {
       'talk' => 'ask ${npc.id}',
-      'spar' => 'spar ${npc.id}',
       'trade' => 'trade ${npc.id}',
       'quest' => 'quest ${npc.id}',
       'joinSect' => 'apprentice ${npc.id}',
@@ -412,6 +405,7 @@ class _NpcActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final joinSectOption = _optionFor('joinSect');
+    final visibleOptions = _visibleOptions();
     final availableAcceptedItems = _availableAcceptedItems();
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -460,7 +454,7 @@ class _NpcActionCard extends StatelessWidget {
             children: [
               _CommandChip(
                 icon: Icons.visibility_outlined,
-                label: '看',
+                label: '查看',
                 onPressed: () => onCommand('look ${npc.id}'),
               ),
               _CommandChip(
@@ -468,14 +462,11 @@ class _NpcActionCard extends StatelessWidget {
                 label: '交谈',
                 onPressed: () => onCommand('ask ${npc.id}'),
               ),
-              if (npc.inquiries.isNotEmpty)
+              for (final inquiry in npc.inquiries)
                 _CommandChip(
                   icon: Icons.help_outline,
-                  label: '话题',
-                  onPressed:
-                      npc.inquiries.length == 1
-                          ? () => onInquiry(npc.inquiries.first.id)
-                          : onOpenDialog,
+                  label: '问：${inquiry.label}',
+                  onPressed: () => onInquiry(inquiry.id),
                 ),
               for (final acceptedItem in availableAcceptedItems)
                 _CommandChip(
@@ -483,12 +474,7 @@ class _NpcActionCard extends StatelessWidget {
                   label: _acceptedItemLabel(acceptedItem),
                   onPressed: () => onGiveItem(acceptedItem.itemId),
                 ),
-              _CommandChip(
-                icon: Icons.sports_martial_arts,
-                label: '切磋',
-                onPressed: () => onCommand('spar ${npc.id}'),
-              ),
-              for (final option in npc.interactions)
+              for (final option in visibleOptions)
                 if (option.type == 'joinSect')
                   _CommandChip(
                     icon: Icons.account_balance,
@@ -518,6 +504,10 @@ class _NpcActionCard extends StatelessWidget {
       }
     }
     return null;
+  }
+
+  List<NpcInteractionOption> _visibleOptions() {
+    return npc.interactions.where((option) => option.type != 'spar').toList();
   }
 
   List<NpcAcceptedItemDefinition> _availableAcceptedItems() {

@@ -1,107 +1,326 @@
 [
-  {
-    "id": "dialogue_wandering_merchant",
-    "lines": ["最近村里不太平，买点药在身上总没错。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_guard",
-    "lines": ["如果你能找到 3 株止血草，我会感谢你的。"],
-    "events": ["event_talk_guard_herb"]
-  },
-  {
-    "id": "dialogue_little_girl",
-    "lines": ["我看到有人往老井方向去了。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_qingyun_guide",
-    "lines": ["若想入门，先听清门规，再去演武场拜见传剑执事。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_herb_gatherer",
-    "lines": ["止血草喜阴，井边坡上还能找到几株。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_old_hunter",
-    "lines": ["雾林夜里别乱走，狼群会顺着血腥味追人。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_wounded_ranger",
-    "lines": ["狼窟里不止一头野狼，我需要先把伤口处理好。"],
-    "events": ["event_talk_wounded_ranger"]
-  },
-  {
-    "id": "dialogue_shrine_keeper",
-    "lines": ["这座石碑比村子还老，剑痕不是凡铁留下的。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_bamboo_sweeper",
-    "lines": ["上山先静心，石阶上的门规可不能踏脏。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_sword_instructor",
-    "lines": ["想入青云门，先把基础剑诀练稳。"],
-    "events": ["event_talk_sword_instructor"]
-  },
-  {
-    "id": "dialogue_qingyun_senior",
-    "lines": ["剑稳之后，脚下也要跟得上风。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_qingyun_elder",
-    "lines": ["云海剑意不可急求，心中无门，剑上无云。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_shaolin_monk",
-    "lines": ["少林先学拳脚，也先学收心。若要入门，须守本门戒律。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_shaolin_luohan",
-    "lines": ["拳架练稳后，再谈内息。急躁者学不得易筋经。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_shaolin_elder",
-    "lines": ["达摩掌不是争强斗狠之术，须能止戈，才可出掌。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_wudang_daotong",
-    "lines": ["武当剑不求一时锋芒，先把圆转之意练进剑路。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_wudang_senior",
-    "lines": ["身随剑转，力从对手来。太极身法要慢练。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_wudang_elder",
-    "lines": ["太极剑意贵在后发，心先不动，剑才不乱。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_huashan_swordsman",
-    "lines": ["华山剑出险峰，入门先练胆，也练眼。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_huashan_senior",
-    "lines": ["紫霞功催动剑势，但根基虚浮，只会伤了自己。"],
-    "events": []
-  },
-  {
-    "id": "dialogue_huashan_elder",
-    "lines": ["九剑重在破招。看不透对手，便先看透自己。"],
-    "events": []
-  }
+    {
+        "id":  "dialogue_wandering_merchant",
+        "lines":  [
+                      "最近村里不太平，买点药在身上总没错。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_guard",
+        "lines":  [
+                      "如果你能找到 3 株止血草，我会感谢你的。"
+                  ],
+        "events":  [
+                       "event_talk_guard_herb"
+                   ]
+    },
+    {
+        "id":  "dialogue_little_girl",
+        "lines":  [
+                      "我看到有人往老井方向去了。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_qingyun_guide",
+        "lines":  [
+                      "若想入门，先听清门规，再去演武场拜见传剑执事。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_herb_gatherer",
+        "lines":  [
+                      "止血草喜阴，井边坡上还能找到几株。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_old_hunter",
+        "lines":  [
+                      "雾林夜里别乱走，狼群会顺着血腥味追人。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_wounded_ranger",
+        "lines":  [
+                      "狼窟里不止一头野狼，我需要先把伤口处理好。"
+                  ],
+        "events":  [
+                       "event_talk_wounded_ranger"
+                   ]
+    },
+    {
+        "id":  "dialogue_shrine_keeper",
+        "lines":  [
+                      "这座石碑比村子还老，剑痕不是凡铁留下的。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_bamboo_sweeper",
+        "lines":  [
+                      "上山先静心，石阶上的门规可不能踏脏。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_sword_instructor",
+        "lines":  [
+                      "想入青云门，先把基础剑诀练稳。"
+                  ],
+        "events":  [
+                       "event_talk_sword_instructor"
+                   ]
+    },
+    {
+        "id":  "dialogue_qingyun_senior",
+        "lines":  [
+                      "剑稳之后，脚下也要跟得上风。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_qingyun_elder",
+        "lines":  [
+                      "云海剑意不可急求，心中无门，剑上无云。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_shaolin_monk",
+        "lines":  [
+                      "少林先学拳脚，也先学收心。若要入门，须守本门戒律。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_shaolin_luohan",
+        "lines":  [
+                      "拳架练稳后，再谈内息。急躁者学不得易筋经。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_shaolin_elder",
+        "lines":  [
+                      "达摩掌不是争强斗狠之术，须能止戈，才可出掌。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_wudang_daotong",
+        "lines":  [
+                      "武当剑不求一时锋芒，先把圆转之意练进剑路。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_wudang_senior",
+        "lines":  [
+                      "身随剑转，力从对手来。太极身法要慢练。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_wudang_elder",
+        "lines":  [
+                      "太极剑意贵在后发，心先不动，剑才不乱。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_huashan_swordsman",
+        "lines":  [
+                      "华山剑出险峰，入门先练胆，也练眼。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_huashan_senior",
+        "lines":  [
+                      "紫霞功催动剑势，但根基虚浮，只会伤了自己。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_huashan_elder",
+        "lines":  [
+                      "九剑重在破招。看不透对手，便先看透自己。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_smith",
+        "lines":  [
+                      "叮当、叮当，火候正好，有事就快说。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_seller",
+        "lines":  [
+                      "客官看看，都是赶路用得上的便宜货。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_xiejian",
+        "lines":  [
+                      "店里东西不多，别乱翻。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_kid",
+        "lines":  [
+                      "你是从山外来的么？山外是不是很大？"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_boy",
+        "lines":  [
+                      "我们就在村路上玩，不去远处。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_girl",
+        "lines":  [
+                      "娘说太阳落山前要回家。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_oldwoman",
+        "lines":  [
+                      "外乡人啊，村里没什么好招待你的。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_punk",
+        "lines":  [
+                      "看什么看？这巷子不是你该来的地方。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_dipi",
+        "lines":  [
+                      "识相点就快走，别在这里碍眼。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_dibao",
+        "lines":  [
+                      "村里地方小，来客都得守规矩。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_cuihua",
+        "lines":  [
+                      "我还忙着呢，有话快说。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_dog",
+        "lines":  [
+                      "黄狗冲你汪汪叫了两声，又低头趴下。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_poorman",
+        "lines":  [
+                      "唉，日子不好过啊。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_village_wang",
+        "lines":  [
+                      "年纪大了，就在这里看个棚子。"
+                  ],
+        "events":  [
+
+                   ]
+    },
+    {
+        "id":  "dialogue_xkx_taishan_tangzi",
+        "lines":  [
+                      "挑山吃的是脚力饭，一步也急不得。"
+                  ],
+        "events":  [
+
+                   ]
+    }
 ]

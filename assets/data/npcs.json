@@ -1,684 +1,1126 @@
 [
-  {
-    "id": "wandering_merchant",
-    "name": "流浪商人",
-    "description": "背着旧货箱的商人，眼神谨慎。",
-    "dialogueId": "dialogue_wandering_merchant",
-    "shopId": "wandering_merchant_shop",
-    "inquiries": [
-      {
-        "id": "name",
-        "label": "姓名",
-        "aliases": ["name", "名字"],
-        "response": "我不过是个走南闯北的货郎，江湖人都叫我流浪商人。"
-      },
-      {
-        "id": "here",
-        "label": "这里",
-        "aliases": ["here", "此地"],
-        "response": "这村子荒了有些年头，最近却总有人往林子和老井那边去。"
-      }
-    ],
-    "interactions": [
-      {
-        "type": "trade",
-        "label": "交易",
-        "itemIds": ["small_potion", "bread"]
-      }
-    ]
-  },
-  {
-    "id": "guard",
-    "name": "守卫",
-    "description": "疲惫但仍尽责的村口守卫。",
-    "dialogueId": "dialogue_guard",
-    "inquiries": [
-      {
-        "id": "name",
-        "label": "姓名",
-        "aliases": ["name", "名字"],
-        "response": "我只是守这村口的人，名字不值一提。"
-      },
-      {
-        "id": "herb",
-        "label": "止血草",
-        "aliases": ["草药", "止血草", "herb"],
-        "response": "止血草叶色发暗，常长在潮湿背阴处。若能寻来三株，巡林人也许还能撑过去。",
-        "eventIds": ["event_talk_guard_herb"]
-      }
-    ],
-    "acceptedItems": [
-      {
-        "itemId": "healing_herb",
-        "label": "交出止血草",
-        "count": 1,
-        "eventIds": ["event_give_guard_herb"]
-      }
-    ],
-    "interactions": [
-      {
-        "type": "quest",
-        "label": "任务",
-        "eventIds": ["event_talk_guard_herb"]
-      }
-    ]
-  },
-  {
-    "id": "little_girl",
-    "name": "小女孩",
-    "description": "躲在屋檐下的小女孩，像是知道一些线索。",
-    "dialogueId": "dialogue_little_girl",
-    "inquiries": [
-      {
-        "id": "well",
-        "label": "老井",
-        "aliases": ["井", "老井", "well"],
-        "response": "我看见有人提着灯往老井去了，灯光很快就不见了。"
-      },
-      {
-        "id": "stranger",
-        "label": "陌生人",
-        "aliases": ["人", "陌生人"],
-        "response": "那人穿着灰衣，走路很轻，不像村里人。"
-      }
-    ]
-  },
-  {
-    "id": "qingyun_guide",
-    "name": "青云门接引人",
-    "description": "衣袍整洁的年轻修士，负责向来客说明山门规矩。",
-    "dialogueId": "dialogue_qingyun_guide",
-    "interactions": [
-      {
-        "type": "quest",
-        "label": "任务",
-        "eventIds": ["event_enter_qingyun_outskirts"]
-      }
-    ]
-  },
-  {
-    "id": "herb_gatherer",
-    "name": "草药客",
-    "description": "背着竹篓的采药人，熟悉附近药草的生长位置。",
-    "dialogueId": "dialogue_herb_gatherer"
-  },
-  {
-    "id": "old_hunter",
-    "name": "老猎户",
-    "description": "常年在雾林活动的猎人，知道野兽出没的路线。",
-    "dialogueId": "dialogue_old_hunter",
-    "combat": {
-      "maxHp": 45,
-      "attack": 8,
-      "defense": 3,
-      "dodge": 3,
-      "expReward": 12,
-      "skillLevels": {
-        "sword": 2,
-        "dodge": 2,
-        "parry": 1
-      },
-      "mappedSkillIds": {
-        "sword": "sword",
-        "parry": "parry",
-        "dodge": "dodge"
-      }
+    {
+        "id":  "wandering_merchant",
+        "name":  "流浪商人",
+        "description":  "背着旧货箱的商人，眼神谨慎。",
+        "dialogueId":  "dialogue_wandering_merchant",
+        "shopId":  "wandering_merchant_shop",
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "我不过是个走南闯北的货郎，江湖人都叫我流浪商人。"
+                          },
+                          {
+                              "id":  "here",
+                              "label":  "这里",
+                              "aliases":  [
+                                              "here",
+                                              "此地"
+                                          ],
+                              "response":  "这村子荒了有些年头，最近却总有人往林子和老井那边去。"
+                          }
+                      ],
+        "interactions":  [
+                             {
+                                 "type":  "trade",
+                                 "label":  "交易",
+                                 "itemIds":  [
+                                                 "small_potion",
+                                                 "bread"
+                                             ]
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "battle",
-        "label": "战斗"
-      }
-    ]
-  },
-  {
-    "id": "wounded_ranger",
-    "name": "受伤巡林人",
-    "description": "腿上缠着布条的巡林人，仍警惕地盯着狼窟。",
-    "dialogueId": "dialogue_wounded_ranger",
-    "interactions": [
-      {
-        "type": "quest",
-        "label": "任务",
-        "eventIds": ["event_talk_wounded_ranger"]
-      }
-    ]
-  },
-  {
-    "id": "shrine_keeper",
-    "name": "守碑老人",
-    "description": "守着石碑的老人，说话总像在背一段旧传说。",
-    "dialogueId": "dialogue_shrine_keeper"
-  },
-  {
-    "id": "bamboo_sweeper",
-    "name": "扫竹童子",
-    "description": "负责打扫山道的小童，对门规倒背如流。",
-    "dialogueId": "dialogue_bamboo_sweeper"
-  },
-  {
-    "id": "sword_instructor",
-    "name": "传剑执事",
-    "description": "青云门入门师父，负责传授基础剑诀。",
-    "dialogueId": "dialogue_sword_instructor",
-    "combat": {
-      "sectId": "qingyun_sect",
-      "maxHp": 80,
-      "attack": 10,
-      "defense": 6,
-      "dodge": 5,
-      "skillLevels": {
-        "sword": 4,
-        "parry": 3,
-        "basic_sword": 5
-      },
-      "mappedSkillIds": {
-        "sword": "basic_sword",
-        "parry": "basic_sword"
-      }
+    {
+        "id":  "guard",
+        "name":  "守卫",
+        "description":  "疲惫但仍尽责的村口守卫。",
+        "dialogueId":  "dialogue_guard",
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "我只是守这村口的人，名字不值一提。"
+                          },
+                          {
+                              "id":  "herb",
+                              "label":  "止血草",
+                              "aliases":  [
+                                              "草药",
+                                              "止血草",
+                                              "herb"
+                                          ],
+                              "response":  "止血草叶色发暗，常长在潮湿背阴处。若能寻来三株，巡林人也许还能撑过去。",
+                              "eventIds":  [
+                                               "event_talk_guard_herb"
+                                           ]
+                          }
+                      ],
+        "acceptedItems":  [
+                              {
+                                  "itemId":  "healing_herb",
+                                  "label":  "交出止血草",
+                                  "count":  1,
+                                  "eventIds":  [
+                                                   "event_give_guard_herb"
+                                               ]
+                              }
+                          ],
+        "interactions":  [
+                             {
+                                 "type":  "quest",
+                                 "label":  "任务",
+                                 "eventIds":  [
+                                                  "event_talk_guard_herb"
+                                              ]
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "quest",
-        "label": "任务",
-        "eventIds": ["event_talk_sword_instructor"]
-      },
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "qingyun_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "qingyun_sect",
-        "requiresSectId": "qingyun_sect"
-      }
-    ]
-  },
-  {
-    "id": "qingyun_senior",
-    "name": "清风师兄",
-    "description": "青云门进阶师父，步法轻快，最擅清风步。",
-    "dialogueId": "dialogue_qingyun_senior",
-    "combat": {
-      "sectId": "qingyun_sect",
-      "maxHp": 100,
-      "attack": 12,
-      "defense": 7,
-      "dodge": 8,
-      "skillLevels": {
-        "sword": 4,
-        "dodge": 6,
-        "parry": 4,
-        "basic_sword": 5,
-        "wind_step": 6
-      },
-      "mappedSkillIds": {
-        "sword": "basic_sword",
-        "parry": "basic_sword",
-        "dodge": "wind_step"
-      }
+    {
+        "id":  "little_girl",
+        "name":  "小女孩",
+        "description":  "躲在屋檐下的小女孩，像是知道一些线索。",
+        "dialogueId":  "dialogue_little_girl",
+        "inquiries":  [
+                          {
+                              "id":  "well",
+                              "label":  "老井",
+                              "aliases":  [
+                                              "井",
+                                              "老井",
+                                              "well"
+                                          ],
+                              "response":  "我看见有人提着灯往老井去了，灯光很快就不见了。"
+                          },
+                          {
+                              "id":  "stranger",
+                              "label":  "陌生人",
+                              "aliases":  [
+                                              "人",
+                                              "陌生人"
+                                          ],
+                              "response":  "那人穿着灰衣，走路很轻，不像村里人。"
+                          }
+                      ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "qingyun_sect",
-        "requiresSectId": "qingyun_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "qingyun_sect",
-        "requiresSectId": "qingyun_sect"
-      }
-    ]
-  },
-  {
-    "id": "qingyun_elder",
-    "name": "青云长老",
-    "description": "青云门长老，掌管门派绝学云海剑意。",
-    "dialogueId": "dialogue_qingyun_elder",
-    "combat": {
-      "sectId": "qingyun_sect",
-      "maxHp": 160,
-      "attack": 18,
-      "defense": 12,
-      "dodge": 10,
-      "skillLevels": {
-        "sword": 8,
-        "dodge": 6,
-        "parry": 8,
-        "force": 6,
-        "basic_sword": 8,
-        "wind_step": 7,
-        "cloud_sword_ultimate": 8
-      },
-      "mappedSkillIds": {
-        "sword": "cloud_sword_ultimate",
-        "parry": "cloud_sword_ultimate",
-        "dodge": "wind_step"
-      }
+    {
+        "id":  "qingyun_guide",
+        "name":  "青云门接引人",
+        "description":  "衣袍整洁的年轻修士，负责向来客说明山门规矩。",
+        "dialogueId":  "dialogue_qingyun_guide",
+        "interactions":  [
+                             {
+                                 "type":  "quest",
+                                 "label":  "任务",
+                                 "eventIds":  [
+                                                  "event_enter_qingyun_outskirts"
+                                              ]
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "qingyun_sect",
-        "requiresSectId": "qingyun_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "qingyun_sect",
-        "requiresSectId": "qingyun_sect"
-      }
-    ]
-  },
-  {
-    "id": "shaolin_monk",
-    "name": "少林知客僧",
-    "description": "灰袍僧人双掌合十，负责接引愿学少林根基的江湖人。",
-    "dialogueId": "dialogue_shaolin_monk",
-    "aliases": ["monk", "shaolin monk"],
-    "title": "少林入门师父",
-    "role": "teacher",
-    "sectId": "shaolin_sect",
-    "teacherLevel": 0,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "shaolin_sect",
-      "maxHp": 95,
-      "attack": 11,
-      "defense": 8,
-      "dodge": 4,
-      "attackSkillSlot": "hand",
-      "skillLevels": {
-        "hand": 4,
-        "parry": 4,
-        "shaolin_changquan": 5
-      },
-      "mappedSkillIds": {
-        "hand": "shaolin_changquan",
-        "parry": "shaolin_changquan"
-      }
+    {
+        "id":  "herb_gatherer",
+        "name":  "草药客",
+        "description":  "背着竹篓的采药人，熟悉附近药草的生长位置。",
+        "dialogueId":  "dialogue_herb_gatherer"
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "shaolin_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "shaolin_sect",
-        "requiresSectId": "shaolin_sect"
-      }
-    ]
-  },
-  {
-    "id": "shaolin_luohan",
-    "name": "罗汉堂首座",
-    "description": "僧人气息沉稳，举手投足间有金石之力。",
-    "dialogueId": "dialogue_shaolin_luohan",
-    "aliases": ["luohan", "shaolin luohan"],
-    "title": "少林进阶师父",
-    "role": "teacher",
-    "sectId": "shaolin_sect",
-    "teacherLevel": 1,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "shaolin_sect",
-      "maxHp": 135,
-      "attack": 14,
-      "defense": 11,
-      "dodge": 6,
-      "attackSkillSlot": "hand",
-      "skillLevels": {
-        "hand": 6,
-        "force": 6,
-        "parry": 5,
-        "shaolin_changquan": 6,
-        "yijin_jing": 6
-      },
-      "mappedSkillIds": {
-        "hand": "shaolin_changquan",
-        "force": "yijin_jing",
-        "parry": "shaolin_changquan"
-      }
+    {
+        "id":  "old_hunter",
+        "name":  "老猎户",
+        "description":  "常年在雾林活动的猎人，知道野兽出没的路线。",
+        "dialogueId":  "dialogue_old_hunter",
+        "combat":  {
+                       "maxHp":  45,
+                       "attack":  8,
+                       "defense":  3,
+                       "dodge":  3,
+                       "expReward":  12,
+                       "skillLevels":  {
+                                           "sword":  2,
+                                           "dodge":  2,
+                                           "parry":  1
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "sword",
+                                              "parry":  "parry",
+                                              "dodge":  "dodge"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "battle",
+                                 "label":  "战斗"
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "shaolin_sect",
-        "requiresSectId": "shaolin_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "shaolin_sect",
-        "requiresSectId": "shaolin_sect"
-      }
-    ]
-  },
-  {
-    "id": "shaolin_elder",
-    "name": "达摩院长老",
-    "description": "白眉老僧静坐如山，掌心隐有沉雷之势。",
-    "dialogueId": "dialogue_shaolin_elder",
-    "aliases": ["elder", "shaolin elder"],
-    "title": "少林长老",
-    "role": "master",
-    "sectId": "shaolin_sect",
-    "teacherLevel": 2,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "shaolin_sect",
-      "maxHp": 210,
-      "attack": 20,
-      "defense": 15,
-      "dodge": 8,
-      "attackSkillSlot": "hand",
-      "skillLevels": {
-        "hand": 9,
-        "force": 8,
-        "parry": 8,
-        "shaolin_changquan": 8,
-        "yijin_jing": 8,
-        "damo_zhang": 9
-      },
-      "mappedSkillIds": {
-        "hand": "damo_zhang",
-        "force": "yijin_jing",
-        "parry": "damo_zhang"
-      }
+    {
+        "id":  "wounded_ranger",
+        "name":  "受伤巡林人",
+        "description":  "腿上缠着布条的巡林人，仍警惕地盯着狼窟。",
+        "dialogueId":  "dialogue_wounded_ranger",
+        "interactions":  [
+                             {
+                                 "type":  "quest",
+                                 "label":  "任务",
+                                 "eventIds":  [
+                                                  "event_talk_wounded_ranger"
+                                              ]
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "shaolin_sect",
-        "requiresSectId": "shaolin_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "shaolin_sect",
-        "requiresSectId": "shaolin_sect"
-      }
-    ]
-  },
-  {
-    "id": "wudang_daotong",
-    "name": "武当道童",
-    "description": "青衣道童背负木剑，言语温和却步法极稳。",
-    "dialogueId": "dialogue_wudang_daotong",
-    "aliases": ["daotong", "wudang daotong"],
-    "title": "武当入门师父",
-    "role": "teacher",
-    "sectId": "wudang_sect",
-    "teacherLevel": 0,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "wudang_sect",
-      "maxHp": 85,
-      "attack": 10,
-      "defense": 6,
-      "dodge": 6,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 4,
-        "parry": 4,
-        "wudang_jian": 5
-      },
-      "mappedSkillIds": {
-        "sword": "wudang_jian",
-        "parry": "wudang_jian"
-      }
+    {
+        "id":  "shrine_keeper",
+        "name":  "守碑老人",
+        "description":  "守着石碑的老人，说话总像在背一段旧传说。",
+        "dialogueId":  "dialogue_shrine_keeper"
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "wudang_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "wudang_sect",
-        "requiresSectId": "wudang_sect"
-      }
-    ]
-  },
-  {
-    "id": "wudang_senior",
-    "name": "武当师兄",
-    "description": "他剑势不急不躁，脚下却始终占着圆转方位。",
-    "dialogueId": "dialogue_wudang_senior",
-    "aliases": ["senior", "wudang senior"],
-    "title": "武当进阶师父",
-    "role": "teacher",
-    "sectId": "wudang_sect",
-    "teacherLevel": 1,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "wudang_sect",
-      "maxHp": 120,
-      "attack": 13,
-      "defense": 9,
-      "dodge": 10,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 6,
-        "dodge": 7,
-        "parry": 6,
-        "wudang_jian": 6,
-        "taiji_shenfa": 7
-      },
-      "mappedSkillIds": {
-        "sword": "wudang_jian",
-        "dodge": "taiji_shenfa",
-        "parry": "wudang_jian"
-      }
+    {
+        "id":  "bamboo_sweeper",
+        "name":  "扫竹童子",
+        "description":  "负责打扫山道的小童，对门规倒背如流。",
+        "dialogueId":  "dialogue_bamboo_sweeper"
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "wudang_sect",
-        "requiresSectId": "wudang_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "wudang_sect",
-        "requiresSectId": "wudang_sect"
-      }
-    ]
-  },
-  {
-    "id": "wudang_elder",
-    "name": "武当长老",
-    "description": "老道垂目拂尘，木剑一横便似山岳转圆。",
-    "dialogueId": "dialogue_wudang_elder",
-    "aliases": ["elder", "wudang elder"],
-    "title": "武当长老",
-    "role": "master",
-    "sectId": "wudang_sect",
-    "teacherLevel": 2,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "wudang_sect",
-      "maxHp": 185,
-      "attack": 18,
-      "defense": 13,
-      "dodge": 14,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 9,
-        "dodge": 9,
-        "parry": 9,
-        "wudang_jian": 8,
-        "taiji_shenfa": 8,
-        "taiji_jianyi": 9
-      },
-      "mappedSkillIds": {
-        "sword": "taiji_jianyi",
-        "dodge": "taiji_shenfa",
-        "parry": "taiji_jianyi"
-      }
+    {
+        "id":  "sword_instructor",
+        "name":  "传剑执事",
+        "description":  "青云门入门师父，负责传授基础剑诀。",
+        "dialogueId":  "dialogue_sword_instructor",
+        "combat":  {
+                       "sectId":  "qingyun_sect",
+                       "maxHp":  80,
+                       "attack":  10,
+                       "defense":  6,
+                       "dodge":  5,
+                       "skillLevels":  {
+                                           "sword":  4,
+                                           "parry":  3,
+                                           "basic_sword":  5
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "basic_sword",
+                                              "parry":  "basic_sword"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "quest",
+                                 "label":  "任务",
+                                 "eventIds":  [
+                                                  "event_talk_sword_instructor"
+                                              ]
+                             },
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "qingyun_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "qingyun_sect",
+                                 "requiresSectId":  "qingyun_sect"
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "wudang_sect",
-        "requiresSectId": "wudang_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "wudang_sect",
-        "requiresSectId": "wudang_sect"
-      }
-    ]
-  },
-  {
-    "id": "huashan_swordsman",
-    "name": "华山剑客",
-    "description": "年轻剑客立在风口，剑穗翻飞，眼神锋利。",
-    "dialogueId": "dialogue_huashan_swordsman",
-    "aliases": ["swordsman", "huashan swordsman"],
-    "title": "华山入门师父",
-    "role": "teacher",
-    "sectId": "huashan_sect",
-    "teacherLevel": 0,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "huashan_sect",
-      "maxHp": 80,
-      "attack": 12,
-      "defense": 5,
-      "dodge": 7,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 5,
-        "parry": 4,
-        "huashan_sword": 5
-      },
-      "mappedSkillIds": {
-        "sword": "huashan_sword",
-        "parry": "huashan_sword"
-      }
+    {
+        "id":  "qingyun_senior",
+        "name":  "清风师兄",
+        "description":  "青云门进阶师父，步法轻快，最擅清风步。",
+        "dialogueId":  "dialogue_qingyun_senior",
+        "combat":  {
+                       "sectId":  "qingyun_sect",
+                       "maxHp":  100,
+                       "attack":  12,
+                       "defense":  7,
+                       "dodge":  8,
+                       "skillLevels":  {
+                                           "sword":  4,
+                                           "dodge":  6,
+                                           "parry":  4,
+                                           "basic_sword":  5,
+                                           "wind_step":  6
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "basic_sword",
+                                              "parry":  "basic_sword",
+                                              "dodge":  "wind_step"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "qingyun_sect",
+                                 "requiresSectId":  "qingyun_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "qingyun_sect",
+                                 "requiresSectId":  "qingyun_sect"
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "huashan_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "huashan_sect",
-        "requiresSectId": "huashan_sect"
-      }
-    ]
-  },
-  {
-    "id": "huashan_senior",
-    "name": "华山师兄",
-    "description": "他收剑于肘后，紫气隐现，像是随时会抢出一剑。",
-    "dialogueId": "dialogue_huashan_senior",
-    "aliases": ["senior", "huashan senior"],
-    "title": "华山进阶师父",
-    "role": "teacher",
-    "sectId": "huashan_sect",
-    "teacherLevel": 1,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "huashan_sect",
-      "maxHp": 115,
-      "attack": 16,
-      "defense": 7,
-      "dodge": 9,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 7,
-        "force": 6,
-        "parry": 6,
-        "huashan_sword": 7,
-        "zixia_gong": 6
-      },
-      "mappedSkillIds": {
-        "sword": "huashan_sword",
-        "force": "zixia_gong",
-        "parry": "huashan_sword"
-      }
+    {
+        "id":  "qingyun_elder",
+        "name":  "青云长老",
+        "description":  "青云门长老，掌管门派绝学云海剑意。",
+        "dialogueId":  "dialogue_qingyun_elder",
+        "combat":  {
+                       "sectId":  "qingyun_sect",
+                       "maxHp":  160,
+                       "attack":  18,
+                       "defense":  12,
+                       "dodge":  10,
+                       "skillLevels":  {
+                                           "sword":  8,
+                                           "dodge":  6,
+                                           "parry":  8,
+                                           "force":  6,
+                                           "basic_sword":  8,
+                                           "wind_step":  7,
+                                           "cloud_sword_ultimate":  8
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "cloud_sword_ultimate",
+                                              "parry":  "cloud_sword_ultimate",
+                                              "dodge":  "wind_step"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "qingyun_sect",
+                                 "requiresSectId":  "qingyun_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "qingyun_sect",
+                                 "requiresSectId":  "qingyun_sect"
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "huashan_sect",
-        "requiresSectId": "huashan_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "huashan_sect",
-        "requiresSectId": "huashan_sect"
-      }
-    ]
-  },
-  {
-    "id": "huashan_elder",
-    "name": "华山长老",
-    "description": "长老衣袖微动，未曾出剑便已让人觉得招式被看穿。",
-    "dialogueId": "dialogue_huashan_elder",
-    "aliases": ["elder", "huashan elder"],
-    "title": "华山长老",
-    "role": "master",
-    "sectId": "huashan_sect",
-    "teacherLevel": 2,
-    "commandVerbs": ["ask", "apprentice", "learn", "spar"],
-    "combat": {
-      "sectId": "huashan_sect",
-      "maxHp": 175,
-      "attack": 22,
-      "defense": 10,
-      "dodge": 12,
-      "attackSkillSlot": "sword",
-      "skillLevels": {
-        "sword": 10,
-        "force": 8,
-        "parry": 9,
-        "huashan_sword": 9,
-        "zixia_gong": 8,
-        "dugu_sword": 10
-      },
-      "mappedSkillIds": {
-        "sword": "dugu_sword",
-        "force": "zixia_gong",
-        "parry": "dugu_sword"
-      }
+    {
+        "id":  "shaolin_monk",
+        "name":  "少林知客僧",
+        "description":  "灰袍僧人双掌合十，负责接引愿学少林根基的江湖人。",
+        "dialogueId":  "dialogue_shaolin_monk",
+        "aliases":  [
+                        "monk",
+                        "shaolin monk"
+                    ],
+        "title":  "少林入门师父",
+        "role":  "teacher",
+        "sectId":  "shaolin_sect",
+        "teacherLevel":  0,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "shaolin_sect",
+                       "maxHp":  95,
+                       "attack":  11,
+                       "defense":  8,
+                       "dodge":  4,
+                       "attackSkillSlot":  "hand",
+                       "skillLevels":  {
+                                           "hand":  4,
+                                           "parry":  4,
+                                           "shaolin_changquan":  5
+                                       },
+                       "mappedSkillIds":  {
+                                              "hand":  "shaolin_changquan",
+                                              "parry":  "shaolin_changquan"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "shaolin_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "shaolin_sect",
+                                 "requiresSectId":  "shaolin_sect"
+                             }
+                         ]
     },
-    "interactions": [
-      {
-        "type": "joinSect",
-        "label": "拜师",
-        "sectId": "huashan_sect",
-        "requiresSectId": "huashan_sect"
-      },
-      {
-        "type": "learn",
-        "label": "请教",
-        "sectId": "huashan_sect",
-        "requiresSectId": "huashan_sect"
-      }
-    ]
-  }
+    {
+        "id":  "shaolin_luohan",
+        "name":  "罗汉堂首座",
+        "description":  "僧人气息沉稳，举手投足间有金石之力。",
+        "dialogueId":  "dialogue_shaolin_luohan",
+        "aliases":  [
+                        "luohan",
+                        "shaolin luohan"
+                    ],
+        "title":  "少林进阶师父",
+        "role":  "teacher",
+        "sectId":  "shaolin_sect",
+        "teacherLevel":  1,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "shaolin_sect",
+                       "maxHp":  135,
+                       "attack":  14,
+                       "defense":  11,
+                       "dodge":  6,
+                       "attackSkillSlot":  "hand",
+                       "skillLevels":  {
+                                           "hand":  6,
+                                           "force":  6,
+                                           "parry":  5,
+                                           "shaolin_changquan":  6,
+                                           "yijin_jing":  6
+                                       },
+                       "mappedSkillIds":  {
+                                              "hand":  "shaolin_changquan",
+                                              "force":  "yijin_jing",
+                                              "parry":  "shaolin_changquan"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "shaolin_sect",
+                                 "requiresSectId":  "shaolin_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "shaolin_sect",
+                                 "requiresSectId":  "shaolin_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "shaolin_elder",
+        "name":  "达摩院长老",
+        "description":  "白眉老僧静坐如山，掌心隐有沉雷之势。",
+        "dialogueId":  "dialogue_shaolin_elder",
+        "aliases":  [
+                        "elder",
+                        "shaolin elder"
+                    ],
+        "title":  "少林长老",
+        "role":  "master",
+        "sectId":  "shaolin_sect",
+        "teacherLevel":  2,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "shaolin_sect",
+                       "maxHp":  210,
+                       "attack":  20,
+                       "defense":  15,
+                       "dodge":  8,
+                       "attackSkillSlot":  "hand",
+                       "skillLevels":  {
+                                           "hand":  9,
+                                           "force":  8,
+                                           "parry":  8,
+                                           "shaolin_changquan":  8,
+                                           "yijin_jing":  8,
+                                           "damo_zhang":  9
+                                       },
+                       "mappedSkillIds":  {
+                                              "hand":  "damo_zhang",
+                                              "force":  "yijin_jing",
+                                              "parry":  "damo_zhang"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "shaolin_sect",
+                                 "requiresSectId":  "shaolin_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "shaolin_sect",
+                                 "requiresSectId":  "shaolin_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "wudang_daotong",
+        "name":  "武当道童",
+        "description":  "青衣道童背负木剑，言语温和却步法极稳。",
+        "dialogueId":  "dialogue_wudang_daotong",
+        "aliases":  [
+                        "daotong",
+                        "wudang daotong"
+                    ],
+        "title":  "武当入门师父",
+        "role":  "teacher",
+        "sectId":  "wudang_sect",
+        "teacherLevel":  0,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "wudang_sect",
+                       "maxHp":  85,
+                       "attack":  10,
+                       "defense":  6,
+                       "dodge":  6,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  4,
+                                           "parry":  4,
+                                           "wudang_jian":  5
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "wudang_jian",
+                                              "parry":  "wudang_jian"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "wudang_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "wudang_sect",
+                                 "requiresSectId":  "wudang_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "wudang_senior",
+        "name":  "武当师兄",
+        "description":  "他剑势不急不躁，脚下却始终占着圆转方位。",
+        "dialogueId":  "dialogue_wudang_senior",
+        "aliases":  [
+                        "senior",
+                        "wudang senior"
+                    ],
+        "title":  "武当进阶师父",
+        "role":  "teacher",
+        "sectId":  "wudang_sect",
+        "teacherLevel":  1,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "wudang_sect",
+                       "maxHp":  120,
+                       "attack":  13,
+                       "defense":  9,
+                       "dodge":  10,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  6,
+                                           "dodge":  7,
+                                           "parry":  6,
+                                           "wudang_jian":  6,
+                                           "taiji_shenfa":  7
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "wudang_jian",
+                                              "dodge":  "taiji_shenfa",
+                                              "parry":  "wudang_jian"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "wudang_sect",
+                                 "requiresSectId":  "wudang_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "wudang_sect",
+                                 "requiresSectId":  "wudang_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "wudang_elder",
+        "name":  "武当长老",
+        "description":  "老道垂目拂尘，木剑一横便似山岳转圆。",
+        "dialogueId":  "dialogue_wudang_elder",
+        "aliases":  [
+                        "elder",
+                        "wudang elder"
+                    ],
+        "title":  "武当长老",
+        "role":  "master",
+        "sectId":  "wudang_sect",
+        "teacherLevel":  2,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "wudang_sect",
+                       "maxHp":  185,
+                       "attack":  18,
+                       "defense":  13,
+                       "dodge":  14,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  9,
+                                           "dodge":  9,
+                                           "parry":  9,
+                                           "wudang_jian":  8,
+                                           "taiji_shenfa":  8,
+                                           "taiji_jianyi":  9
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "taiji_jianyi",
+                                              "dodge":  "taiji_shenfa",
+                                              "parry":  "taiji_jianyi"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "wudang_sect",
+                                 "requiresSectId":  "wudang_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "wudang_sect",
+                                 "requiresSectId":  "wudang_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "huashan_swordsman",
+        "name":  "华山剑客",
+        "description":  "年轻剑客立在风口，剑穗翻飞，眼神锋利。",
+        "dialogueId":  "dialogue_huashan_swordsman",
+        "aliases":  [
+                        "swordsman",
+                        "huashan swordsman"
+                    ],
+        "title":  "华山入门师父",
+        "role":  "teacher",
+        "sectId":  "huashan_sect",
+        "teacherLevel":  0,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "huashan_sect",
+                       "maxHp":  80,
+                       "attack":  12,
+                       "defense":  5,
+                       "dodge":  7,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  5,
+                                           "parry":  4,
+                                           "huashan_sword":  5
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "huashan_sword",
+                                              "parry":  "huashan_sword"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "huashan_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "huashan_sect",
+                                 "requiresSectId":  "huashan_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "huashan_senior",
+        "name":  "华山师兄",
+        "description":  "他收剑于肘后，紫气隐现，像是随时会抢出一剑。",
+        "dialogueId":  "dialogue_huashan_senior",
+        "aliases":  [
+                        "senior",
+                        "huashan senior"
+                    ],
+        "title":  "华山进阶师父",
+        "role":  "teacher",
+        "sectId":  "huashan_sect",
+        "teacherLevel":  1,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "huashan_sect",
+                       "maxHp":  115,
+                       "attack":  16,
+                       "defense":  7,
+                       "dodge":  9,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  7,
+                                           "force":  6,
+                                           "parry":  6,
+                                           "huashan_sword":  7,
+                                           "zixia_gong":  6
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "huashan_sword",
+                                              "force":  "zixia_gong",
+                                              "parry":  "huashan_sword"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "huashan_sect",
+                                 "requiresSectId":  "huashan_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "huashan_sect",
+                                 "requiresSectId":  "huashan_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "huashan_elder",
+        "name":  "华山长老",
+        "description":  "长老衣袖微动，未曾出剑便已让人觉得招式被看穿。",
+        "dialogueId":  "dialogue_huashan_elder",
+        "aliases":  [
+                        "elder",
+                        "huashan elder"
+                    ],
+        "title":  "华山长老",
+        "role":  "master",
+        "sectId":  "huashan_sect",
+        "teacherLevel":  2,
+        "commandVerbs":  [
+                             "ask",
+                             "apprentice",
+                             "learn",
+                             "spar"
+                         ],
+        "combat":  {
+                       "sectId":  "huashan_sect",
+                       "maxHp":  175,
+                       "attack":  22,
+                       "defense":  10,
+                       "dodge":  12,
+                       "attackSkillSlot":  "sword",
+                       "skillLevels":  {
+                                           "sword":  10,
+                                           "force":  8,
+                                           "parry":  9,
+                                           "huashan_sword":  9,
+                                           "zixia_gong":  8,
+                                           "dugu_sword":  10
+                                       },
+                       "mappedSkillIds":  {
+                                              "sword":  "dugu_sword",
+                                              "force":  "zixia_gong",
+                                              "parry":  "dugu_sword"
+                                          }
+                   },
+        "interactions":  [
+                             {
+                                 "type":  "joinSect",
+                                 "label":  "拜师",
+                                 "sectId":  "huashan_sect",
+                                 "requiresSectId":  "huashan_sect"
+                             },
+                             {
+                                 "type":  "learn",
+                                 "label":  "请教",
+                                 "sectId":  "huashan_sect",
+                                 "requiresSectId":  "huashan_sect"
+                             }
+                         ]
+    },
+    {
+        "id":  "xkx_village_npc_smith",
+        "name":  "冯铁匠",
+        "description":  "村里的铁匠，粗布短打上落着火星和铁屑。",
+        "dialogueId":  "dialogue_xkx_village_smith",
+        "aliases":  [
+                        "smith",
+                        "feng",
+                        "冯铁匠",
+                        "铁匠"
+                    ],
+        "role":  "merchant",
+        "shopId":  "xkx_village_smith_shop",
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "小人姓冯，村里人都叫我冯铁匠。"
+                          },
+                          {
+                              "id":  "here",
+                              "label":  "这里",
+                              "aliases":  [
+                                              "here",
+                                              "此地"
+                                          ],
+                              "response":  "这里是小人糊口的铺子，平日给村里人打些锄头铁锅。"
+                          },
+                          {
+                              "id":  "sword",
+                              "label":  "剑",
+                              "aliases":  [
+                                              "剑",
+                                              "sword"
+                                          ],
+                              "response":  "那是给华山派岳掌门打的，小人可不敢随便卖。"
+                          }
+                      ],
+        "interactions":  [
+                             {
+                                 "type":  "trade",
+                                 "label":  "交易",
+                                 "itemIds":  [
+                                                 "xkx_village_obj_hammer"
+                                             ]
+                             }
+                         ]
+    },
+    {
+        "id":  "xkx_village_npc_seller",
+        "name":  "小贩",
+        "description":  "挑着担子的村中小贩，担子里塞着些零碎日用。",
+        "dialogueId":  "dialogue_xkx_village_seller",
+        "aliases":  [
+                        "seller",
+                        "小贩",
+                        "货郎"
+                    ],
+        "role":  "merchant",
+        "shopId":  "xkx_village_seller_shop",
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "我就是个走村串户的小贩，靠这副担子讨生活。"
+                          },
+                          {
+                              "id":  "goods",
+                              "label":  "货物",
+                              "aliases":  [
+                                              "货物",
+                                              "买卖",
+                                              "goods"
+                                          ],
+                              "response":  "都是些鞋、木棍、水壶、鸡蛋，赶路用得上。"
+                          }
+                      ],
+        "interactions":  [
+                             {
+                                 "type":  "trade",
+                                 "label":  "交易",
+                                 "itemIds":  [
+                                                 "xkx_village_obj_stick",
+                                                 "xkx_village_obj_shoes",
+                                                 "xkx_village_obj_bottle",
+                                                 "xkx_village_obj_egg"
+                                             ]
+                             }
+                         ]
+    },
+    {
+        "id":  "xkx_village_npc_xiejian",
+        "name":  "李四",
+        "description":  "杂货店里的伙计，正懒洋洋地看着门外。",
+        "dialogueId":  "dialogue_xkx_village_xiejian",
+        "aliases":  [
+                        "xiejian",
+                        "li si",
+                        "李四"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "小的叫李四，在这里替店家看铺。"
+                          },
+                          {
+                              "id":  "here",
+                              "label":  "杂货店",
+                              "aliases":  [
+                                              "here",
+                                              "杂货店"
+                                          ],
+                              "response":  "这店里没什么好货，村里人来来去去也就买些针线杂物。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_kid",
+        "name":  "小孩",
+        "description":  "村里的小孩，追着同伴在土路上跑来跑去。",
+        "dialogueId":  "dialogue_xkx_village_kid",
+        "aliases":  [
+                        "kid",
+                        "小孩"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "name",
+                              "label":  "姓名",
+                              "aliases":  [
+                                              "name",
+                                              "名字"
+                                          ],
+                              "response":  "我娘不让我随便告诉外乡人名字。"
+                          },
+                          {
+                              "id":  "gudui",
+                              "label":  "谷堆",
+                              "aliases":  [
+                                              "谷堆",
+                                              "gudui"
+                                          ],
+                              "response":  "广场角上那几个谷堆可好玩啦，不过大人不让我们乱钻。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_boy",
+        "name":  "男孩",
+        "description":  "一个穿着旧布衣的男孩，脚上沾满碎石路的尘土。",
+        "dialogueId":  "dialogue_xkx_village_boy",
+        "aliases":  [
+                        "boy",
+                        "男孩"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "road",
+                              "label":  "村路",
+                              "aliases":  [
+                                              "路",
+                                              "村路"
+                                          ],
+                              "response":  "往北就是打谷场，往南出了村就清静多了。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_girl",
+        "name":  "女孩",
+        "description":  "扎着小辫的女孩，怀里抱着一只旧布娃娃。",
+        "dialogueId":  "dialogue_xkx_village_girl",
+        "aliases":  [
+                        "girl",
+                        "女孩"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "village",
+                              "label":  "村子",
+                              "aliases":  [
+                                              "村子",
+                                              "这里"
+                                          ],
+                              "response":  "村里人不多，大家都认得彼此，外乡人一来就很显眼。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_oldwoman",
+        "name":  "老大娘",
+        "description":  "白发苍苍的老大娘坐在土屋里，手边放着破旧针线。",
+        "dialogueId":  "dialogue_xkx_village_oldwoman",
+        "aliases":  [
+                        "oldwoman",
+                        "老大娘"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "village",
+                              "label":  "村子",
+                              "aliases":  [
+                                              "村子",
+                                              "这里"
+                                          ],
+                              "response":  "这小村靠着华山，日子清苦些，总还能过。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_punk",
+        "name":  "小流氓",
+        "description":  "倚在巷口的小流氓，眼神四处乱瞟。",
+        "dialogueId":  "dialogue_xkx_village_punk",
+        "aliases":  [
+                        "punk",
+                        "小流氓"
+                    ]
+    },
+    {
+        "id":  "xkx_village_npc_dipi",
+        "name":  "地痞",
+        "description":  "吊儿郎当的地痞挡在暗巷里，一副不好惹的模样。",
+        "dialogueId":  "dialogue_xkx_village_dipi",
+        "aliases":  [
+                        "dipi",
+                        "地痞"
+                    ]
+    },
+    {
+        "id":  "xkx_village_npc_dibao",
+        "name":  "地保",
+        "description":  "村里的地保，衣着比寻常村民稍整齐些。",
+        "dialogueId":  "dialogue_xkx_village_dibao",
+        "aliases":  [
+                        "dibao",
+                        "地保"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "village",
+                              "label":  "村务",
+                              "aliases":  [
+                                              "村务",
+                                              "村子"
+                                          ],
+                              "response":  "村里虽小，也有些规矩，外乡人别乱闯人家屋子。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_cuihua",
+        "name":  "翠花",
+        "description":  "年轻村妇正在屋里忙活，听见脚步声便抬头望来。",
+        "dialogueId":  "dialogue_xkx_village_cuihua",
+        "aliases":  [
+                        "cuihua",
+                        "翠花"
+                    ]
+    },
+    {
+        "id":  "xkx_village_npc_dog",
+        "name":  "黄狗",
+        "description":  "一条瘦黄狗趴在村口，耳朵警觉地竖着。",
+        "dialogueId":  "dialogue_xkx_village_dog",
+        "aliases":  [
+                        "dog",
+                        "黄狗"
+                    ]
+    },
+    {
+        "id":  "xkx_village_npc_poorman",
+        "name":  "穷汉",
+        "description":  "衣衫褴褛的穷汉缩在破屋里，神情疲惫。",
+        "dialogueId":  "dialogue_xkx_village_poorman",
+        "aliases":  [
+                        "poorman",
+                        "穷汉"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "village",
+                              "label":  "近况",
+                              "aliases":  [
+                                              "近况",
+                                              "村子"
+                                          ],
+                              "response":  "村子里能糊口就不错了，哪还有什么闲心谈江湖。"
+                          }
+                      ]
+    },
+    {
+        "id":  "xkx_village_npc_wang",
+        "name":  "王老汉",
+        "description":  "王老汉守着小棚子，脸上皱纹像干裂的黄土。",
+        "dialogueId":  "dialogue_xkx_village_wang",
+        "aliases":  [
+                        "wang",
+                        "王老汉"
+                    ]
+    },
+    {
+        "id":  "xkx_taishan_npc_tangzi",
+        "name":  "挑山工",
+        "description":  "挑山工把扁担靠在肩上，像是刚从山路上下来。",
+        "dialogueId":  "dialogue_xkx_taishan_tangzi",
+        "aliases":  [
+                        "tangzi",
+                        "挑山工"
+                    ],
+        "inquiries":  [
+                          {
+                              "id":  "road",
+                              "label":  "山路",
+                              "aliases":  [
+                                              "山路",
+                                              "泰山"
+                                          ],
+                              "response":  "山路不好走，脚下得稳，心里也得稳。"
+                          }
+                      ]
+    }
 ]

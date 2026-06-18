@@ -11,13 +11,16 @@ import '../../game/models/npc_definition.dart';
 import '../../game/models/room_definition.dart';
 import '../../game/models/shop_definition.dart';
 import '../../game/systems/map_system.dart';
+import 'character_status_panel.dart';
 import 'panel_frame.dart';
 
 part 'map_canvas.dart';
 part 'map_interaction_list.dart';
 
 class MapPanel extends ConsumerStatefulWidget {
-  const MapPanel({super.key});
+  const MapPanel({super.key, this.showCharacterSummary = false});
+
+  final bool showCharacterSummary;
 
   static const _mapSystem = MapSystem();
 
@@ -52,14 +55,12 @@ class _MapPanelState extends ConsumerState<MapPanel> {
     _rememberRoomAfterBuild(state.currentRoomId);
 
     return PanelFrame(
-      title: '地图',
+      title: _panelTitle(room, zone?.name),
       child: Column(
         children: [
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final hasInteractions = _hasInteractions(room);
-                final narrow = constraints.maxWidth < 520;
                 final mapCanvas = _MapCanvas(
                   rooms: mapRooms,
                   currentRooms: visibleRooms,
@@ -68,61 +69,36 @@ class _MapPanelState extends ConsumerState<MapPanel> {
                   previousRoom: previousRoom,
                   currentRoomId: state.currentRoomId,
                 );
+                final primaryContent =
+                    widget.showCharacterSummary
+                        ? Row(
+                          children: [
+                            Expanded(child: mapCanvas),
+                            const SizedBox(width: 8),
+                            const SizedBox(
+                              width: 118,
+                              child: CharacterSummary(),
+                            ),
+                          ],
+                        )
+                        : mapCanvas;
 
-                if (!hasInteractions) {
-                  return mapCanvas;
-                }
-
-                if (narrow) {
-                  final interactionHeight = math.min(
-                    136.0,
-                    math.max(104.0, constraints.maxHeight * 0.36),
-                  );
-                  return Column(
-                    children: [
-                      Expanded(child: mapCanvas),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: interactionHeight,
-                        child: _MapInteractionList(state: state, ref: ref),
-                      ),
-                    ],
-                  );
-                }
-
-                final interactionWidth = math.min(
-                  190.0,
-                  math.max(150.0, constraints.maxWidth * 0.34),
-                );
-                return Row(
-                  children: [
-                    Expanded(child: mapCanvas),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: interactionWidth,
-                      child: _MapInteractionList(state: state, ref: ref),
-                    ),
-                  ],
-                );
+                return primaryContent;
               },
             ),
           ),
           const SizedBox(height: 6),
-          _RoomInfo(room: room, zoneName: zone?.name),
+          SizedBox(
+            height: widget.showCharacterSummary ? 92 : 112,
+            child: _MapInteractionList(state: state, ref: ref),
+          ),
         ],
       ),
     );
   }
 
-  bool _hasInteractions(RoomDefinition? room) {
-    if (room == null) {
-      return false;
-    }
-    return room.commands.isNotEmpty ||
-        room.investigateEvents.isNotEmpty ||
-        room.restEvents.isNotEmpty ||
-        room.npcs.isNotEmpty ||
-        room.items.isNotEmpty;
+  String _panelTitle(RoomDefinition? room, String? zoneName) {
+    return '区域：${zoneName ?? '未知区域'}。${room?.name ?? '未知房间'}';
   }
 
   RoomDefinition? _previousRoomFor(
@@ -179,46 +155,5 @@ class _MapPanelState extends ConsumerState<MapPanel> {
         _lastRoomId = currentRoomId;
       }
     });
-  }
-}
-
-class _RoomInfo extends StatelessWidget {
-  const _RoomInfo({required this.room, required this.zoneName});
-
-  final RoomDefinition? room;
-  final String? zoneName;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 88,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '区域：${zoneName ?? '未知区域'} · ${room?.name ?? '未知房间'}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 4),
-            Expanded(
-              child: Text(
-                '描述：${room?.description ?? ''}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

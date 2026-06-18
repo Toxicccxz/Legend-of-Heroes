@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "id":  "village_entrance",
         "name":  "废弃村口",
@@ -880,7 +880,8 @@
                       "southeast":  "xkx_village_alley1"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_punk",
+                     "xkx_village_npc_dipi"
                  ],
         "items":  [
 
@@ -1027,7 +1028,7 @@
                       "west":  "xkx_village_eroad1"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_boy"
                  ],
         "items":  [
 
@@ -1079,7 +1080,7 @@
                       "north":  "xkx_village_eroad1"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_seller"
                  ],
         "items":  [
 
@@ -1131,7 +1132,7 @@
                       "south":  "xkx_village_eroad2"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_dibao"
                  ],
         "items":  [
 
@@ -1278,7 +1279,7 @@
                       "west":  "xkx_village_square"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_girl"
                  ],
         "items":  [
 
@@ -1330,7 +1331,7 @@
                       "north":  "xkx_village_hsroad2"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_girl"
                  ],
         "items":  [
 
@@ -1428,7 +1429,7 @@
                       "north":  "xkx_village_sexit"
                   },
         "npcs":  [
-
+                     "xkx_taishan_npc_tangzi"
                  ],
         "items":  [
 
@@ -1480,7 +1481,7 @@
                       "northeast":  "xkx_village_nwroad2"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_cuihua"
                  ],
         "items":  [
 
@@ -1625,7 +1626,7 @@
                       "south":  "xkx_village_hsroad3"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_dog"
                  ],
         "items":  [
 
@@ -1677,7 +1678,7 @@
                       "south":  "xkx_village_wexit"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_poorman"
                  ],
         "items":  [
 
@@ -1729,7 +1730,7 @@
                       "south":  "xkx_village_eroad3"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_xiejian"
                  ],
         "items":  [
 
@@ -1781,7 +1782,7 @@
                       "west":  "xkx_village_sroad2"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_oldwoman"
                  ],
         "items":  [
 
@@ -1834,7 +1835,7 @@
                       "north":  "xkx_village_eroad3"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_smith"
                  ],
         "items":  [
 
@@ -1932,7 +1933,7 @@
                       "east":  "xkx_village_eroad3"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_kid"
                  ],
         "items":  [
 
@@ -1985,7 +1986,8 @@
                       "south":  "xkx_village_sexit"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_girl",
+                     "xkx_village_npc_boy"
                  ],
         "items":  [
 
@@ -2091,7 +2093,7 @@
                       "west":  "xkx_village_alley1"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_boy"
                  ],
         "items":  [
 
@@ -2233,7 +2235,7 @@
                       "west":  "xkx_village_temple1"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_wang"
                  ],
         "items":  [
 
@@ -2286,7 +2288,7 @@
                       "north":  "xkx_village_shack"
                   },
         "npcs":  [
-
+                     "xkx_village_npc_kid"
                  ],
         "items":  [
 

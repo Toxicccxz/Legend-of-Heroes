@@ -1,17 +1,51 @@
 [
-  {
-    "id": "wandering_merchant_shop",
-    "name": "流浪商人的旧货箱",
-    "description": "箱子里摆着几样赶路常用的小东西。",
-    "goods": [
-      {
-        "itemId": "small_potion",
-        "price": 30
-      },
-      {
-        "itemId": "bread",
-        "price": 8
-      }
-    ]
-  }
+    {
+        "id":  "wandering_merchant_shop",
+        "name":  "流浪商人的旧货箱",
+        "description":  "箱子里摆着几样赶路常用的小东西。",
+        "goods":  [
+                      {
+                          "itemId":  "small_potion",
+                          "price":  30
+                      },
+                      {
+                          "itemId":  "bread",
+                          "price":  8
+                      }
+                  ]
+    },
+    {
+        "id":  "xkx_village_smith_shop",
+        "name":  "冯铁匠的铁匠铺",
+        "description":  "炉火旁摆着几样新打好的铁器。",
+        "goods":  [
+                      {
+                          "itemId":  "xkx_village_obj_hammer",
+                          "price":  60
+                      }
+                  ]
+    },
+    {
+        "id":  "xkx_village_seller_shop",
+        "name":  "小贩的担子",
+        "description":  "担子里放着村里常见的便宜杂货。",
+        "goods":  [
+                      {
+                          "itemId":  "xkx_village_obj_stick",
+                          "price":  12
+                      },
+                      {
+                          "itemId":  "xkx_village_obj_shoes",
+                          "price":  18
+                      },
+                      {
+                          "itemId":  "xkx_village_obj_bottle",
+                          "price":  10
+                      },
+                      {
+                          "itemId":  "xkx_village_obj_egg",
+                          "price":  3
+                      }
+                  ]
+    }
 ]

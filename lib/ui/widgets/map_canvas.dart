@@ -20,91 +20,26 @@ class _MapCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRect(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final showLegend =
-              constraints.maxWidth >= 260 && constraints.maxHeight >= 120;
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              TweenAnimationBuilder<double>(
-                key: ValueKey(
-                  '${previousRoom?.id ?? currentRoomId}->$currentRoomId',
-                ),
-                tween: Tween(begin: 0, end: 1),
-                duration: const Duration(milliseconds: 280),
-                curve: Curves.easeOutCubic,
-                builder: (context, progress, child) {
-                  return CustomPaint(
-                    painter: _RoomMapPainter(
-                      rooms: rooms,
-                      currentRooms: currentRooms,
-                      previousRooms: previousRooms,
-                      currentRoom: currentRoom,
-                      previousRoom: previousRoom,
-                      currentRoomId: currentRoomId,
-                      moveProgress: progress,
-                    ),
-                  );
-                },
-              ),
-              if (showLegend)
-                const Positioned(right: 4, top: 4, child: _MapLegend()),
-            ],
+      child: TweenAnimationBuilder<double>(
+        key: ValueKey('${previousRoom?.id ?? currentRoomId}->$currentRoomId'),
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutCubic,
+        builder: (context, progress, child) {
+          return CustomPaint(
+            painter: _RoomMapPainter(
+              rooms: rooms,
+              currentRooms: currentRooms,
+              previousRooms: previousRooms,
+              currentRoom: currentRoom,
+              previousRoom: previousRoom,
+              currentRoomId: currentRoomId,
+              moveProgress: progress,
+            ),
+            child: const SizedBox.expand(),
           );
         },
       ),
-    );
-  }
-}
-
-class _MapLegend extends StatelessWidget {
-  const _MapLegend();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.all(4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _LegendItem(label: '其他房间', current: false),
-            SizedBox(height: 6),
-            _LegendItem(label: '当前位置', current: true),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _LegendItem extends StatelessWidget {
-  const _LegendItem({required this.label, required this.current});
-
-  final String label;
-  final bool current;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 14,
-          height: 14,
-          decoration: BoxDecoration(
-            border: Border.all(width: 1.4),
-            color: current ? Colors.black : Colors.white,
-          ),
-        ),
-        const SizedBox(width: 6),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
     );
   }
 }

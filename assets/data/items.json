@@ -1,109 +1,164 @@
 [
-  {
-    "id": "small_potion",
-    "name": "小红药水",
-    "description": "恢复 20 HP。",
-    "type": "consumable",
-    "effects": {},
-    "useEvents": [
-      "event_use_small_potion"
-    ]
-  },
-  {
-    "id": "healing_herb",
-    "name": "止血草",
-    "description": "守卫需要的任务物品。",
-    "type": "quest",
-    "effects": {}
-  },
-  {
-    "id": "bread",
-    "name": "面包",
-    "description": "恢复少量体力。",
-    "type": "consumable",
-    "effects": {},
-    "useEvents": [
-      "event_use_bread"
-    ]
-  },
-  {
-    "id": "novice_hat",
-    "name": "新手布帽",
-    "description": "粗布缝成的帽子，能挡一点风。",
-    "type": "equipment",
-    "slot": "head",
-    "effects": {
-      "maxMp": 3
+    {
+        "id":  "small_potion",
+        "name":  "小红药水",
+        "description":  "恢复 20 HP。",
+        "type":  "consumable",
+        "effects":  {
+
+                    },
+        "useEvents":  [
+                          "event_use_small_potion"
+                      ]
+    },
+    {
+        "id":  "healing_herb",
+        "name":  "止血草",
+        "description":  "守卫需要的任务物品。",
+        "type":  "quest",
+        "effects":  {
+
+                    }
+    },
+    {
+        "id":  "bread",
+        "name":  "面包",
+        "description":  "恢复少量体力。",
+        "type":  "consumable",
+        "effects":  {
+
+                    },
+        "useEvents":  [
+                          "event_use_bread"
+                      ]
+    },
+    {
+        "id":  "novice_hat",
+        "name":  "新手布帽",
+        "description":  "粗布缝成的帽子，能挡一点风。",
+        "type":  "equipment",
+        "slot":  "head",
+        "effects":  {
+                        "maxMp":  3
+                    }
+    },
+    {
+        "id":  "novice_cloth",
+        "name":  "新手布衣",
+        "description":  "粗布缝成的基础防具。",
+        "type":  "equipment",
+        "slot":  "upperBody",
+        "effects":  {
+                        "maxHp":  5,
+                        "defense":  1
+                    }
+    },
+    {
+        "id":  "novice_wristguards",
+        "name":  "新手护腕",
+        "description":  "布条缠成的护腕，方便握持武器。",
+        "type":  "equipment",
+        "slot":  "wrist",
+        "effects":  {
+                        "attack":  1
+                    }
+    },
+    {
+        "id":  "novice_pants",
+        "name":  "新手布裤",
+        "description":  "便于赶路的粗布长裤。",
+        "type":  "equipment",
+        "slot":  "lowerBody",
+        "effects":  {
+                        "maxStamina":  4
+                    }
+    },
+    {
+        "id":  "novice_shoes",
+        "name":  "新手布鞋",
+        "description":  "鞋底很薄，但比赤脚强。",
+        "type":  "equipment",
+        "slot":  "feet",
+        "effects":  {
+                        "maxStamina":  2
+                    }
+    },
+    {
+        "id":  "wooden_necklace",
+        "name":  "木珠项链",
+        "description":  "一串朴素木珠，能让人稍稍安心。",
+        "type":  "equipment",
+        "slot":  "necklace",
+        "effects":  {
+                        "maxHp":  2,
+                        "maxMp":  2
+                    }
+    },
+    {
+        "id":  "rusty_sword",
+        "name":  "生锈铁剑",
+        "description":  "剑刃有些钝，但足以防身。",
+        "type":  "equipment",
+        "slot":  "weapon",
+        "effects":  {
+                        "attack":  2,
+                        "defense":  1
+                    }
+    },
+    {
+        "id":  "wooden_token",
+        "name":  "木制令牌",
+        "description":  "青云门接引点用来识别新人的令牌。",
+        "type":  "quest",
+        "effects":  {
+
+                    }
+    },
+    {
+        "id":  "xkx_village_obj_hammer",
+        "name":  "铁锤",
+        "description":  "冯铁匠铺子里常见的铁锤，沉甸甸的。",
+        "type":  "material",
+        "effects":  {
+
+                    }
+    },
+    {
+        "id":  "xkx_village_obj_stick",
+        "name":  "木棍",
+        "description":  "削得还算直的一根木棍，可以用来防身。",
+        "type":  "equipment",
+        "slot":  "weapon",
+        "effects":  {
+                        "attack":  1
+                    }
+    },
+    {
+        "id":  "xkx_village_obj_shoes",
+        "name":  "布鞋",
+        "description":  "粗布鞋，鞋底纳得很厚，适合走土路。",
+        "type":  "equipment",
+        "slot":  "feet",
+        "effects":  {
+                        "maxStamina":  2
+                    }
+    },
+    {
+        "id":  "xkx_village_obj_bottle",
+        "name":  "水壶",
+        "description":  "普通竹水壶，路上解渴用。",
+        "type":  "material",
+        "effects":  {
+
+                    }
+    },
+    {
+        "id":  "xkx_village_obj_egg",
+        "name":  "鸡蛋",
+        "description":  "村里母鸡刚下的鸡蛋。",
+        "type":  "consumable",
+        "effects":  {
+
+                    }
     }
-  },
-  {
-    "id": "novice_cloth",
-    "name": "新手布衣",
-    "description": "粗布缝成的基础防具。",
-    "type": "equipment",
-    "slot": "upperBody",
-    "effects": {
-      "maxHp": 5,
-      "defense": 1
-    }
-  },
-  {
-    "id": "novice_wristguards",
-    "name": "新手护腕",
-    "description": "布条缠成的护腕，方便握持武器。",
-    "type": "equipment",
-    "slot": "wrist",
-    "effects": {
-      "attack": 1
-    }
-  },
-  {
-    "id": "novice_pants",
-    "name": "新手布裤",
-    "description": "便于赶路的粗布长裤。",
-    "type": "equipment",
-    "slot": "lowerBody",
-    "effects": {
-      "maxStamina": 4
-    }
-  },
-  {
-    "id": "novice_shoes",
-    "name": "新手布鞋",
-    "description": "鞋底很薄，但比赤脚强。",
-    "type": "equipment",
-    "slot": "feet",
-    "effects": {
-      "maxStamina": 2
-    }
-  },
-  {
-    "id": "wooden_necklace",
-    "name": "木珠项链",
-    "description": "一串朴素木珠，能让人稍稍安心。",
-    "type": "equipment",
-    "slot": "necklace",
-    "effects": {
-      "maxHp": 2,
-      "maxMp": 2
-    }
-  },
-  {
-    "id": "rusty_sword",
-    "name": "生锈铁剑",
-    "description": "剑刃有些钝，但足以防身。",
-    "type": "equipment",
-    "slot": "weapon",
-    "effects": {
-      "attack": 2,
-      "defense": 1
-    }
-  },
-  {
-    "id": "wooden_token",
-    "name": "木制令牌",
-    "description": "青云门接引点用来识别新人的令牌。",
-    "type": "quest",
-    "effects": {}
-  }
 ]

@@ -26,21 +26,19 @@ class GameScreen extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              const _MudHeader(),
-              const SizedBox(height: 8),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (constraints.maxWidth >= 900) {
-                      return const _WideMudLayout();
-                    }
-                    return const _CompactMudLayout();
-                  },
-                ),
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth >= 900) {
+                return const Column(
+                  children: [
+                    _MudHeader(),
+                    SizedBox(height: 8),
+                    Expanded(child: _WideMudLayout()),
+                  ],
+                );
+              }
+              return const _CompactMudLayout();
+            },
           ),
         ),
       ),
@@ -100,11 +98,9 @@ class _CompactMudLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        CharacterStatusPanel(),
+        Expanded(flex: 5, child: MapPanel(showCharacterSummary: true)),
         SizedBox(height: 8),
-        Expanded(flex: 5, child: MapPanel()),
-        SizedBox(height: 8),
-        Expanded(flex: 5, child: ActionMessagePanel()),
+        Expanded(flex: 6, child: ActionMessagePanel(showStatusMenu: true)),
       ],
     );
   }

@@ -6,10 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/core/game_action.dart';
 import '../../game/core/game_controller.dart';
 import '../../game/core/game_state.dart';
+import 'character_status_panel.dart';
 import 'panel_frame.dart';
 
 class ActionMessagePanel extends ConsumerWidget {
-  const ActionMessagePanel({super.key});
+  const ActionMessagePanel({super.key, this.showStatusMenu = false});
+
+  final bool showStatusMenu;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +32,10 @@ class ActionMessagePanel extends ConsumerWidget {
               const SizedBox(height: 6),
               Expanded(child: _MessageLog(state: state)),
               const SizedBox(height: 6),
-              SizedBox(height: actionPadHeight, child: const _MudActionPad()),
+              SizedBox(
+                height: actionPadHeight,
+                child: _MudActionPad(showStatusMenu: showStatusMenu),
+              ),
             ],
           );
         },
@@ -210,7 +216,9 @@ extension MessageFilterLabel on MessageFilter {
 }
 
 class _MudActionPad extends ConsumerWidget {
-  const _MudActionPad();
+  const _MudActionPad({required this.showStatusMenu});
+
+  final bool showStatusMenu;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -225,32 +233,33 @@ class _MudActionPad extends ConsumerWidget {
           height: 34,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: const [
-              _QuickCommandButton(
+            children: [
+              const _QuickCommandButton(
                 command: 'look room',
                 label: '查看',
                 icon: Icons.visibility_outlined,
               ),
-              _QuickCommandButton(
+              const _QuickCommandButton(
                 command: 'score',
                 label: '状态',
                 icon: Icons.badge_outlined,
               ),
-              _QuickCommandButton(
+              const _QuickCommandButton(
                 command: 'inventory',
                 label: '背包',
                 icon: Icons.inventory_2_outlined,
               ),
-              _QuickCommandButton(
+              const _QuickCommandButton(
                 command: 'investigate',
                 label: '调查',
                 icon: Icons.search,
               ),
-              _QuickCommandButton(
+              const _QuickCommandButton(
                 command: 'rest',
                 label: '休息',
                 icon: Icons.bed,
               ),
+              if (showStatusMenu) const _StatusMenuButton(),
             ],
           ),
         ),
@@ -270,6 +279,49 @@ class _MudActionPad extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _StatusMenuButton extends StatelessWidget {
+  const _StatusMenuButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: OutlinedButton.icon(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(0, 30),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
+          side: const BorderSide(color: Colors.black),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        ),
+        onPressed: () => _showStatusMenu(context),
+        icon: const Icon(Icons.menu_book_outlined, size: 15),
+        label: const Text('角色菜单', style: TextStyle(fontSize: 12)),
+      ),
+    );
+  }
+
+  void _showStatusMenu(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return const FractionallySizedBox(
+          heightFactor: 0.72,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: CharacterStatusMenu(),
+          ),
+        );
+      },
     );
   }
 }

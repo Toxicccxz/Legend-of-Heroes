@@ -51,6 +51,26 @@ class CharacterStatusPanel extends ConsumerWidget {
   }
 }
 
+class CharacterSummary extends ConsumerWidget {
+  const CharacterSummary({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(gameControllerProvider);
+    return _PlayerStats(state: state);
+  }
+}
+
+class CharacterStatusMenu extends ConsumerWidget {
+  const CharacterStatusMenu({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(gameControllerProvider);
+    return _StatusTabArea(state: state, ref: ref);
+  }
+}
+
 class _PlayerStats extends StatelessWidget {
   const _PlayerStats({required this.state});
 
